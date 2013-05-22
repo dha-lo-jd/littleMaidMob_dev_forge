@@ -1,8 +1,11 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.ai.EntityAIWander;
+
 public class LMM_EntityAIWander extends EntityAIWander implements LMM_IEntityAI {
 
-	protected boolean isEnable;
+	public boolean isEnable;
 	
 	public LMM_EntityAIWander(EntityCreature par1EntityCreature, float par2) {
 		super(par1EntityCreature, par2);

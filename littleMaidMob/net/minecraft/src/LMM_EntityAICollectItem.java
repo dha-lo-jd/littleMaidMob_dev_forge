@@ -2,14 +2,24 @@ package net.minecraft.src;
 
 import java.util.List;
 
-import javax.activation.MailcapCommandMap;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LMM_EntityLittleMaid;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 
 public class LMM_EntityAICollectItem extends EntityAIBase {
 	
-	protected LMM_EntityLittleMaid theMaid;
-	protected float moveSpeed;
-	protected EntityItem targetItem;
-	protected boolean lastAvoidWater;
+	public LMM_EntityLittleMaid theMaid;
+	public float moveSpeed;
+	public EntityItem targetItem;
+	public boolean lastAvoidWater;
 	
 	
 	public LMM_EntityAICollectItem(LMM_EntityLittleMaid pEntityLittleMaid, float pmoveSpeed) {
@@ -87,7 +97,7 @@ public class LMM_EntityAICollectItem extends EntityAIBase {
 	}
 
 	public boolean canEntityItemBeSeen(Entity entity) {
-		// ƒAƒCƒeƒ€‚Ì‰Â‹”»’è
+		// ã‚¢ã‚¤ãƒ†ãƒ ã®å¯è¦–åˆ¤å®š
 		return theMaid.worldObj.rayTraceBlocks(Vec3.createVectorHelper(theMaid.posX, theMaid.posY + (double)theMaid.getEyeHeight(), theMaid.posZ), Vec3.createVectorHelper(entity.posX, entity.posY + ((entity.boundingBox.minY - entity.boundingBox.minY) / 2), entity.posZ)) == null;
 	}
 

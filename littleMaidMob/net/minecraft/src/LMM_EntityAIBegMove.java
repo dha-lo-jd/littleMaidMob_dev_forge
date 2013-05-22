@@ -1,5 +1,9 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.LMM_EntityLittleMaid;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.player.EntityPlayer;
+
 public class LMM_EntityAIBegMove extends EntityAIBase {
 
 	private LMM_EntityLittleMaid theMaid;
@@ -36,7 +40,7 @@ public class LMM_EntityAIBegMove extends EntityAIBase {
 	@Override
 	public void updateTask() {
 //		mod_LMM_littleMaidMob.Debug(String.format("begrange:%f", theMaid.aiBeg.getDistanceSq()));
-		// ”‡‚¢Šñ‚êI
+		// é€™ã„å¯„ã‚Œï¼
 		if (theMaid.aiBeg.getDistanceSq() < 3.5D) {
 			theMaid.getNavigator().clearPathEntity();
 		} else {

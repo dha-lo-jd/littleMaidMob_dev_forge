@@ -1,5 +1,11 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LMM_EntityLittleMaid;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.world.World;
+
 public class LMM_EntityAIFollowOwner extends EntityAIBase implements LMM_IEntityAI {
 
     private LMM_EntityLittleMaid theMaid;
@@ -11,7 +17,7 @@ public class LMM_EntityAIFollowOwner extends EntityAIBase implements LMM_IEntity
     float maxDist;
     float minDist;
     private boolean field_48311_i;
-    protected boolean isEnable;
+    public boolean isEnable;
 
     public LMM_EntityAIFollowOwner(LMM_EntityLittleMaid par1EntityLittleMaid, float par2, float par3, float par4)
     {

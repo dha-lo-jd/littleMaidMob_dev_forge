@@ -6,64 +6,92 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.multiplayer.NetClientHandler;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.LMM_EntityLittleMaid;
+import net.minecraft.entity.LMM_EntityModeManager;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.NetServerHandler;
+import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.stats.Achievement;
+import net.minecraft.stats.AchievementList;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class mod_LMM_littleMaidMob extends BaseMod {
 
-	@MLProp(info="Relative spawn weight. The lower the less common. 10=pigs. 0=off")
-	public static int spawnWeight = 5;
-	@MLProp(info="Maximum spawn count in the World.")
-	public static int spawnLimit = 20;
-	@MLProp(info="Minimum spawn group count.")
-	public static int minGroupSize = 1;
-	@MLProp(info="Maximum spawn group count.")
-	public static int maxGroupSize = 3;
-//    @MLProp(info="trampleCrops")
-	public static boolean trampleCrops = false;
-	@MLProp(info="It will despawn, if it lets things go. ")
-	public static boolean canDespawn = false;
-	@MLProp(info="At local, make sure the name of the owner. ")
-	public static boolean checkOwnerName = false;
-	@MLProp(info="Not to survive the doppelganger. ")
-	public static boolean antiDoppelganger = true;
-	@MLProp(info="Enable LMM SpawnEgg Recipe. ")
-	public static boolean enableSpawnEgg = false;
-	
-	
-//    @MLProp(info="Living Voice Rate. 1.0=100%, 0.5=50%, 0.0=0%", max=1.0F, min=0.0F)
-//    public static float LivingVoiceRate = 1.0F;
-	@MLProp(info="LittleMaid Voice distortion.")
-	public static boolean VoiceDistortion = true;
-	
-	@MLProp(info="Default selected Texture Packege. Null is Random")
-	public static String defaultTexture = "";
-	@MLProp(info="Print Debug Massages.")
-	public static boolean DebugMessage = true;
-	@MLProp(info="Print Death Massages.")
-	public static boolean DeathMessage = true;
-	@MLProp(info="Spawn Anywhere.")
-	public static boolean Dominant = false;
-	@MLProp(info="true: AlphaBlend(request power), false: AlphaTest(more fast)")
-	public static boolean AlphaBlend = true;
-	@MLProp(info="true: Will be hostile, false: Is a pacifist")
-	public static boolean Aggressive = true;
-
-	@MLProp(info="used Achievement index.(0 = Disable)")
-	public static int AchievementID = 222000;
-
-	@MLProp(info="UniqueEntityId(0 is AutoAssigned.)", max=255)
-	public static int UniqueEntityId = 30;
-	@MLProp(info="FilePath mode.")
-	public static boolean useMinecraftPath = false;
-
 	public static Achievement ac_Contract;
+	@MLProp(info = "used Achievement index.(0 = Disable)")
+	public static int AchievementID = 222000;
+	@MLProp(info = "true: Will be hostile, false: Is a pacifist")
+	public static boolean Aggressive = true;
+	@MLProp(info = "true: AlphaBlend(request power), false: AlphaTest(more fast)")
+	public static boolean AlphaBlend = true;
+	@MLProp(info = "Not to survive the doppelganger. ")
+	public static boolean antiDoppelganger = true;
+	@MLProp(info = "It will despawn, if it lets things go. ")
+	public static boolean canDespawn = false;
+	@MLProp(info = "At local, make sure the name of the owner. ")
+	public static boolean checkOwnerName = false;
 	public static int containerID;
+	@MLProp(info = "Print Death Massages.")
+	public static boolean DeathMessage = true;
 
+	@MLProp(info = "Print Debug Massages.")
+	public static boolean DebugMessage = true;
+
+	@MLProp(info = "Default selected Texture Packege. Null is Random")
+	public static String defaultTexture = "";
+	@MLProp(info = "Spawn Anywhere.")
+	public static boolean Dominant = false;
+	@MLProp(info = "Enable LMM SpawnEgg Recipe. ")
+	public static boolean enableSpawnEgg = false;
+	@MLProp(info = "Maximum spawn group count.")
+	public static int maxGroupSize = 3;
+	@MLProp(info = "Minimum spawn group count.")
+	public static int minGroupSize = 1;
+	@MLProp(info = "Maximum spawn count in the World.")
+	public static int spawnLimit = 20;
+
+	@MLProp(info = "Relative spawn weight. The lower the less common. 10=pigs. 0=off")
+	public static int spawnWeight = 5;
+
+	//    @MLProp(info="trampleCrops")
+	public static boolean trampleCrops = false;
+	@MLProp(info = "UniqueEntityId(0 is AutoAssigned.)", max = 255)
+	public static int UniqueEntityId = 30;
+
+	@MLProp(info = "FilePath mode.")
+	public static boolean useMinecraftPath = false;
+	//    @MLProp(info="Living Voice Rate. 1.0=100%, 0.5=50%, 0.0=0%", max=1.0F, min=0.0F)
+	//    public static float LivingVoiceRate = 1.0F;
+	@MLProp(info = "LittleMaid Voice distortion.")
+	public static boolean VoiceDistortion = true;
 
 	public static void Debug(String pText, Object... pVals) {
-		// ƒfƒoƒbƒOƒƒbƒZ[ƒW
+		// ãƒ‡ãƒãƒƒã‚°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 		if (DebugMessage) {
 			System.out.println(String.format("littleMaidMob-" + pText, pVals));
 		}
+	}
+
+	@Override
+	public void addRenderer(Map map) {
+		LMM_Client.addRenderer(map);
+	}
+
+	@Override
+	public void clientCustomPayload(NetClientHandler var1, Packet250CustomPayload var2) {
+		// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå´ã®ç‰¹æ®Šãƒ‘ã‚±ãƒƒãƒˆå—ä¿¡å‹•ä½œ
+		LMM_Client.clientCustomPayload(var1, var2);
+	}
+
+	@Override
+	public GuiContainer getContainerGUI(EntityClientPlayerMP var1, int var2,
+			int var3, int var4, int var5) {
+		return LMM_Client.getContainerGUI(var1, var2, var3, var4, var5);
 	}
 
 	@Override
@@ -73,7 +101,7 @@ public class mod_LMM_littleMaidMob extends BaseMod {
 
 	@Override
 	public String getPriorities() {
-		// MMMLib‚ğ—v‹
+		// MMMLibã‚’è¦æ±‚
 		return "required-after:mod_MMM_MMMLib";
 	}
 
@@ -84,129 +112,117 @@ public class mod_LMM_littleMaidMob extends BaseMod {
 
 	@Override
 	public void load() {
-		// MMMLib‚ÌRevisionƒ`ƒFƒbƒN
+		// MMMLibã®Revisionãƒã‚§ãƒƒã‚¯
 		MMM_Helper.checkRevision("2");
-		
+
 		UniqueEntityId = UniqueEntityId == 0 ? MMM_Helper.getNextEntityID(true) : UniqueEntityId;
 		defaultTexture = defaultTexture.trim();
 		containerID = 222;
 		ModLoader.registerContainerID(this, containerID);
 		ModLoader.registerEntityID(LMM_EntityLittleMaid.class, "LittleMaid", UniqueEntityId, 0xefffef, 0x9f5f5f);
-//        ModLoader.addEntityTracker(this, LMM_EntityLittleMaid.class, var2, var3, var4, var5);
+		//        ModLoader.addEntityTracker(this, LMM_EntityLittleMaid.class, var2, var3, var4, var5);
 		ModLoader.addLocalization("entity.LittleMaid.name", "LittleMaid");
-		ModLoader.addLocalization("entity.LittleMaid.name", "ja_JP", "ƒŠƒgƒ‹ƒƒCƒh");
+		ModLoader.addLocalization("entity.LittleMaid.name", "ja_JP", "ãƒªãƒˆãƒ«ãƒ¡ã‚¤ãƒ‰");
 		if (enableSpawnEgg) {
-			// µŠ«—pƒŒƒVƒs‚ğ’Ç‰Á
+			// æ‹›å–šç”¨ãƒ¬ã‚·ãƒ”ã‚’è¿½åŠ 
 			ModLoader.addRecipe(new ItemStack(Item.monsterPlacer, 1, UniqueEntityId), new Object[] {
-				"scs",
-				"sbs",
-				" e ",
-				Character.valueOf('s'), Item.sugar,
-				Character.valueOf('c'), new ItemStack(Item.dyePowder, 1, 3),
-				Character.valueOf('b'), Item.slimeBall,
-				Character.valueOf('e'), Item.egg,
+					"scs",
+					"sbs",
+					" e ",
+					Character.valueOf('s'), Item.sugar,
+					Character.valueOf('c'), new ItemStack(Item.dyePowder, 1, 3),
+					Character.valueOf('b'), Item.slimeBall,
+					Character.valueOf('e'), Item.egg,
 			});
 		}
-		
+
 		if (MMM_Helper.isClient) {
-			// ƒAƒ`ÀŒ±—p
+			// ã‚¢ãƒå®Ÿé¨“ç”¨
 			if (AchievementID != 0) {
-				ac_Contract = new Achievement(AchievementID, "littleMaid", 1, -4, Item.cake, AchievementList.bakeCake).registerAchievement();
-//                ModLoader.AddAchievementDesc(ac_Contract, "(21)", "Capture the LittleMaid!");
+				ac_Contract = new Achievement(AchievementID, "littleMaid", 1, -4, Item.cake, AchievementList.bakeCake)
+						.registerAchievement();
+				//                ModLoader.AddAchievementDesc(ac_Contract, "(21)", "Capture the LittleMaid!");
 				ModLoader.addAchievementDesc(ac_Contract, "Enlightenment!", "Capture the LittleMaid!");
-				ModLoader.addLocalization("achievement.littleMaid", "ja_JP", "Œå‚èB");
-				ModLoader.addLocalization("achievement.littleMaid.desc", "ja_JP", "ƒƒCƒh‚³‚ñ‚ğ“üè‚µ‚Ü‚µ‚½B");
+				ModLoader.addLocalization("achievement.littleMaid", "ja_JP", "æ‚Ÿã‚Šã€‚");
+				ModLoader.addLocalization("achievement.littleMaid.desc", "ja_JP", "ãƒ¡ã‚¤ãƒ‰ã•ã‚“ã‚’å…¥æ‰‹ã—ã¾ã—ãŸã€‚");
 			}
-			
-			// –¼Ì•ÏŠ·ƒe[ƒuƒ‹
+
+			// åç§°å¤‰æ›ãƒ†ãƒ¼ãƒ–ãƒ«
 			ModLoader.addLocalization("littleMaidMob.text.Health", "Health");
-			ModLoader.addLocalization("littleMaidMob.text.Health", "ja_JP", "ƒƒCƒh‹­“x");
+			ModLoader.addLocalization("littleMaidMob.text.Health", "ja_JP", "ãƒ¡ã‚¤ãƒ‰å¼·åº¦");
 			ModLoader.addLocalization("littleMaidMob.text.AP", "AP");
-			ModLoader.addLocalization("littleMaidMob.text.AP", "ja_JP", "ƒƒCƒh‘•b");
-			
-			// ƒfƒtƒHƒ‹ƒgƒ‚ƒfƒ‹‚Ìİ’è
+			ModLoader.addLocalization("littleMaidMob.text.AP", "ja_JP", "ãƒ¡ã‚¤ãƒ‰è£…ç”²");
+
+			// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ¢ãƒ‡ãƒ«ã®è¨­å®š
 			LMM_Client.init();
 		}
-		
-		// AIƒŠƒXƒg‚Ì’Ç‰Á
-		LMM_EntityModeManager.init();
-		
-		// ƒAƒCƒeƒ€ƒXƒƒbƒgXV—p‚ÌƒpƒPƒbƒg
-		ModLoader.registerPacketChannel(this, "LMM|Upd");
-		
-	}
 
-	@Override
-	public void addRenderer(Map map) {
-		LMM_Client.addRenderer(map);
+		// AIãƒªã‚¹ãƒˆã®è¿½åŠ 
+		LMM_EntityModeManager.init();
+
+		// ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆæ›´æ–°ç”¨ã®ãƒ‘ã‚±ãƒƒãƒˆ
+		ModLoader.registerPacketChannel(this, "LMM|Upd");
+
 	}
 
 	@Override
 	public void modsLoaded() {
-		if (UniqueEntityId == -1) return;
+		if (UniqueEntityId == -1) {
+			return;
+		}
 		// Dominant
-		if(spawnWeight > 0) {
+		if (spawnWeight > 0) {
 			if (Dominant) {
-				// ‚ ‚ç‚ä‚éêŠ‚ÉƒXƒ|[ƒ“‚·‚é
+				// ã‚ã‚‰ã‚†ã‚‹å ´æ‰€ã«ã‚¹ãƒãƒ¼ãƒ³ã™ã‚‹
 				try {
-					Field afield[] = (net.minecraft.src.BiomeGenBase.class).getDeclaredFields();
+					Field afield[] = (BiomeGenBase.class).getDeclaredFields();
 					LinkedList<BiomeGenBase> linkedlist = new LinkedList<BiomeGenBase>();
-					for(int j = 0; j < afield.length; j++) {
-						Class class1 = afield[j].getType();
-						if((afield[j].getModifiers() & 8) != 0 && class1.isAssignableFrom(net.minecraft.src.BiomeGenBase.class)) {
-							BiomeGenBase biomegenbase = (BiomeGenBase)afield[j].get(null);
+					for (Field element : afield) {
+						Class class1 = element.getType();
+						if ((element.getModifiers() & 8) != 0 && class1.isAssignableFrom(BiomeGenBase.class)) {
+							BiomeGenBase biomegenbase = (BiomeGenBase) element.get(null);
 							linkedlist.add(biomegenbase);
 						}
 					}
-					BiomeGenBase[] dominateBiomes = (BiomeGenBase[])linkedlist.toArray(new BiomeGenBase[0]);
-					
-					ModLoader.addSpawn(net.minecraft.src.LMM_EntityLittleMaid.class, spawnWeight, minGroupSize, maxGroupSize, EnumCreatureType.creature, dominateBiomes);
+					BiomeGenBase[] dominateBiomes = linkedlist.toArray(new BiomeGenBase[0]);
+
+					ModLoader.addSpawn(LMM_EntityLittleMaid.class, spawnWeight, minGroupSize, maxGroupSize,
+							EnumCreatureType.creature, dominateBiomes);
 				} catch (Exception exception) {
 					Debug("Dominate Exception.");
 				}
 			} else {
-				// ’ÊíƒXƒ|[ƒ“İ’è
-				ModLoader.addSpawn(LMM_EntityLittleMaid.class, spawnWeight, minGroupSize, maxGroupSize, EnumCreatureType.creature);
+				// é€šå¸¸ã‚¹ãƒãƒ¼ãƒ³è¨­å®š
+				ModLoader.addSpawn(LMM_EntityLittleMaid.class, spawnWeight, minGroupSize, maxGroupSize,
+						EnumCreatureType.creature);
 			}
 		}
-		
-		// ƒ‚[ƒhƒŠƒXƒg‚ğ\’z
+
+		// ãƒ¢ãƒ¼ãƒ‰ãƒªã‚¹ãƒˆã‚’æ§‹ç¯‰
 		LMM_EntityModeManager.loadEntityMode();
-		
+
 		if (MMM_Helper.isClient) {
-			// ‰¹º‚Ì‰ğÍ
+			// éŸ³å£°ã®è§£æ
 			if (useMinecraftPath) {
 				LMM_SoundManager.sounddir = new File(Minecraft.getMinecraftDir(), "/resources/mod/sound/littleMaidMob");
 			} else {
-				LMM_SoundManager.sounddir = Minecraft.getAppDir("minecraft/resources/mod/sound/littleMaidMob"); 
+				LMM_SoundManager.sounddir = Minecraft.getAppDir("minecraft/resources/mod/sound/littleMaidMob");
 			}
 			Debug("SoundDir:".concat(LMM_SoundManager.sounddir.toString()));
-			// ƒTƒEƒ“ƒhƒpƒbƒN
+			// ã‚µã‚¦ãƒ³ãƒ‰ãƒ‘ãƒƒã‚¯
 			LMM_SoundManager.loadDefaultSoundPack();
 			LMM_SoundManager.loadSoundPack();
 		}
-		
-		// IFF‚Ìƒ[ƒh
+
+		// IFFã®ãƒ­ãƒ¼ãƒ‰
 		LMM_IFF.loadIFFs();
-		
+
 	}
 
 	@Override
 	public void serverCustomPayload(NetServerHandler var1, Packet250CustomPayload var2) {
-		// ƒT[ƒo‘¤‚Ì“®ì
+		// ã‚µãƒ¼ãƒå´ã®å‹•ä½œ
 		LMM_Net.serverCustomPayload(var1, var2);
-	}
-
-	@Override
-	public void clientCustomPayload(NetClientHandler var1, Packet250CustomPayload var2) {
-		// ƒNƒ‰ƒCƒAƒ“ƒg‘¤‚Ì“ÁêƒpƒPƒbƒgóM“®ì
-		LMM_Client.clientCustomPayload(var1, var2);
-	}
-
-	@Override
-	public GuiContainer getContainerGUI(EntityClientPlayerMP var1, int var2,
-			int var3, int var4, int var5) {
-		return LMM_Client.getContainerGUI(var1, var2, var3, var4, var5);
 	}
 
 }

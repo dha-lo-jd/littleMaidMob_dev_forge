@@ -1,13 +1,23 @@
 package net.minecraft.src;
 
-import java.lang.annotation.Target;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LMM_EntityLittleMaid;
+import net.minecraft.entity.LMM_EntityModeBase;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAINearestAttackableTargetSorter;
+import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.util.MathHelper;
+
 public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackableTarget {
 
-	protected LMM_EntityLittleMaid theMaid;
+	public LMM_EntityLittleMaid theMaid;
 	Entity targetEntity;
 	Class targetClass;
 	int targetChance;
@@ -49,10 +59,10 @@ public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackab
 		} else {
 			List var5 = this.taskOwner.worldObj.getEntitiesWithinAABB(this.targetClass, this.taskOwner.boundingBox.expand((double)this.targetDistance, 4.0D, (double)this.targetDistance));
 			if (theMaid.mstatMasterEntity != null && !theMaid.isBloodsuck()) {
-				// ƒ\[ƒ^[‚ğå’†S‚Ö
+				// ã‚½ãƒ¼ã‚¿ãƒ¼ã‚’ä¸»ä¸­å¿ƒã¸
 				Collections.sort(var5, new EntityAINearestAttackableTargetSorter(this, theMaid.mstatMasterEntity));
 			} else {
-				// ©•ª’†S‚Éƒ\[ƒg
+				// è‡ªåˆ†ä¸­å¿ƒã«ã‚½ãƒ¼ãƒˆ
 				Collections.sort(var5, this.theNearestAttackableTargetSorter);
 			}
 			Iterator var2 = var5.iterator();
@@ -79,8 +89,8 @@ public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackab
 	}
 
 //	@Override
-	protected boolean isSuitableTargetLM(Entity par1EntityLiving, boolean par2) {
-		// LMM—p‚ÉƒJƒXƒ^ƒ€
+	public boolean isSuitableTargetLM(Entity par1EntityLiving, boolean par2) {
+		// LMMç”¨ã«ã‚«ã‚¹ã‚¿ãƒ 
 		if (par1EntityLiving == null) {
 			return false;
 		}
@@ -107,17 +117,17 @@ public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackab
 			}
 		}
 		
-		// Šî“_‚©‚çˆê’è‹——£—£‚ê‚Ä‚¢‚éê‡‚àUŒ‚‚µ‚È‚¢
+		// åŸºç‚¹ã‹ã‚‰ä¸€å®šè·é›¢é›¢ã‚Œã¦ã„ã‚‹å ´åˆã‚‚æ”»æ’ƒã—ãªã„
 		if (!taskOwner.isWithinHomeDistance(MathHelper.floor_double(par1EntityLiving.posX), MathHelper.floor_double(par1EntityLiving.posY), MathHelper.floor_double(par1EntityLiving.posZ))) {
 			return false;
 		}
 		
-		// ƒ^[ƒQƒbƒg‚ªŒ©‚¦‚È‚¢
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒè¦‹ãˆãªã„
 		if (shouldCheckSight && !taskOwner.getEntitySenses().canSee(par1EntityLiving)) {
 			return false;
 		}
 		
-		// UŒ‚’†~”»’èH
+		// æ”»æ’ƒä¸­æ­¢åˆ¤å®šï¼Ÿ
 		if (this.field_75303_a) {
 			if (--this.field_75302_c <= 0) {
 				this.field_75301_b = 0;

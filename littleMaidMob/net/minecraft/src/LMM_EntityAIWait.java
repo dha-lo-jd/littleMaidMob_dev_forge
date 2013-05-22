@@ -1,5 +1,8 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.LMM_EntityLittleMaid;
+import net.minecraft.entity.ai.EntityAISit;
+
 public class LMM_EntityAIWait extends EntityAISit {
 
 	public LMM_EntityLittleMaid theMaid;

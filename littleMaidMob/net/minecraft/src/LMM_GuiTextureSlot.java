@@ -4,21 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.LMM_EntityLittleMaid;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-import net.minecraft.client.Minecraft;
+import org.lwjgl.opengl.GL11;
 
 public class LMM_GuiTextureSlot extends GuiSlot {
 
 	public LMM_GuiTextureSelect owner;
-	protected int selected;
-	protected LMM_EntityLittleMaid maid;
-	protected List<Integer> indexTexture;
-	protected List<Integer> indexArmor;
+	public int selected;
+	public LMM_EntityLittleMaid maid;
+	public List<Integer> indexTexture;
+	public List<Integer> indexArmor;
 	public boolean mode;
 	public int texsel[] = new int[2];
 	public int color;
-	protected int selectColor;
+	public int selectColor;
 	private ItemStack armors[] = new ItemStack[] {
 			new ItemStack(Item.bootsLeather),
 			new ItemStack(Item.legsLeather),
@@ -66,12 +72,12 @@ public class LMM_GuiTextureSlot extends GuiSlot {
 	}
 
 	@Override
-	protected int getSize() {
+	public int getSize() {
 		return mode ? indexArmor.size() : indexTexture.size();
 	}
 
 	@Override
-	protected void elementClicked(int var1, boolean var2) {
+	public void elementClicked(int var1, boolean var2) {
 		if (mode) {
 			selected = var1;
 			texsel[1] = var1;
@@ -91,18 +97,18 @@ public class LMM_GuiTextureSlot extends GuiSlot {
 	}
 
 	@Override
-	protected boolean isSelected(int var1) {
+	public boolean isSelected(int var1) {
 		return selected == var1;
 	}
 
 	@Override
-	protected void drawBackground() {
+	public void drawBackground() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	protected void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5) {
+	public void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5) {
 		GL11.glPushMatrix();
 		
 		if (!mode) {
@@ -139,7 +145,7 @@ public class LMM_GuiTextureSlot extends GuiSlot {
 //		RenderHelper.enableStandardItemLighting();
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 		if (mode) {
-			// アーマー
+			// 繧｢繝ｼ繝槭�ｼ
 			GL11.glTranslatef(1F, 0, 0);
 			maid.textureModel0 = null;
 			Map<Integer, String> lmap = lbox.armors.get("default");
@@ -170,7 +176,7 @@ public class LMM_GuiTextureSlot extends GuiSlot {
 			}
 			
 		} else {
-			// テクスチャ表示
+			// 繝�繧ｯ繧ｹ繝√Ε陦ｨ遉ｺ
 			for (int li = 0; li < 16; li++) {
 				GL11.glTranslatef(1F, 0, 0);
 				if (lbox.hasColor(li, isContract)) {
