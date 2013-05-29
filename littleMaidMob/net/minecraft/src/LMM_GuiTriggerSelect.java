@@ -1,15 +1,14 @@
-package net.minecraft.client.gui.inventory;
+package net.minecraft.src;
 
 import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.LMM_GuiIFF;
-import net.minecraft.src.LMM_TriggerSelect;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;

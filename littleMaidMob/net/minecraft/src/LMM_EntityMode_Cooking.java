@@ -1,11 +1,8 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.LMM_EnumSound;
-import net.minecraft.src.LMM_InventoryLittleMaid;
-import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 

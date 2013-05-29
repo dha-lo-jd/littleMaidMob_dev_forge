@@ -1,10 +1,7 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.src.MMM_FileManager;
-import net.minecraft.src.MMM_ManagerBase;
 
 public class LMM_EntityModeManager extends MMM_ManagerBase<LMM_EntityModeBase> {
 
@@ -20,9 +17,7 @@ public class LMM_EntityModeManager extends MMM_ManagerBase<LMM_EntityModeBase> {
 			try {
 				llist.add(lmode.getClass().getConstructor(LMM_EntityLittleMaid.class).newInstance(pentity));
 			} catch (Exception e) {
-				e.printStackTrace();
 			} catch (Error e) {
-				e.printStackTrace();
 			}
 		}
 
@@ -64,10 +59,7 @@ public class LMM_EntityModeManager extends MMM_ManagerBase<LMM_EntityModeBase> {
 
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
 		} catch (Error e) {
-
-			e.printStackTrace();
 		}
 
 		return false;

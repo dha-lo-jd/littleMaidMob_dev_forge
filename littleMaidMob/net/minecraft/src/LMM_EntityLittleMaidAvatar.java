@@ -1,21 +1,20 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet18Animation;
-import net.minecraft.src.LMM_Client;
-import net.minecraft.src.LMM_EnumSound;
-import net.minecraft.src.mod_LMM_littleMaidMob;
 import net.minecraft.stats.StatBase;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+
 public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 
-	public Minecraft mc;
 	public LMM_EntityLittleMaid avatar;
 	public boolean isItemTrigger;
 	public boolean isItemReload;
@@ -25,12 +24,11 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	private double appendZ;
 
 	
-	public LMM_EntityLittleMaidAvatar(World par1World, Minecraft pminecraft, LMM_EntityLittleMaid par2EntityLittleMaid) {
+	public LMM_EntityLittleMaidAvatar(World par1World, LMM_EntityLittleMaid par2EntityLittleMaid) {
 		super(par1World);
 		
 		// 初期設定
 		avatar = par2EntityLittleMaid;
-		mc = pminecraft;
 		
 		inventory = avatar.maidInventory;
 		inventory.player = this;

@@ -3,7 +3,6 @@ package net.minecraft.src;
 import java.util.Map.Entry;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LMM_EntityLittleMaid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetServerHandler;
@@ -20,7 +19,7 @@ public class LMM_Net {
 //	public static final byte LMN_Server_SetTexture		= (byte)0x81;
 	public static final byte LMN_Client_SwingArm		= (byte)0x81;
 	public static final byte LMN_Server_DecDyePowder	= (byte)0x02;
-	public static final byte LMN_Client_UpdateTexture	= (byte)0x83;
+//	public static final byte LMN_Client_UpdateTexture	= (byte)0x83;
 	public static final byte LMN_Server_SetIFFValue		= (byte)0x04;
 	public static final byte LMN_Client_SetIFFValue		= (byte)0x04;
 	public static final byte LMN_Server_SaveIFF			= (byte)0x05;

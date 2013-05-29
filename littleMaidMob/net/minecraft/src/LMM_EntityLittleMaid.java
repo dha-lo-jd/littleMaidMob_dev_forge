@@ -1,4 +1,4 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -12,7 +12,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPumpkin;
-import net.minecraft.client.model.MMM_ModelMultiBase;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIOpenDoor;
@@ -25,13 +29,13 @@ import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.LMM_ContainerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBlock;
@@ -48,37 +52,6 @@ import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.profiler.Profiler;
-import net.minecraft.src.LMM_Client;
-import net.minecraft.src.LMM_EntityAIAttackArrow;
-import net.minecraft.src.LMM_EntityAIAttackOnCollide;
-import net.minecraft.src.LMM_EntityAIAvoidPlayer;
-import net.minecraft.src.LMM_EntityAIBeg;
-import net.minecraft.src.LMM_EntityAIBegMove;
-import net.minecraft.src.LMM_EntityAICollectItem;
-import net.minecraft.src.LMM_EntityAIFindBlock;
-import net.minecraft.src.LMM_EntityAIFleeRain;
-import net.minecraft.src.LMM_EntityAIFollowOwner;
-import net.minecraft.src.LMM_EntityAIJumpToMaster;
-import net.minecraft.src.LMM_EntityAIRestrictRain;
-import net.minecraft.src.LMM_EntityAISwimming;
-import net.minecraft.src.LMM_EntityAITracerMove;
-import net.minecraft.src.LMM_EntityAIWait;
-import net.minecraft.src.LMM_EntityAIWander;
-import net.minecraft.src.LMM_EnumSound;
-import net.minecraft.src.LMM_IFF;
-import net.minecraft.src.LMM_InventoryLittleMaid;
-import net.minecraft.src.LMM_Net;
-import net.minecraft.src.LMM_SoundManager;
-import net.minecraft.src.LMM_SwingStatus;
-import net.minecraft.src.MMM_Counter;
-import net.minecraft.src.MMM_EquippedStabilizer;
-import net.minecraft.src.MMM_Helper;
-import net.minecraft.src.MMM_ITextureEntity;
-import net.minecraft.src.MMM_TextureBox;
-import net.minecraft.src.MMM_TextureBoxServer;
-import net.minecraft.src.MMM_TextureManager;
-import net.minecraft.src.ModLoader;
-import net.minecraft.src.mod_LMM_littleMaidMob;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
@@ -92,146 +65,146 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 
 	//	public static Minecraft mcGame;
 
-	public static final int dataFlags_ForceUpdateInventory = 0x80000000;
-	public static final int dataWatch_ColorMode = 19;
-	//    public static final int dataWatch_TexArmar	= 21;
-	public static final int dataWatch_Flags = 22;
-
-	public static final int dataWatch_Flags_Aimebow = 0x00000004;
-	public static final int dataWatch_Flags_Bloodsuck = 0x00000800;
-	public static final int dataWatch_Flags_Freedom = 0x00000008;
-	public static final int dataWatch_Flags_LooksSugar = 0x00000400;
-	public static final int dataWatch_Flags_looksWithInterest = 0x00000001;
-	public static final int dataWatch_Flags_looksWithInterestAXIS = 0x00000002;
-	public static final int dataWatch_Flags_OverDrive = 0x00001000;
-	public static final int dataWatch_Flags_PlayingMode = 0x00000040;
-	public static final int dataWatch_Flags_remainsContract = 0x00000020;
-	public static final int dataWatch_Flags_Tracer = 0x00000010;
-	public static final int dataWatch_Flags_Wait = 0x00000100;
-	public static final int dataWatch_Flags_WaitEx = 0x00000200;
-	public static final int dataWatch_Flags_Working = 0x00000080;
-	public static final int dataWatch_Free = 31;
-	public static final int dataWatch_Gotcha = 23;
-	public static final int dataWatch_Health = 18;
-	public static final int dataWatch_Texture = 20;
-	private static final float moveSpeed_Max = 0.3F;
 	// TODO:定数は要修正
 	private static final float moveSpeed_Nomal = 0.23F;
-
+	private static final float moveSpeed_Max = 0.3F;
 	private static final float moveSpeed_Overdrive = 1.0F;
 
-	public LMM_EntityAIAttackOnCollide aiAttack;
-	public LMM_EntityAIAvoidPlayer aiAvoidPlayer;
-	public LMM_EntityAIBeg aiBeg;
-	public LMM_EntityAIBegMove aiBegMove;
-	public EntityAIRestrictOpenDoor aiCloseDoor;
-	public LMM_EntityAICollectItem aiCollectItem;
-	public LMM_EntityAIFindBlock aiFindBlock;
-	public LMM_EntityAIFollowOwner aiFollow;
-	public LMM_EntityAIFleeRain aiFreeRain;
-	public LMM_EntityAIJumpToMaster aiJumpTo;
-	public EntityAIOpenDoor aiOpenDoor;
-	public EntityAIPanic aiPanic;
-	public Profiler aiProfiler;
+	public static final int dataWatch_Health = 18;
+	public static final int dataWatch_ColorMode = 19;
+	public static final int dataWatch_Texture = 20;
+	//    public static final int dataWatch_TexArmar	= 21;
+	public static final int dataWatch_Flags = 22;
+	public static final int dataWatch_Flags_looksWithInterest = 0x00000001;
+	public static final int dataWatch_Flags_looksWithInterestAXIS = 0x00000002;
+	public static final int dataWatch_Flags_Aimebow = 0x00000004;
+	public static final int dataWatch_Flags_Freedom = 0x00000008;
+	public static final int dataWatch_Flags_Tracer = 0x00000010;
+	public static final int dataWatch_Flags_remainsContract = 0x00000020;
+	public static final int dataWatch_Flags_PlayingMode = 0x00000040;
+	public static final int dataWatch_Flags_Working = 0x00000080;
+	public static final int dataWatch_Flags_Wait = 0x00000100;
+	public static final int dataWatch_Flags_WaitEx = 0x00000200;
+	public static final int dataWatch_Flags_LooksSugar = 0x00000400;
+	public static final int dataWatch_Flags_Bloodsuck = 0x00000800;
+	public static final int dataWatch_Flags_OverDrive = 0x00001000;
+	public static final int dataWatch_Gotcha = 23;
+	public static final int dataWatch_Free = 31;
 
-	public LMM_EntityAIRestrictRain aiRestrictRain;
-	public LMM_EntityAIAttackArrow aiShooting;
-	public EntityAISwimming aiSwiming;
+	public static final int dataFlags_ForceUpdateInventory = 0x80000000;
 
-	// AI
-	public EntityAITempt aiTempt;
-	public LMM_EntityAITracerMove aiTracer;
-	public LMM_EntityAIWander aiWander;
+	// 変数減らしたいなぁ
+	//    public long maidContractLimit;		// 契約失効日
+	public int maidContractLimit; // 契約期間
+	public long maidAnniversary; // 契約日UIDとして使用
+	public int maidDominantArm; // 利き腕、1Byte
+	public String textureArmor1[] = new String[4];
+	public String textureArmor2[] = new String[4];
+	//	public String textureName;
+	//	public String textureArmorName;
+	//	public int textureIndex;
+	//	public int textureArmorIndex;
+	//	public MMM_ModelMultiBase textureModel0;
+	//	public MMM_ModelMultiBase textureModel1;
+	//	public MMM_ModelMultiBase textureModel2;
+	public MMM_TextureBoxBase textureBox[] = new MMM_TextureBoxBase[2];
+	public int textureIndex[] = new int[2];
+	public Map<String, MMM_EquippedStabilizer> maidStabilizer = new HashMap<String, MMM_EquippedStabilizer>();
+
+	public LMM_InventoryLittleMaid maidInventory;
+	public LMM_EntityLittleMaidAvatar maidAvatar;
+	public LMM_EntityCaps maidCaps; // Client側のみ
+
+	public List<LMM_EntityModeBase> maidEntityModeList;
+	public Map<Integer, EntityAITasks[]> maidModeList;
+	public Map<String, Integer> maidModeIndexList;
+	public int maidMode; // 2Byte
+	public int maidColor; // 1Byte
+	public boolean maidTracer;
+	public boolean maidFreedom;
+	public boolean maidWait;
+	public boolean maidContract;
+	public int homeWorld;
+
+	// 動的な状態
+	public EntityPlayer mstatMasterEntity; // 主
+	public double mstatMasterDistanceSq; // 主との距離、計算軽量化用
+	public Entity mstatgotcha; // ワイヤード用
+	public boolean mstatBloodsuck;
+	public boolean mstatClockMaid;
+	// マスク判定
+	public int mstatMaskSelect;
+	// 追加の頭部装備
+	public boolean mstatCamouflage;
+	public boolean mstatPlanter;
+	//	public boolean isMaidChaseWait;
+	public int mstatWaitCount;
+	public int mstatTime;
+	public MMM_Counter maidOverDriveTime;
+	public boolean mstatFirstLook;
+	public boolean mstatLookSuger;
+	public MMM_Counter mstatWorkingCount;
+	public int mstatPlayingRole;
+	public int mstatWorkingInt;
+	public String mstatModeName;
+	public boolean mstatOpenInventory;
+	// 腕振り
+	public LMM_SwingStatus mstatSwingStatus[];
+	public boolean mstatAimeBow;
+	// 首周り
+	private boolean looksWithInterest;
+	private boolean looksWithInterestAXIS;
+	private float rotateAngleHead; // Angle
+	private float prevRotateAngleHead; // prevAngle
+
 	/**
 	 * 個体ごとに値をバラつかせるのに使う。
 	 */
 	public float entityIdFactor;
-	// 実験用
-	private int firstload = 1;
-	public int homeWorld;
-	// 首周り
-	private boolean looksWithInterest;
-	private boolean looksWithInterestAXIS;
-	// ActiveModeClass
-	public LMM_EntityModeBase maidActiveModeClass;
-	public long maidAnniversary; // 契約日UIDとして使用
 
-	public LMM_EntityLittleMaidAvatar maidAvatar;
+	public boolean weaponFullAuto; // 装備がフルオート武器かどうか
+	public boolean weaponReload; // 装備がリロードを欲しているかどうか
 	public boolean maidCamouflage;
-	public LMM_EntityCaps maidCaps; // Client側のみ
-	public int maidColor; // 1Byte
-	public boolean maidContract;
-	// 変数減らしたいなぁ
-	//    public long maidContractLimit;		// 契約失効日
-	public int maidContractLimit; // 契約期間
+
 	// 音声
 	//	public LMM_EnumSound maidAttackSound;
 	public LMM_EnumSound maidDamegeSound;
-	public int maidDominantArm; // 利き腕、1Byte
-	public List<LMM_EntityModeBase> maidEntityModeList;
-	public boolean maidFreedom;
-	public LMM_InventoryLittleMaid maidInventory;
-	public int maidMode; // 2Byte
-	public Map<String, Integer> maidModeIndexList;
-	public Map<Integer, EntityAITasks[]> maidModeList;
-	public MMM_Counter maidOverDriveTime;
 	public int maidSoundInterval;
 	public float maidSoundRate;
-	public Map<String, MMM_EquippedStabilizer> maidStabilizer = new HashMap<String, MMM_EquippedStabilizer>();
-	public boolean maidTracer;
-	public boolean maidWait;
-	public boolean mstatAimeBow;
-	public boolean mstatBloodsuck;
-	// 追加の頭部装備
-	public boolean mstatCamouflage;
-	public boolean mstatClockMaid;
 
-	public boolean mstatFirstLook;
-
-	public Entity mstatgotcha; // ワイヤード用
-	public boolean mstatLookSuger;
-	// マスク判定
-	public int mstatMaskSelect;
-
-	public double mstatMasterDistanceSq; // 主との距離、計算軽量化用
-	// 動的な状態
-	public EntityPlayer mstatMasterEntity; // 主
-	public String mstatModeName;
-
-	public boolean mstatOpenInventory;
-	public boolean mstatPlanter;
-
-	public int mstatPlayingRole;
-	// 腕振り
-	public LMM_SwingStatus mstatSwingStatus[];
-	public int mstatTime;
-	//	public boolean isMaidChaseWait;
-	public int mstatWaitCount;
-	public MMM_Counter mstatWorkingCount;
-	public int mstatWorkingInt;
-	private float prevRotateAngleHead; // prevAngle
-	private float rotateAngleHead; // Angle
+	// 実験用
+	private int firstload = 1;
 	public String statusMessage = "";
-	public String textureArmor1[] = new String[4];
-	public String textureArmor2[] = new String[4];
-	public int textureArmorIndex;
-	public String textureArmorName;
-	public int textureIndex;
-	//	public int prevTextureIndex;
-	//	public int prevTextureArmorIndex;
-	public MMM_ModelMultiBase textureModel0;
-	public MMM_ModelMultiBase textureModel1;
-	public MMM_ModelMultiBase textureModel2;
-	public String textureName;
-	public boolean weaponFullAuto; // 装備がフルオート武器かどうか
-	public boolean weaponReload; // 装備がリロードを欲しているかどうか
+
+	// AI
+	public EntityAITempt aiTempt;
+	public LMM_EntityAIBeg aiBeg;
+	public LMM_EntityAIBegMove aiBegMove;
+	public EntityAIOpenDoor aiOpenDoor;
+	public EntityAIRestrictOpenDoor aiCloseDoor;
+	public LMM_EntityAIAvoidPlayer aiAvoidPlayer;
+	public LMM_EntityAIFollowOwner aiFollow;
+	public LMM_EntityAIAttackOnCollide aiAttack;
+	public LMM_EntityAIAttackArrow aiShooting;
+	public LMM_EntityAICollectItem aiCollectItem;
+	public LMM_EntityAIRestrictRain aiRestrictRain;
+	public LMM_EntityAIFleeRain aiFreeRain;
+	public LMM_EntityAIWander aiWander;
+	public LMM_EntityAIJumpToMaster aiJumpTo;
+	public LMM_EntityAIFindBlock aiFindBlock;
+	public LMM_EntityAITracerMove aiTracer;
+	public EntityAISwimming aiSwiming;
+	public EntityAIPanic aiPanic;
+	// ActiveModeClass
+	public LMM_EntityModeBase maidActiveModeClass;
+	public Profiler aiProfiler;
 
 	public LMM_EntityLittleMaid(World par1World) {
 		super(par1World);
 		// 初期設定
 		maidInventory = new LMM_InventoryLittleMaid(this);
 		if (par1World != null) {
-			maidAvatar = new LMM_EntityLittleMaidAvatar(par1World, MMM_Helper.mc, this);
+			maidAvatar = new LMM_EntityLittleMaidAvatar(par1World, this);
 		}
 		mstatOpenInventory = false;
 		//		isMaidChaseWait = false;
@@ -262,16 +235,14 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		//		maidStabilizer.put("HeadTop", MMM_StabilizerManager.getStabilizer("WitchHat", "HeadTop"));
 
 		// 形態形成場
-		textureName = textureArmorName = "default";
+		MMM_TextureBox ltb[] = new MMM_TextureBox[2];
 		maidColor = 12;
-		textureIndex = textureArmorIndex = 0;
-		if (MMM_Helper.isClient) {
-			LMM_Client.setTextureValue(this);
-		}
+		ltb[0] = ltb[1] = MMM_TextureManager.getDefaultTexture(this);
+		mod_LMM_littleMaidMob.Debug("ltb[0]%s", ltb[0] == null ? "NULL" : ltb[0].textureName);
+		setTexturePackName(ltb);
+		//		maidSoundRate = LMM_SoundManager.getSoundRate(textureBox[0].textureName, maidColor);
 		// モデルレンダリング用のフラグ獲得用ヘルパー関数
 		maidCaps = new LMM_EntityCaps(this);
-
-		maidSoundRate = LMM_SoundManager.getSoundRate(textureName, maidColor);
 
 		// EntityModeの追加
 		maidEntityModeList = LMM_EntityModeManager.getModeList(this);
@@ -283,9 +254,6 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		initModeList();
 		mstatModeName = "";
 		maidMode = 65535;
-		if (worldObj != null) {
-			setMaidMode("Wild");
-		}
 	}
 
 	public void addMaidMode(EntityAITasks[] peaiTasks, String pmodeName, int pmodeIndex) {
@@ -473,7 +441,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 				// ヘルムを持ってる
 				mstatMaskSelect = i;
 				maidInventory.armorInventory[3] = is;
-				LMM_Client.setArmorTextureValue(this);
+				setTextureNames();
 				return;
 			}
 		}
@@ -676,8 +644,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 			// ドミナント
 			return worldObj.checkNoEntityCollision(boundingBox)
 					&& worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty()
-					&& !worldObj.isAnyLiquid(boundingBox)
-					&& getBlockPathWeight(lx, ly, lz) >= 0.0F;
+					&& !worldObj.isAnyLiquid(boundingBox) && getBlockPathWeight(lx, ly, lz) >= 0.0F;
 		} else {
 			return super.getCanSpawnHere();
 		}
@@ -893,9 +860,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 			if (mstatMasterEntity == null || mstatMasterEntity.isDead) {
 				String lname;
 				// サーバー側ならちゃんとオーナ判定する
-				if (!MMM_Helper.isClient
-						|| mod_LMM_littleMaidMob.checkOwnerName
-						|| MMM_Helper.mc.thePlayer == null) {
+				if (!MMM_Helper.isClient || mod_LMM_littleMaidMob.checkOwnerName || MMM_Helper.mc.thePlayer == null) {
 					lname = getMaidMaster();
 				} else {
 					lname = MMM_Helper.mc.thePlayer.username;
@@ -957,6 +922,18 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 	public int getMaxHealth() {
 		// 最大HP
 		return 20;
+	}
+
+	@Override
+	public double getMountedYOffset() {
+		// TODO:ここは要調整
+		if (riddenByEntity instanceof EntityChicken) {
+			return height + 0.03D;
+		}
+		if (riddenByEntity instanceof EntitySquid) {
+			return height - 0.2D;
+		}
+		return super.getMountedYOffset() + 0.35D;
 	}
 
 	/**
@@ -1110,24 +1087,19 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 	public void initCreature() {
 		super.initCreature();
 		// テクスチャーをランダムで選択
+		String ls;
 		if (mod_LMM_littleMaidMob.defaultTexture.isEmpty()) {
-			textureName = textureArmorName = MMM_TextureManager.getRandomTexture(rand);
+			ls = MMM_TextureManager.getRandomTextureString(rand);
 		} else {
-			textureName = textureArmorName = mod_LMM_littleMaidMob.defaultTexture;
+			ls = mod_LMM_littleMaidMob.defaultTexture;
 		}
-		textureIndex = textureArmorIndex = MMM_TextureManager.getIndexTextureBoxServer(this, textureName);
-		if (textureIndex == -1) {
-			// ここは必要なくなった？
-			textureName = textureArmorName = "default";
-			textureIndex = textureArmorIndex = MMM_TextureManager.getIndexTextureBoxServer(this, textureName);
-		}
+		textureIndex[0] = textureIndex[1] = MMM_TextureManager.getIndexTextureBoxServer(this, ls);
+		textureBox[0] = textureBox[1] = MMM_TextureManager.getTextureBoxServer(textureIndex[0]);
 		// 野生のメイド色をランダムで指定
-		maidColor = MMM_TextureManager.getRandomWildColor(textureIndex, rand);
-		mod_LMM_littleMaidMob.Debug(String.format("init-ID:%d, %s:%d", entityId, textureName, maidColor));
-		//		MMM_Helper.mc.thePlayer.addChatMessage(String.format("init-ID:%d, %s(%d):%d", entityId, textureName, textureIndex, maidColor));
-		setTexturePackIndex(maidColor, new int[] { textureIndex, textureArmorIndex });
-		//		setMaidColor(maidColor);
-
+		maidColor = textureBox[0].getRandomWildColor(rand);
+		mod_LMM_littleMaidMob.Debug("init-ID:%d, %s:%d", entityId, textureBox[0].textureName, maidColor);
+		setTexturePackIndex(maidColor, textureIndex);
+		setMaidMode("Wild");
 	}
 
 	public void initModeList() {
@@ -1263,23 +1235,20 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 									}
 								}
 								return true;
-							}
-							else if (itemstack1.itemID == Item.dyePowder.itemID) {
+							} else if (itemstack1.itemID == Item.dyePowder.itemID) {
 								// カラーメイド
 								if (!worldObj.isRemote) {
 									setMaidColor(15 - itemstack1.getItemDamage());
 								}
 								MMM_Helper.decPlayerInventory(par1EntityPlayer, -1, 1);
 								return true;
-							}
-							else if (itemstack1.itemID == Item.feather.itemID) {
+							} else if (itemstack1.itemID == Item.feather.itemID) {
 								// 自由行動
 								MMM_Helper.decPlayerInventory(par1EntityPlayer, -1, 1);
 								setFreedom(!isFreedom());
 								worldObj.setEntityState(this, isFreedom() ? (byte) 12 : (byte) 13);
 								return true;
-							}
-							else if (itemstack1.itemID == Item.saddle.itemID) {
+							} else if (itemstack1.itemID == Item.saddle.itemID) {
 								// 肩車
 								if (!worldObj.isRemote) {
 									if (ridingEntity == par1EntityPlayer) {
@@ -1289,15 +1258,13 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 									}
 									return true;
 								}
-							}
-							else if (itemstack1.itemID == Item.gunpowder.itemID) {
+							} else if (itemstack1.itemID == Item.gunpowder.itemID) {
 								// test TNT-D
 								//								playSound(LMM_EnumSound.eatGunpowder, false);
 								maidOverDriveTime.setValue(itemstack1.stackSize * 10);
 								MMM_Helper.decPlayerInventory(par1EntityPlayer, -1, itemstack1.stackSize);
 								return true;
-							}
-							else if (itemstack1.itemID == Item.book.itemID) {
+							} else if (itemstack1.itemID == Item.book.itemID) {
 								// IFFのオープン
 								MMM_Helper.decPlayerInventory(par1EntityPlayer, -1, 1);
 								//	    		            	ModLoader.openGUI(par1EntityPlayer, new LMM_GuiIFF(worldObj, this));
@@ -1305,8 +1272,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 									LMM_Client.OpenIFF(this, par1EntityPlayer);
 								}
 								return true;
-							}
-							else if ((itemstack1.itemID == Item.glassBottle.itemID) && (experienceValue >= 5)) {
+							} else if ((itemstack1.itemID == Item.glassBottle.itemID) && (experienceValue >= 5)) {
 								// Expボトル
 								MMM_Helper.decPlayerInventory(par1EntityPlayer, -1, 1);
 								if (!worldObj.isRemote) {
@@ -1317,8 +1283,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 									}
 								}
 								return true;
-							}
-							else if (itemstack1.getItem() instanceof ItemPotion) {
+							} else if (itemstack1.getItem() instanceof ItemPotion) {
 								// ポーション
 								if (!worldObj.isRemote) {
 									List list = ((ItemPotion) itemstack1.getItem()).getEffects(itemstack1);
@@ -1332,8 +1297,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 								}
 								MMM_Helper.decPlayerInventory(par1EntityPlayer, -1, 1);
 								return true;
-							}
-							else if (isFreedom() && itemstack1.itemID == Item.redstone.itemID) {
+							} else if (isFreedom() && itemstack1.itemID == Item.redstone.itemID) {
 								// Tracer
 								MMM_Helper.decPlayerInventory(par1EntityPlayer, -1, 1);
 								setPathToEntity(null);
@@ -1442,13 +1406,6 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		return maidAvatar.isBlocking();
 	}
 
-	/**
-	 * 埋葬対策コピー
-	 */
-	private boolean isBlockTranslucent(int par1, int par2, int par3) {
-		return worldObj.isBlockNormalCube(par1, par2, par3);
-	}
-
 	public boolean isBloodsuck() {
 		return mstatBloodsuck;
 	}
@@ -1493,13 +1450,13 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		return isMaidContract() && isRemainsContract();
 	}
 
-	// 保持アイテム関連
-
 	public boolean isMaidContractOwner(EntityPlayer pentity) {
 		return pentity == getMaidMasterEntity();
 
 		//		return pentity == mstatMasterEntity;
 	}
+
+	// 保持アイテム関連
 
 	public boolean isMaidContractOwner(String pname) {
 		return pname.equalsIgnoreCase(mstatMasterEntity.username);
@@ -1734,12 +1691,10 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 						if (mstatFirstLook && (mstatTime > 23500 || mstatTime < 1500)) {
 							lsound = LMM_EnumSound.goodmorning;
 							mstatFirstLook = false;
-						}
-						else if (!mstatFirstLook && b) {
+						} else if (!mstatFirstLook && b) {
 							lsound = LMM_EnumSound.goodnight;
 							mstatFirstLook = true;
-						}
-						else if (mstatFirstLook && !b) {
+						} else if (mstatFirstLook && !b) {
 							mstatFirstLook = false;
 						}
 
@@ -1848,16 +1803,12 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		if (worldObj.isRemote) {
 			// クライアント側
 			boolean lupd = false;
-			//			isWait();
-			if (textureIndex > -1 && textureArmorIndex > -1) {
-				lupd |= updateMaidContract();
-				lupd |= updateTexturePack();
-				lupd |= updateMaidColor();
-			} else {
-				sendTextureToServer();
-			}
+			lupd |= updateMaidContract();
+			lupd |= updateMaidColor();
+			//			lupd |= updateTexturePack();
+			updateTexturePack();
 			if (lupd) {
-				LMM_Client.setTextureValue(this);
+				setTextureNames();
 			}
 			int lcolormode = dataWatcher.getWatchableObjectInt(dataWatch_ColorMode);
 			setMaidMode(lcolormode & 0xffff);
@@ -2077,9 +2028,9 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		maidSoundInterval = 20;
 		if (worldObj.isRemote) {
 			// Client
-			String s = LMM_SoundManager.getSoundValue(enumsound, textureName, maidColor & 0x00ff);
-			mod_LMM_littleMaidMob
-					.Debug(String.format("id:%d, se:%04x-%s", entityId, enumsound.index, enumsound.name()));
+			String s = LMM_SoundManager.getSoundValue(enumsound, textureBox[0].textureName, maidColor & 0x00ff);
+			mod_LMM_littleMaidMob.Debug(String.format("id:%d, se:%04x-%s (%s)", entityId, enumsound.index,
+					enumsound.name(), s));
 			float lpitch = mod_LMM_littleMaidMob.VoiceDistortion ? (rand.nextFloat() * 0.2F) + 0.95F : 1.0F;
 			worldObj.playSound(posX, posY, posZ, s, getSoundVolume(), lpitch, false);
 		}
@@ -2093,8 +2044,6 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 			return;
 		}
 		maidSoundInterval = 20;
-		mod_LMM_littleMaidMob.Debug(String.format("id:%d-%s, seps:%04x-%s", entityId, worldObj.isRemote ? "Client"
-				: "Server", enumsound.index, enumsound.name()));
 		if (worldObj.isRemote) {
 			// Client
 			//			String lsound = LMM_SoundManager.getSoundValue(enumsound, textureName, maidColor & 0x00ff);
@@ -2102,11 +2051,9 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 			//			worldObj.playSound(posX, posY, posZ, lsound, getSoundVolume(), lpitch, false);
 		} else {
 			// Server
-			byte[] lbuf = new byte[] {
-					LMM_Net.LMN_Client_PlaySound,
-					0, 0, 0, 0,
-					0, 0, 0, 0
-			};
+			mod_LMM_littleMaidMob.Debug(String.format("id:%d-%s, seps:%04x-%s", entityId, worldObj.isRemote ? "Client"
+					: "Server", enumsound.index, enumsound.name()));
+			byte[] lbuf = new byte[] { LMM_Net.LMN_Client_PlaySound, 0, 0, 0, 0, 0, 0, 0, 0 };
 			MMM_Helper.setInt(lbuf, 5, enumsound.index);
 			LMM_Net.sendToAllEClient(this, lbuf);
 		}
@@ -2212,8 +2159,12 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 			setMaidWait(par1nbtTagCompound.getBoolean("Wait"));
 			setFreedom(par1nbtTagCompound.getBoolean("Freedom"));
 			setTracer(par1nbtTagCompound.getBoolean("Tracer"));
-			textureName = par1nbtTagCompound.getString("texName");
-			textureArmorName = par1nbtTagCompound.getString("texArmor");
+			textureIndex[0] = MMM_TextureManager
+					.getIndexTextureBoxServer(this, par1nbtTagCompound.getString("texName"));
+			textureIndex[1] = MMM_TextureManager.getIndexTextureBoxServer(this,
+					par1nbtTagCompound.getString("texArmor"));
+			textureBox[0] = MMM_TextureManager.getTextureBoxServer(textureIndex[0]);
+			textureBox[1] = MMM_TextureManager.getTextureBoxServer(textureIndex[1]);
 			byte b = par1nbtTagCompound.getByte("ModeColor");
 			setMaidColor(b & 0x0f);
 			switch ((b & 0xf0) >> 4) {
@@ -2322,9 +2273,13 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 			if (mstatSwingStatus.length <= maidDominantArm) {
 				maidDominantArm = 0;
 			}
-			textureName = par1nbtTagCompound.getString("texName");
-			textureArmorName = par1nbtTagCompound.getString("texArmor");
-			setMaidColor(par1nbtTagCompound.getInteger("Color"));
+			textureIndex[0] = MMM_TextureManager
+					.getIndexTextureBoxServer(this, par1nbtTagCompound.getString("texName"));
+			textureIndex[1] = MMM_TextureManager.getIndexTextureBoxServer(this,
+					par1nbtTagCompound.getString("texArmor"));
+			textureBox[0] = MMM_TextureManager.getTextureBoxServer(textureIndex[0]);
+			textureBox[1] = MMM_TextureManager.getTextureBoxServer(textureIndex[1]);
+			setTexturePackIndex(par1nbtTagCompound.getInteger("Color"), textureIndex);
 
 			// HomePosition
 			int lhx = par1nbtTagCompound.getInteger("homeX");
@@ -2343,12 +2298,6 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 				maidEntityModeList.get(li).readEntityFromNBT(par1nbtTagCompound);
 			}
 		}
-		// TODO: ColorBitsをどうするべ？
-		//		textureIndex = MMM_TextureManager.setStringToIndex(textureName, -1);
-		//		textureArmorIndex = MMM_TextureManager.setStringToIndex(textureArmorName, -1);
-		textureIndex = MMM_TextureManager.getIndexTextureBoxServer(this, textureName);
-		textureArmorIndex = MMM_TextureManager.getIndexTextureBoxServer(this, textureArmorName);
-		setTexturePackIndex(maidColor, new int[] { textureIndex, textureArmorIndex });
 		onInventoryChanged();
 
 		// ドッペル対策
@@ -2386,7 +2335,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 	 */
 	public boolean sendTextureToServer() {
 		// 16bitあればテクスチャパックの数にたりんべ
-		MMM_TextureManager.postSetTexturePack(this, maidColor, new String[] { textureName, textureArmorName });
+		MMM_TextureManager.postSetTexturePack(this, maidColor, textureBox);
 		return true;
 	}
 
@@ -2412,7 +2361,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 			if (mstatMaskSelect > -1) {
 				maidInventory.mainInventory[mstatMaskSelect] = par2ItemStack;
 			}
-			LMM_Client.setArmorTextureValue(this);
+			setTextureNames();
 		} else {
 			par1 -= 5;
 			// 持ち物のアップデート
@@ -2437,7 +2386,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 				//				mstatSwingStatus[lequip].index = lslotindex;
 			}
 			if (lslotindex >= LMM_InventoryLittleMaid.maxInventorySize) {
-				LMM_Client.setArmorTextureValue(this);
+				setTextureNames();
 			}
 			String s = par2ItemStack == null ? null : par2ItemStack.getItemName();
 			mod_LMM_littleMaidMob.Debug(String.format("ID:%d Slot(%2d:%d):%s", entityId, lslotindex, lequip,
@@ -2506,10 +2455,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		setAIMoveSpeed(pFlag ? moveSpeed_Nomal : moveSpeed_Max);
 		setMoveForward(0.0F);
 		if (maidFreedom && isMaidContract()) {
-			setHomeArea(
-					MathHelper.floor_double(posX),
-					MathHelper.floor_double(posY),
-					MathHelper.floor_double(posZ), 16);
+			setHomeArea(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ), 16);
 		} else {
 			detachHome();
 		}
@@ -2550,7 +2496,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 	}
 
 	public void setMaidColor(int index) {
-		maidColor = index & 0xff;
+		maidColor = index & 0x00ff;
 		setMaidColorMode();
 	}
 
@@ -2558,8 +2504,8 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		if (worldObj == null || worldObj.isRemote) {
 			return;
 		}
-		dataWatcher.updateObject(dataWatch_ColorMode,
-				(maidMode & 0xffff) | ((maidColor & 0xff) << 16) | ((maidDominantArm & 0xff) << 24));
+		dataWatcher.updateObject(dataWatch_ColorMode, (maidMode & 0xffff) | ((maidColor & 0x00ff) << 16)
+				| ((maidDominantArm & 0x00ff) << 24));
 	}
 
 	public void setMaidContract(boolean flag) {
@@ -2704,6 +2650,26 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		mstatWaitCount = count;
 	}
 
+	public void setNextTexturePackege(int pTargetTexture) {
+		if (pTargetTexture == 0) {
+			int lc = (maidColor & 0x00ff) + (isMaidContract() ? 0 : MMM_TextureManager.tx_wild);
+			textureBox[0] = MMM_TextureManager.getNextPackege((MMM_TextureBox) textureBox[0], lc);
+			if (textureBox[0] == null) {
+				// 指定色が無い場合は標準モデルに
+				textureBox[0] = textureBox[1] = MMM_TextureManager.getDefaultTexture(this);
+				maidColor = 12;
+			} else {
+				textureBox[1] = textureBox[0];
+			}
+			if (!((MMM_TextureBox) textureBox[1]).hasArmor()) {
+				pTargetTexture = 1;
+			}
+		}
+		if (pTargetTexture == 1) {
+			textureBox[1] = MMM_TextureManager.getNextArmorPackege((MMM_TextureBox) textureBox[1]);
+		}
+	}
+
 	// インベントリの表示関係
 	// まさぐれるのは一人だけ
 	public void setOpenInventory(boolean flag) {
@@ -2723,6 +2689,20 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		}
 	}
 
+	public void setPrevTexturePackege(int pTargetTexture) {
+		if (pTargetTexture == 0) {
+			int lc = (maidColor & 0x00ff) + (isMaidContract() ? 0 : MMM_TextureManager.tx_wild);
+			textureBox[0] = MMM_TextureManager.getPrevPackege((MMM_TextureBox) textureBox[0], lc);
+			textureBox[1] = textureBox[0];
+			if (!((MMM_TextureBox) textureBox[1]).hasArmor()) {
+				pTargetTexture = 1;
+			}
+		}
+		if (pTargetTexture == 1) {
+			textureBox[1] = MMM_TextureManager.getPrevArmorPackege((MMM_TextureBox) textureBox[1]);
+		}
+	}
+
 	// 腕振り
 	public void setSwing(int attacktime, LMM_EnumSound enumsound) {
 		setSwing(attacktime, enumsound, maidDominantArm);
@@ -2736,12 +2716,7 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 			setSwinging(pArm, enumsound);
 		}
 		if (worldObj instanceof WorldServer) {
-			byte[] lba = new byte[] {
-					LMM_Net.LMN_Client_SwingArm,
-					0, 0, 0, 0,
-					(byte) pArm,
-					0, 0, 0, 0
-			};
+			byte[] lba = new byte[] { LMM_Net.LMN_Client_SwingArm, 0, 0, 0, 0, (byte) pArm, 0, 0, 0, 0 };
 			MMM_Helper.setInt(lba, 6, enumsound.index);
 			LMM_Net.sendToAllEClient(this, lba);
 		}
@@ -2764,30 +2739,67 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		setMaidContract(par1);
 	}
 
+	/**
+	 * Client用
+	 */
+	public void setTextureNames() {
+		if (!(textureBox[0] instanceof MMM_TextureBox) && !(textureBox[1] instanceof MMM_TextureBox)) {
+			return;
+		}
+		int lc = (maidColor & 0x00ff) + (isMaidContract() ? 0 : MMM_TextureManager.tx_wild);
+		if (((MMM_TextureBox) textureBox[0]).hasColor(lc)) {
+			texture = ((MMM_TextureBox) textureBox[0]).getTextureName(lc);
+			for (int i = 0; i < 4; i++) {
+				ItemStack is = maidInventory.armorItemInSlot(i);
+				textureArmor1[i] = ((MMM_TextureBox) textureBox[1]).getArmorTextureName(true, is);
+				textureArmor2[i] = ((MMM_TextureBox) textureBox[1]).getArmorTextureName(false, is);
+			}
+		} else {
+			// TODO:setDefaultTexture
+			setNextTexturePackege(0);
+			//			MMM_TextureManager.postSetTexturePack(this, maidColor & 0x00ff, textureBox);
+		}
+	}
+
 	@Override
 	public void setTexturePackIndex(int pColor, int[] pIndex) {
 		// Server
-		textureIndex = pIndex[0];
-		textureArmorIndex = pIndex[1];
+		textureIndex[0] = pIndex[0];
+		textureIndex[1] = pIndex[1];
 		dataWatcher.updateObject(dataWatch_Texture,
-				(Integer.valueOf(textureIndex) & 0xffff) | ((Integer.valueOf(textureArmorIndex) & 0xffff) << 16));
+				(Integer.valueOf(textureIndex[0]) & 0xffff) | ((Integer.valueOf(textureIndex[1]) & 0xffff) << 16));
 		// TODO:この以下はホントはいらんけども修正めんどいので。
-		textureName = MMM_TextureManager.getTextureBoxServer(textureIndex).textureName;
-		textureArmorName = MMM_TextureManager.getTextureBoxServer(textureArmorIndex).textureName;
+		textureBox[0] = MMM_TextureManager.getTextureBoxServer(textureIndex[0]);
+		textureBox[1] = MMM_TextureManager.getTextureBoxServer(textureIndex[1]);
 		// サイズの変更
-		MMM_TextureBoxServer lbs = MMM_TextureManager.getTextureBoxServer(textureIndex);
-		if (lbs != null) {
-			setSize(-1F, 0F);
-			setSize(lbs.modelWidth, lbs.modelHeight);
-			mod_LMM_littleMaidMob.Debug("changeSize-ID:%d: %f, %f, %b", entityId, lbs.modelWidth, lbs.modelHeight,
-					worldObj.isRemote);
-		}
+		setSize(textureBox[0].modelWidth, textureBox[0].modelHeight);
+		func_98054_a(false);
+		mod_LMM_littleMaidMob.Debug("changeSize-ID:%d: %f, %f, %b", entityId, width, height, worldObj.isRemote);
 		setMaidColor(pColor);
 	}
 
 	@Override
 	public void setTexturePackName(MMM_TextureBox[] pTextureBox) {
-		// TODO Auto-generated method stub
+		// Client
+		textureBox[0] = pTextureBox[0];
+		textureBox[1] = pTextureBox[1];
+		setTextureNames();
+		// 身長変更用
+		setSize(textureBox[0].getWidth(), textureBox[0].getHeight());
+		func_98054_a(false);
+		setPosition(posX, posY, posZ);
+		mod_LMM_littleMaidMob.Debug("ID:%d, TextureModel:%s", entityId, textureBox[0].textureName);
+		// モデルの初期化
+		if (((MMM_TextureBox) textureBox[0]).models[0] instanceof MMM_ModelMultiMMMBase) {
+			((MMM_ModelMultiMMMBase) ((MMM_TextureBox) textureBox[0]).models[0]).changeModel(maidCaps);
+		}
+		// スタビの付け替え
+		//		for (Entry<String, MMM_EquippedStabilizer> le : pEntity.maidStabilizer.entrySet()) {
+		//			if (le.getValue() != null) {
+		//				le.getValue().updateEquippedPoint(pEntity.textureModel0);
+		//			}
+		//		}
+		maidSoundRate = LMM_SoundManager.getSoundRate(textureBox[0].textureName, maidColor);
 
 	}
 
@@ -2977,15 +2989,16 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		int ltexture = dataWatcher.getWatchableObjectInt(dataWatch_Texture);
 		int larmor = (ltexture >>> 16) & 0xffff;
 		ltexture &= 0xffff;
-		if (textureIndex > -1 && ltexture != textureIndex) {
+		if (textureIndex[0] != ltexture) {
+			textureIndex[0] = ltexture;
 			lflag = true;
 		}
-		if (textureArmorIndex > -1 && larmor != textureArmorIndex) {
+		if (textureIndex[1] != larmor) {
+			textureIndex[1] = larmor;
 			lflag = true;
 		}
-
 		if (lflag) {
-			MMM_TextureManager.postGetTexturePack(this, new int[] { textureIndex, textureArmorIndex });
+			MMM_TextureManager.postGetTexturePack(this, textureIndex);
 		}
 		return lflag;
 	}
@@ -3029,18 +3042,8 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		par1nbtTagCompound.setInteger("EXP", experienceValue);
 		par1nbtTagCompound.setInteger("DominantArm", maidDominantArm);
 		par1nbtTagCompound.setInteger("Color", maidColor);
-		if (textureName == null) {
-			par1nbtTagCompound.setString("texName", "");
-		} else {
-			par1nbtTagCompound.setString("texName", textureName);
-		}
-		if (textureArmorName == null) {
-			par1nbtTagCompound.setString("texArmor", "");
-		} else {
-			par1nbtTagCompound.setString("texArmor", textureArmorName);
-		}
-		textureName = par1nbtTagCompound.getString("texName");
-		textureArmorName = par1nbtTagCompound.getString("texArmor");
+		par1nbtTagCompound.setString("texName", textureBox[0].textureName);
+		par1nbtTagCompound.setString("texArmor", textureBox[1].textureName);
 		// HomePosition
 		par1nbtTagCompound.setInteger("homeX", getHomePosition().posX);
 		par1nbtTagCompound.setInteger("homeY", getHomePosition().posY);
@@ -3051,6 +3054,13 @@ public class LMM_EntityLittleMaid extends EntityTameable implements MMM_ITexture
 		for (int li = 0; li < maidEntityModeList.size(); li++) {
 			maidEntityModeList.get(li).writeEntityToNBT(par1nbtTagCompound);
 		}
+	}
+
+	/**
+	 * 埋葬対策コピー
+	 */
+	private boolean isBlockTranslucent(int par1, int par2, int par3) {
+		return worldObj.isBlockNormalCube(par1, par2, par3);
 	}
 
 }

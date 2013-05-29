@@ -1,7 +1,8 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommand;
@@ -11,11 +12,6 @@ import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.LMM_RenderLittleMaid;
-import net.minecraft.src.MMM_TextureBox;
-import net.minecraft.src.MMM_TextureBoxServer;
-import net.minecraft.src.MMM_TextureManager;
-import net.minecraft.src.ModLoader;
 
 public class LMM_EntityMode_Test extends LMM_EntityModeBase implements ICommand {
 
@@ -66,8 +62,8 @@ public class LMM_EntityMode_Test extends LMM_EntityModeBase implements ICommand 
 		llist.add(String.format("Limit: %b[%b]", owner.isMaidContract(), owner.isMaidContractEX()));
 		int li = owner.dataWatcher.getWatchableObjectInt(LMM_EntityLittleMaid.dataWatch_Texture);
 		llist.add(String.format("Texture=%s(%x/ %x), %s(%x / %x)",
-				MMM_TextureManager.getTextureBoxServerIndex(owner.textureIndex).packegeName, owner.textureIndex, li & 0xffff,
-				MMM_TextureManager.getTextureBoxServerIndex(owner.textureArmorIndex).packegeName, owner.textureArmorIndex, (li >>> 16)
+				owner.textureBox[0].textureName, owner.textureIndex[0], li & 0xffff,
+				owner.textureBox[1].textureName, owner.textureIndex[1], (li >>> 16)
 				));
 		
 		ld = (double)llist.size() * 0.25D - 0.5D;
@@ -109,7 +105,7 @@ public class LMM_EntityMode_Test extends LMM_EntityModeBase implements ICommand 
 	@Override
 	public String getCommandUsage(ICommandSender var1) {
 //		return "";
-		return "/" + this.getCommandName() + " <0-3>";
+		return "/" + this.getCommandName() + " <0-4>";
 	}
 
 	@Override
@@ -131,7 +127,7 @@ public class LMM_EntityMode_Test extends LMM_EntityModeBase implements ICommand 
 				break;
 			case 2:
 				// textureIndex
-				var1.sendChatToPlayer("textureIndex:");
+				var1.sendChatToPlayer("textureServer:");
 				for (int li = 0; li < MMM_TextureManager.textureServer.size(); li++) {
 					MMM_TextureBoxServer lb = MMM_TextureManager.getTextureBoxServer(li);
 					var1.sendChatToPlayer(String.format("%4d : %04x : %s", li, lb.wildColor, lb.textureName));
@@ -141,7 +137,14 @@ public class LMM_EntityMode_Test extends LMM_EntityModeBase implements ICommand 
 				// textures
 				var1.sendChatToPlayer("textures:");
 				for (MMM_TextureBox ltb : MMM_TextureManager.textures) {
-					var1.sendChatToPlayer(ltb.packegeName);
+					var1.sendChatToPlayer(ltb.textureName);
+				}
+				break;
+			case 4:
+				// textures
+				var1.sendChatToPlayer("textureServerIndex:");
+				for (Entry<MMM_TextureBox, Integer> ltb : MMM_TextureManager.textureServerIndex.entrySet()) {
+					var1.sendChatToPlayer(String.format("%04x, %s", ltb.getValue(), ltb.getKey().textureName));
 				}
 				break;
 			}

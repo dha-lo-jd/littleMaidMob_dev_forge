@@ -1,8 +1,6 @@
 package net.minecraft.src;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.LMM_EntityLittleMaid;
-import net.minecraft.entity.MMM_EntityDummy;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;

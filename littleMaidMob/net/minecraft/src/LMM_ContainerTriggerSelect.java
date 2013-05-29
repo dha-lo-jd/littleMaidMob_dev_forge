@@ -1,21 +1,21 @@
-package net.minecraft.client.gui.inventory;
+package net.minecraft.src;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.gui.inventory.ContainerCreative;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.LMM_TriggerSelect;
 
 public class LMM_ContainerTriggerSelect extends ContainerCreative {
 
-	public int weaponOffset;
 	public List<ItemStack> weaponSelect = new ArrayList<ItemStack>();
-	public List<Integer> weaponSelectList;
 	public String weaponSelectName;
+	public List<Integer> weaponSelectList;
+	public int weaponOffset;
 
 	public LMM_ContainerTriggerSelect(EntityPlayer entityplayer) {
 		super(entityplayer);
@@ -23,15 +23,15 @@ public class LMM_ContainerTriggerSelect extends ContainerCreative {
 		inventorySlots.clear();
 		for (int l2 = 0; l2 < 5; l2++) {
 			for (int j3 = 0; j3 < 8; j3++) {
-				addSlotToContainer(new Slot(LMM_GuiTriggerSelect.getInventory1(),
-						j3 + l2 * 8, 8 + j3 * 18, 18 + l2 * 18));
+				addSlotToContainer(new Slot(LMM_GuiTriggerSelect.getInventory1(), j3 + l2 * 8, 8 + j3 * 18,
+						18 + l2 * 18));
 			}
 		}
 
 		for (int l2 = 0; l2 < 4; l2++) {
 			for (int j3 = 0; j3 < 8; j3++) {
-				addSlotToContainer(new Slot(LMM_GuiTriggerSelect.getInventory2(),
-						j3 + l2 * 8, 8 + j3 * 18, 121 + l2 * 18));
+				addSlotToContainer(new Slot(LMM_GuiTriggerSelect.getInventory2(), j3 + l2 * 8, 8 + j3 * 18,
+						121 + l2 * 18));
 			}
 
 		}
@@ -60,21 +60,6 @@ public class LMM_ContainerTriggerSelect extends ContainerCreative {
 
 	public List getItemList() {
 		return weaponSelectList;
-	}
-
-	private void initAllSelections() {
-		// コンテナ表示用アイテムの設定
-		itemList.clear();
-		Item[] var2 = Item.itemsList;
-		int var3 = var2.length;
-
-		for (int var4 = 0; var4 < var3; ++var4) {
-			Item var5 = var2[var4];
-
-			if (var5 != null && var5.getCreativeTab() != null) {
-				var5.getSubItems(var5.itemID, (CreativeTabs) null, itemList);
-			}
-		}
 	}
 
 	@Override
@@ -206,6 +191,21 @@ public class LMM_ContainerTriggerSelect extends ContainerCreative {
 			}
 		}
 		return itemstack;
+	}
+
+	private void initAllSelections() {
+		// コンテナ表示用アイテムの設定
+		itemList.clear();
+		Item[] var2 = Item.itemsList;
+		int var3 = var2.length;
+
+		for (int var4 = 0; var4 < var3; ++var4) {
+			Item var5 = var2[var4];
+
+			if (var5 != null && var5.getCreativeTab() != null) {
+				var5.getSubItems(var5.itemID, (CreativeTabs) null, itemList);
+			}
+		}
 	}
 
 }

@@ -1,11 +1,9 @@
 package net.minecraft.src;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.LMM_GuiTriggerSelect;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.LMM_EntityLittleMaid;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.util.StringTranslate;
 import net.minecraft.world.World;

@@ -1,4 +1,4 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.EntityAITasks;
@@ -6,9 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.LMM_EnumSound;
-import net.minecraft.src.LMM_TriggerSelect;
-import net.minecraft.src.ModLoader;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 

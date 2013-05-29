@@ -7,8 +7,6 @@ import java.util.List;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.LMM_EntityLittleMaid;
-import net.minecraft.entity.LMM_EntityModeBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTargetSorter;
 import net.minecraft.pathfinding.PathEntity;

@@ -1,19 +1,16 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFlintAndSteel;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.LMM_EntityAIHurtByTarget;
-import net.minecraft.src.LMM_EntityAINearestAttackableTarget;
-import net.minecraft.src.LMM_TriggerSelect;
-import net.minecraft.src.ModLoader;
-import net.minecraft.src.mod_LMM_littleMaidMob;
 import net.minecraft.world.World;
 
 public class LMM_EntityMode_Archer extends LMM_EntityModeBase {

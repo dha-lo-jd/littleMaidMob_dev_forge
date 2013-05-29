@@ -1,14 +1,11 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.src.LMM_EntityAIHurtByTarget;
-import net.minecraft.src.LMM_EntityAINearestAttackableTarget;
-import net.minecraft.src.LMM_TriggerSelect;
-import net.minecraft.src.ModLoader;
 
 /**
  * 独自基準としてモード定数は0x0080は平常、0x00c0は血まみれモードと区別。

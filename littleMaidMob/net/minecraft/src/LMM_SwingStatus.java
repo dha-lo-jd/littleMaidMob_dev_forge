@@ -1,6 +1,5 @@
 package net.minecraft.src;
 
-import net.minecraft.entity.LMM_EntityLittleMaid;
 import net.minecraft.item.ItemStack;
 
 public class LMM_SwingStatus {

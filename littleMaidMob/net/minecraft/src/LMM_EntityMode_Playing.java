@@ -1,8 +1,10 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySnowball;
@@ -10,9 +12,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemSnowball;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.src.LMM_EnumSound;
-import net.minecraft.src.ModLoader;
-import net.minecraft.src.mod_LMM_littleMaidMob;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 

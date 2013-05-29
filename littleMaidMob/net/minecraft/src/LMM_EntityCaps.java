@@ -1,13 +1,10 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.LMM_SwingStatus;
-import net.minecraft.src.MMM_IModelCaps;
-
 
 /**
  * Entityのデータ読み取り用のクラス
@@ -42,12 +39,12 @@ public class LMM_EntityCaps implements MMM_IModelCaps {
 		caps.put("height", caps_height);
 		caps.put("width", caps_width);
 		caps.put("YOffset", caps_YOffset);
-//		caps.put("mountedYOffset", caps_mountedYOffset);
+		caps.put("mountedYOffset", caps_mountedYOffset);
 		caps.put("dominantArm", caps_dominantArm);
-//		caps.put("render", caps_render);
-//		caps.put("Arms", caps_Arms);
+		//		caps.put("render", caps_render);
+		//		caps.put("Arms", caps_Arms);
 		caps.put("HeadMount", caps_HeadMount);
-//		caps.put("HardPoint", caps_HardPoint);
+		//		caps.put("HardPoint", caps_HardPoint);
 		caps.put("stabiliser", caps_stabiliser);
 		caps.put("Items", caps_Items);
 		caps.put("Actions", caps_Actions);
@@ -63,15 +60,9 @@ public class LMM_EntityCaps implements MMM_IModelCaps {
 		owner = pOwner;
 	}
 
-	@Override
-	public Map<String, Integer> getModelCaps() {
-		return caps;
-	}
-
-	@Override
-	public Object getCapsValue(int pIndex, Object ...pArg) {
+	public Object getCapsValue(int pIndex, Object... pArg) {
 		int li = 0;
-		
+
 		switch (pIndex) {
 		case caps_Entity:
 			return owner;
@@ -116,20 +107,22 @@ public class LMM_EntityCaps implements MMM_IModelCaps {
 		case caps_entityIdFactor:
 			return owner.entityIdFactor;
 		case caps_height:
-			return owner.textureModel0 == null ? null : owner.textureModel0.getHeight();
+			return owner.textureBox[0] == null ? null : owner.textureBox[0].getHeight();
 		case caps_width:
-			return owner.textureModel0 == null ? null : owner.textureModel0.getWidth();
+			return owner.textureBox[0] == null ? null : owner.textureBox[0].getWidth();
 		case caps_YOffset:
-			return owner.textureModel0 == null ? null : owner.textureModel0.getyOffset();
+			return owner.textureBox[0] == null ? null : owner.textureBox[0].getYOffset();
+		case caps_mountedYOffset:
+			return owner.textureBox[0] == null ? null : owner.textureBox[0].getMountedYOffset();
 		case caps_dominantArm:
 			return owner.maidDominantArm;
-//		case caps_mountedYOffset:
-//			return owner.textureModel0 == null ? null : owner.textureModel0.getHeight();
-//		case caps_render:
-//		case caps_Arms:
+			//		case caps_mountedYOffset:
+			//			return owner.textureModel0 == null ? null : owner.textureModel0.getHeight();
+			//		case caps_render:
+			//		case caps_Arms:
 		case caps_HeadMount:
 			return owner.maidInventory.getStackInSlot(17);
-//		case caps_HardPoint:
+			//		case caps_HardPoint:
 		case caps_stabiliser:
 			return owner.maidStabilizer;
 		case caps_Items:
@@ -152,20 +145,23 @@ public class LMM_EntityCaps implements MMM_IModelCaps {
 			return lgrounds;
 		case caps_Ground:
 			// float (int pIndex, int pDefVal)
-			if (owner.mstatSwingStatus.length < (Integer)pArg[0]) {
+			if (owner.mstatSwingStatus.length < (Integer) pArg[0]) {
 				return pArg[1];
 			}
-			return owner.mstatSwingStatus[(Integer)pArg[0]].onGround;
+			return owner.mstatSwingStatus[(Integer) pArg[0]].onGround;
 		case caps_Inventory:
 			return owner.maidInventory;
 		case caps_interestedAngle:
-			return owner.getInterestedAngle((Float)pArg[0]);
+			return owner.getInterestedAngle((Float) pArg[0]);
 		}
-		
+
 		return null;
 	}
 
-	@Override
+	public Map<String, Integer> getModelCaps() {
+		return caps;
+	}
+
 	public boolean setCapsValue(int pIndex, Object... pArg) {
 		return false;
 	}

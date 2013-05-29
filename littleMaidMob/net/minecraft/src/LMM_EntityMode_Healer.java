@@ -1,4 +1,4 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
 import java.util.Iterator;
 import java.util.List;
@@ -11,8 +11,6 @@ import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.src.LMM_EnumSound;
-import net.minecraft.src.ModLoader;
 
 public class LMM_EntityMode_Healer extends LMM_EntityModeBase {
 

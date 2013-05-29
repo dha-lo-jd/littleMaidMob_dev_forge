@@ -1,9 +1,11 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAITasks;
@@ -13,28 +15,21 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.LMM_EntityAIAttackOnCollide;
-import net.minecraft.src.LMM_EntityAICollectItem;
-import net.minecraft.src.LMM_EntityAIHurtByTarget;
-import net.minecraft.src.LMM_EnumSound;
-import net.minecraft.src.MMM_Helper;
-import net.minecraft.src.ModLoader;
-import net.minecraft.src.mod_LMM_littleMaidMob;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 
 public class LMM_EntityMode_Basic extends LMM_EntityModeBase {
 
-	public static final int mmode_Escorter = 0x0001;
 	public static final int mmode_Wild = 0x0000;
+	public static final int mmode_Escorter = 0x0001;
 
+	private IInventory myTile;
+	private IInventory myChest;
 	private List<IInventory> fusedTiles;
 	private boolean isWorking;
 	private double lastdistance;
 	private int maidSearchCount;
-	private IInventory myChest;
-	private IInventory myTile;
 
 	/**
 	 * Wild, Escorter
@@ -66,7 +61,8 @@ public class LMM_EntityMode_Basic extends LMM_EntityModeBase {
 		ltasks[0].addTask(10, new EntityAILeapAtTarget(owner, 0.3F));
 		ltasks[0].addTask(11, owner.aiWander);
 		ltasks[0].addTask(12, new EntityAIWatchClosest2(owner, EntityLiving.class, 10F, 0.02F));
-		ltasks[0].addTask(13, new EntityAIWatchClosest2(owner, LMM_EntityLittleMaid.class, 10F, 0.02F));
+		ltasks[0].addTask(13,
+				new EntityAIWatchClosest2(owner, net.minecraft.src.LMM_EntityLittleMaid.class, 10F, 0.02F));
 		ltasks[0].addTask(13, new EntityAIWatchClosest2(owner, EntityPlayer.class, 10F, 0.02F));
 		ltasks[0].addTask(13, new EntityAILookIdle(owner));
 
@@ -364,33 +360,26 @@ public class LMM_EntityMode_Basic extends LMM_EntityModeBase {
 					&& maidSearchCount < owner.maidInventory.mainInventory.length) {
 				maidSearchCount++;
 			}
-			if (is != null && !(
-					is.getItem().itemID == Item.sugar.itemID
-							|| is.getItem().itemID == Item.pocketSundial.itemID
-							|| (is == owner.maidInventory.armorItemInSlot(3))
+			if (is != null
+					&& !(is.getItem().itemID == Item.sugar.itemID || is.getItem().itemID == Item.pocketSundial.itemID || (is == owner.maidInventory
+							.armorItemInSlot(3))
 					//					|| (is.getItem() instanceof ItemArmor && ((ItemArmor)is.getItem()).armorType == 0)
-					))
-			{
+					)) {
 				//				mod_littleMaidMob.Debug("getchest2.");
 				boolean f = false;
-				for (int j = 0; j < myChest.getSizeInventory() && is.stackSize > 0; j++)
-				{
+				for (int j = 0; j < myChest.getSizeInventory() && is.stackSize > 0; j++) {
 					ItemStack isc = myChest.getStackInSlot(j);
-					if (isc == null)
-					{
+					if (isc == null) {
 						//						mod_littleMaidMob.Debug(String.format("%s -> NULL", is.getItemName()));
 						myChest.setInventorySlotContents(j, is.copy());
 						is.stackSize = 0;
 						f = true;
 						break;
-					}
-					else if (isc.isStackable() && isc.isItemEqual(is))
-					{
+					} else if (isc.isStackable() && isc.isItemEqual(is)) {
 						//						mod_littleMaidMob.Debug(String.format("%s -> %s", is.getItemName(), isc.getItemName()));
 						f = true;
 						isc.stackSize += is.stackSize;
-						if (isc.stackSize > isc.getMaxStackSize())
-						{
+						if (isc.stackSize > isc.getMaxStackSize()) {
 							is.stackSize = isc.stackSize - isc.getMaxStackSize();
 							isc.stackSize = isc.getMaxStackSize();
 						} else {

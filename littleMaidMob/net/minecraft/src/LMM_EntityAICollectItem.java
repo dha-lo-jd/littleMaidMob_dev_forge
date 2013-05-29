@@ -3,7 +3,6 @@ package net.minecraft.src;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LMM_EntityLittleMaid;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;

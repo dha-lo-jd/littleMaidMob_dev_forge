@@ -1,8 +1,5 @@
 package net.minecraft.src;
 
-import net.minecraft.entity.LMM_EntityLittleMaid;
-import net.minecraft.entity.LMM_EntityModeBase;
-import net.minecraft.entity.MMM_EntityDummy;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;

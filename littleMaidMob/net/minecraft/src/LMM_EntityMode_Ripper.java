@@ -1,5 +1,7 @@
-package net.minecraft.entity;
+package net.minecraft.src;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
@@ -9,21 +11,16 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.LMM_EntityAINearestAttackableTarget;
-import net.minecraft.src.LMM_EnumSound;
-import net.minecraft.src.LMM_InventoryLittleMaid;
-import net.minecraft.src.ModLoader;
-import net.minecraft.src.mod_LMM_littleMaidMob;
 import net.minecraft.util.DamageSource;
 
 public class LMM_EntityMode_Ripper extends LMM_EntityModeBase {
 
-	public static final int mmode_Detonator = 0x00c2;
 	public static final int mmode_Ripper = 0x0081;
 	public static final int mmode_TNTD = 0x00c1;
+	public static final int mmode_Detonator = 0x00c2;
 
-	public int lastTimeSinceIgnited;
 	public int timeSinceIgnited;
+	public int lastTimeSinceIgnited;
 
 	public LMM_EntityMode_Ripper(LMM_EntityLittleMaid pEntity) {
 		super(pEntity);
@@ -93,8 +90,9 @@ public class LMM_EntityMode_Ripper extends LMM_EntityModeBase {
 				// TODO:カットオフ
 				// なんでPrivateにかえたし
 				try {
-					lis.damageItem((Integer) ModLoader.getPrivateValue(EntityCreeper.class,
-							(EntityCreeper) pEntity, 1), owner.maidAvatar);
+					lis.damageItem(
+							(Integer) ModLoader.getPrivateValue(EntityCreeper.class, (EntityCreeper) pEntity, 1),
+							owner.maidAvatar);
 					ModLoader.setPrivateValue(EntityCreeper.class, (EntityCreeper) pEntity, 1, 0);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -170,12 +168,10 @@ public class LMM_EntityMode_Ripper extends LMM_EntityModeBase {
 			return 0;
 		}
 		int i = (int) (f2 * 0.2F * 255F);
-		if (i < 0)
-		{
+		if (i < 0) {
 			i = 0;
 		}
-		if (i > 255)
-		{
+		if (i > 255) {
 			i = 255;
 		}
 		mod_LMM_littleMaidMob.Debug(String.format("%2x", i));
@@ -256,8 +252,7 @@ public class LMM_EntityMode_Ripper extends LMM_EntityModeBase {
 			if (timeSinceIgnited < 0) {
 				if (lastTimeSinceIgnited != timeSinceIgnited) {
 					owner.dataWatcher.updateObject(LMM_EntityLittleMaid.dataWatch_Free, Integer.valueOf(0));
-				}
-				else if (owner.dataWatcher.getWatchableObjectInt(LMM_EntityLittleMaid.dataWatch_Free) == 1) {
+				} else if (owner.dataWatcher.getWatchableObjectInt(LMM_EntityLittleMaid.dataWatch_Free) == 1) {
 					lastTimeSinceIgnited = timeSinceIgnited = 0;
 				}
 			}
