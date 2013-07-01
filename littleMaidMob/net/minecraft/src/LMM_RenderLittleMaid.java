@@ -1,114 +1,88 @@
 package net.minecraft.src;
 
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldServer;
 
 import org.lwjgl.opengl.GL11;
 
-public class LMM_RenderLittleMaid extends RenderLiving {
+public class LMM_RenderLittleMaid extends MMM_RenderModelMulti {
 
 	// Feilds
-	public MMM_ModelBaseDuo modelMain;
-	public MMM_ModelBaseDuo modelFATT;
 
 
 	// Method
 	public LMM_RenderLittleMaid(float f) {
-		super(null, f);
-		modelFATT = new MMM_ModelBaseDuo(this);
-		modelFATT.isModelAlphablend = mod_LMM_littleMaidMob.AlphaBlend;
-		modelFATT.isRendering = true;
-		modelMain = new MMM_ModelBaseDuo(this);
-		modelMain.isModelAlphablend = mod_LMM_littleMaidMob.AlphaBlend;
-		modelMain.capsLink = modelFATT;
-		mainModel = modelMain;
-		setRenderPassModel(modelFATT);
-	}
-
-	public int setArmorModelEx(LMM_EntityLittleMaid entitylmaid, int i, float f) {
-		// アーマーの表示設定
-		modelFATT.renderParts = i;
-		ItemStack is = entitylmaid.maidInventory.armorItemInSlot(i);
-		if (is != null && is.stackSize > 0) {
-//			mod_littleMaidMob.Debug(String.format("en:%d-%d", i, ret));
-			modelFATT.showArmorParts(i);
-			return is.isItemEnchanted() ? 15 : 1;
-		}
-		
-		return -1;
+		super(f);
 	}
 
 	@Override
-	public int shouldRenderPass(EntityLiving entityliving, int i, float f) {
-		//littlemaidEX
-		return setArmorModelEx((LMM_EntityLittleMaid)entityliving, i, f);
-	}
-
-	@Override
-	public void preRenderCallback(EntityLiving entityliving, float f) {
-		Float lscale = (Float)modelMain.getCapsValue(MMM_IModelCaps.caps_ScaleFactor);
-		if (lscale != null) {
-			GL11.glScalef(lscale, lscale, lscale);
-		}
-	}
-
-	public void doRenderLitlleMaid(LMM_EntityLittleMaid plittleMaid, double px, double py, double pz, float f, float f1) {
-		// いくつか重複してるのであとで確認
-		// 姿勢による高さ調整
-		double lay = py;
-//		if (plittleMaid.isSneaking()) {
-//			// しゃがみ
-//			lay -= 0.06D;
-//		} else if (plittleMaid.isRiding() && plittleMaid.ridingEntity == null) {
-//			// 座り込み
-//			lay -= 0.25D;
-//		}
+	public void setModelValues(EntityLiving par1EntityLiving, double par2,
+			double par4, double par6, float par8, float par9, MMM_IModelCaps pEntityCaps) {
+		LMM_EntityLittleMaid lmaid = (LMM_EntityLittleMaid)par1EntityLiving;
 		
-		if (plittleMaid.worldObj instanceof WorldServer) {
-			// RSHUD-ACV用
-			Entity le = MMM_Helper.mc.theWorld.getEntityByID(plittleMaid.entityId);
-			if (le instanceof LMM_EntityLittleMaid) {
-				LMM_EntityLittleMaid lel = (LMM_EntityLittleMaid)le;
-				modelMain.modelInner = ((MMM_TextureBox)lel.textureBox[0]).models[0];
-				modelFATT.modelInner = ((MMM_TextureBox)lel.textureBox[1]).models[1];
-				modelFATT.modelOuter = ((MMM_TextureBox)lel.textureBox[1]).models[2];
-				modelFATT.textureInner = lel.textureArmor1;
-				modelFATT.textureOuter = lel.textureArmor2;
-				plittleMaid.texture = lel.texture;
-			}
-		} else {
-			modelMain.modelInner = ((MMM_TextureBox)plittleMaid.textureBox[0]).models[0];
-			modelFATT.modelInner = ((MMM_TextureBox)plittleMaid.textureBox[1]).models[1];
-			modelFATT.modelOuter = ((MMM_TextureBox)plittleMaid.textureBox[1]).models[2];
-			modelFATT.textureInner = plittleMaid.textureArmor1;
-			modelFATT.textureOuter = plittleMaid.textureArmor2;
-		}
-
 		modelMain.setRender(this);
-		modelMain.setEntityCaps(plittleMaid.maidCaps);
+		modelMain.setEntityCaps(pEntityCaps);
+		modelMain.showAllParts();
 		modelMain.isAlphablend = true;
 		modelFATT.isAlphablend = true;
 		
 		modelMain.setCapsValue(MMM_IModelCaps.caps_heldItemLeft, (Integer)0);
 		modelMain.setCapsValue(MMM_IModelCaps.caps_heldItemRight, (Integer)0);
-		modelMain.setCapsValue(MMM_IModelCaps.caps_onGround, renderSwingProgress(plittleMaid, f1));
-		modelMain.setCapsValue(MMM_IModelCaps.caps_isRiding, plittleMaid.isRiding());
-		modelMain.setCapsValue(MMM_IModelCaps.caps_isSneak, plittleMaid.isSneaking());
-		modelMain.setCapsValue(MMM_IModelCaps.caps_aimedBow, plittleMaid.isAimebow());
-		modelMain.setCapsValue(MMM_IModelCaps.caps_isWait, plittleMaid.isMaidWait());
-		modelMain.setCapsValue(MMM_IModelCaps.caps_isChild, plittleMaid.isChild());
-		modelMain.setCapsValue(MMM_IModelCaps.caps_entityIdFactor, plittleMaid.entityIdFactor);
-		modelMain.setCapsValue(MMM_IModelCaps.caps_ticksExisted, plittleMaid.ticksExisted);
+//		modelMain.setCapsValue(MMM_IModelCaps.caps_onGround, renderSwingProgress(lmaid, par9));
+		modelMain.setCapsValue(MMM_IModelCaps.caps_onGround,
+				lmaid.mstatSwingStatus[0].getSwingProgress(par9),
+				lmaid.mstatSwingStatus[1].getSwingProgress(par9));
+		modelMain.setCapsValue(MMM_IModelCaps.caps_isRiding, lmaid.isRiding());
+		modelMain.setCapsValue(MMM_IModelCaps.caps_isSneak, lmaid.isSneaking());
+		modelMain.setCapsValue(MMM_IModelCaps.caps_aimedBow, lmaid.isAimebow());
+		modelMain.setCapsValue(MMM_IModelCaps.caps_isWait, lmaid.isMaidWait());
+		modelMain.setCapsValue(MMM_IModelCaps.caps_isChild, lmaid.isChild());
+		modelMain.setCapsValue(MMM_IModelCaps.caps_entityIdFactor, lmaid.entityIdFactor);
+		modelMain.setCapsValue(MMM_IModelCaps.caps_ticksExisted, lmaid.ticksExisted);
+		modelMain.setCapsValue(MMM_IModelCaps.caps_dominantArm, lmaid.maidDominantArm);
 		// だが無意味だ
 //		plittleMaid.textureModel0.isChild = plittleMaid.textureModel1.isChild = plittleMaid.textureModel2.isChild = plittleMaid.isChild();
+	}
+
+	public void doRenderLitlleMaid(LMM_EntityLittleMaid plittleMaid, double px, double py, double pz, float f, float f1) {
+		// いくつか重複してるのであとで確認
+		// 姿勢による高さ調整
 		
-		doRenderLiving(plittleMaid, px, lay, pz, f, f1);
+		if (plittleMaid.worldObj instanceof WorldServer) {
+			// RSHUD-ACV用
+			MMM_TextureBox ltbox0, ltbox1;
+			ltbox0 = MMM_TextureManager.instance.getTextureBox(plittleMaid.textureBox[0]);
+			ltbox1 = MMM_TextureManager.instance.getTextureBox(plittleMaid.textureBox[1]);
+			modelMain.model = ltbox0.models[0];
+			modelFATT.modelInner = ltbox1.models[1];
+			modelFATT.modelOuter = ltbox1.models[2];
+			plittleMaid.textures[0] = ltbox0.getTextureName(plittleMaid.maidColor);
+			plittleMaid.textures[1] = ltbox0.getTextureName(plittleMaid.maidColor + MMM_TextureManager.tx_eye);
+			plittleMaid.textureArmor1[0] = ltbox1.getArmorTextureName(true, plittleMaid.getCurrentArmor(0));
+			plittleMaid.textureArmor1[1] = ltbox1.getArmorTextureName(true, plittleMaid.getCurrentArmor(1));
+			plittleMaid.textureArmor1[2] = ltbox1.getArmorTextureName(true, plittleMaid.getCurrentArmor(2));
+			plittleMaid.textureArmor1[3] = ltbox1.getArmorTextureName(true, plittleMaid.getCurrentArmor(3));
+			plittleMaid.textureArmor2[0] = ltbox1.getArmorTextureName(false, plittleMaid.getCurrentArmor(0));
+			plittleMaid.textureArmor2[1] = ltbox1.getArmorTextureName(false, plittleMaid.getCurrentArmor(1));
+			plittleMaid.textureArmor2[2] = ltbox1.getArmorTextureName(false, plittleMaid.getCurrentArmor(2));
+			plittleMaid.textureArmor2[3] = ltbox1.getArmorTextureName(false, plittleMaid.getCurrentArmor(3));
+			modelFATT.textureInner = plittleMaid.textureArmor1;
+			modelFATT.textureOuter = plittleMaid.textureArmor2;
+		} else {
+			modelMain.model = ((MMM_TextureBox)plittleMaid.textureBox[0]).models[0];
+			modelMain.textures = plittleMaid.textures;
+			modelFATT.modelInner = ((MMM_TextureBox)plittleMaid.textureBox[1]).models[1];
+			modelFATT.modelOuter = ((MMM_TextureBox)plittleMaid.textureBox[1]).models[2];
+			modelFATT.textureInner = plittleMaid.textureArmor1;
+			modelFATT.textureOuter = plittleMaid.textureArmor2;
+		}
+		
+//		doRenderLiving(plittleMaid, px, py, pz, f, f1);
+		renderModelMulti(plittleMaid, px, py, pz, f, f1, plittleMaid.maidCaps);
 		
 		
 		// ひも
@@ -144,8 +118,8 @@ public class LMM_RenderLittleMaid extends RenderLiving {
 			double d15 = (float)(d7 - d10);
 			double d16 = (float)(d8 - d12);
 			double d17 = (float)(d9 - d14);
-			GL11.glDisable(3553 /*GL_TEXTURE_2D*/);
-			GL11.glDisable(2896 /*GL_LIGHTING*/);
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glDisable(GL11.GL_LIGHTING);
 			tessellator.startDrawing(3);
 			tessellator.setColorOpaque_I(0);
 			int i = 16;
@@ -156,8 +130,8 @@ public class LMM_RenderLittleMaid extends RenderLiving {
 			}
 			
 			tessellator.draw();
-			GL11.glEnable(2896 /*GL_LIGHTING*/);
-			GL11.glEnable(3553 /*GL_TEXTURE_2D*/);
+			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
 		}
 	}
 
@@ -180,28 +154,14 @@ public class LMM_RenderLittleMaid extends RenderLiving {
 		mainModel.render(par1EntityLiving, par2, par3, par4, par5, par6, par7);
 	}
 
-	public void renderSpecials(LMM_EntityLittleMaid entitylittlemaid, float f) {
-		// ハードポイントの描画
-		modelMain.renderItems(entitylittlemaid, this);
-		renderArrowsStuckInEntity(entitylittlemaid, f);
-	}
-
-	@Override
-	public void renderEquippedItems(EntityLiving entityliving, float f) {
-		renderSpecials((LMM_EntityLittleMaid)entityliving, f);
-	}
-
 	@Override
 	public void passSpecialRender(EntityLiving par1EntityLiving, double par2, double par4, double par6) {
 		super.passSpecialRender(par1EntityLiving, par2, par4, par6);
 		
-		if (par1EntityLiving instanceof LMM_EntityLittleMaid) {
-			LMM_EntityLittleMaid llmm = (LMM_EntityLittleMaid)par1EntityLiving;
-	
-			// 追加分
-			for (int li = 0; li < llmm.maidEntityModeList.size(); li++) {
-				llmm.maidEntityModeList.get(li).showSpecial(this, par2, par4, par6);
-			}
+		LMM_EntityLittleMaid llmm = (LMM_EntityLittleMaid)par1EntityLiving;
+		// 追加分
+		for (int li = 0; li < llmm.maidEntityModeList.size(); li++) {
+			llmm.maidEntityModeList.get(li).showSpecial(this, par2, par4, par6);
 		}
 	}
 

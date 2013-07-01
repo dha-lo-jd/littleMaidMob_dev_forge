@@ -23,24 +23,39 @@ public class LMM_ContainerTriggerSelect extends ContainerCreative {
 		inventorySlots.clear();
 		for (int l2 = 0; l2 < 5; l2++) {
 			for (int j3 = 0; j3 < 8; j3++) {
-				addSlotToContainer(new Slot(LMM_GuiTriggerSelect.getInventory1(), j3 + l2 * 8, 8 + j3 * 18,
-						18 + l2 * 18));
+				addSlotToContainer(new Slot(LMM_GuiTriggerSelect.getInventory1(),
+						j3 + l2 * 8, 8 + j3 * 18, 18 + l2 * 18));
 			}
 		}
-
+		
 		for (int l2 = 0; l2 < 4; l2++) {
 			for (int j3 = 0; j3 < 8; j3++) {
-				addSlotToContainer(new Slot(LMM_GuiTriggerSelect.getInventory2(), j3 + l2 * 8, 8 + j3 * 18,
-						121 + l2 * 18));
+				addSlotToContainer(new Slot(LMM_GuiTriggerSelect.getInventory2(),
+						j3 + l2 * 8, 8 + j3 * 18, 121 + l2 * 18));
 			}
-
+			
 		}
-
+		
 		setWeaponSelect(entityplayer.username, LMM_TriggerSelect.selector.get(0));
-
+		
 		initAllSelections();
 		scrollTo(0.0F);
 		setWeaponlist(0.0F);
+	}
+
+	private void initAllSelections() {
+		// コンテナ表示用アイテムの設定
+		this.itemList.clear();
+		Item[] var2 = Item.itemsList;
+		int var3 = var2.length;
+		
+		for (int var4 = 0; var4 < var3; ++var4) {
+			Item var5 = var2[var4];
+			
+			if (var5 != null && var5.getCreativeTab() != null) {
+				var5.getSubItems(var5.itemID, (CreativeTabs) null, this.itemList);
+			}
+		}
 	}
 
 	@Override
@@ -49,65 +64,10 @@ public class LMM_ContainerTriggerSelect extends ContainerCreative {
 	}
 
 	@Override
-	public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot) {
-		return false;
-	}
-
-	@Override
-	public boolean func_94531_b(Slot par1Slot) {
-		return false;
-	}
-
-	public List getItemList() {
-		return weaponSelectList;
-	}
-
-	@Override
-	public boolean mergeItemStack(ItemStack itemstack, int i, int j, boolean flag) {
-		// itemstack以外は無効
-		boolean flag1 = false;
-		int k = 0;
-
-		// 同じのがあったときは追加しない
-		while (itemstack.stackSize > 0 && k < weaponSelect.size()) {
-			ItemStack itemstack1 = weaponSelect.get(k);
-			if (itemstack1 != null) {
-				if (itemstack1.isItemEqual(itemstack)) {
-					// 同一アイテムである
-					flag1 = true;
-					break;
-				}
-			} else {
-				weaponSelect.set(k, itemstack);
-				flag1 = true;
-				break;
-			}
-			k++;
-		}
-		if (!flag1) {
-			weaponSelect.add(itemstack);
-			setWeaponlist(1.0F);
-		} else {
-			int m = (weaponSelect.size() / 8 - 4) + 1;
-			int n = k / 8;
-			float f = (float) n / (float) m;
-			if (f < 0.0F) {
-				f = 0.0F;
-			}
-			if (f > 1.0F) {
-				f = 1.0F;
-			}
-			setWeaponlist(f);
-		}
-
-		return flag1;
-	}
-
-	@Override
 	public void scrollTo(float f) {
 		// スクロールポジション
 		int i = (itemList.size() / 8 - 5) + 1;
-		int j = (int) (f * i + 0.5D);
+		int j = (int) ((double) (f * (float) i) + 0.5D);
 		if (j < 0) {
 			j = 0;
 		}
@@ -115,8 +75,7 @@ public class LMM_ContainerTriggerSelect extends ContainerCreative {
 			for (int l = 0; l < 8; l++) {
 				int i1 = l + (k + j) * 8;
 				if (i1 >= 0 && i1 < itemList.size()) {
-					LMM_GuiTriggerSelect.getInventory1().setInventorySlotContents(l + k * 8,
-							(ItemStack) itemList.get(i1));
+					LMM_GuiTriggerSelect.getInventory1().setInventorySlotContents(l + k * 8, (ItemStack) itemList.get(i1));
 				} else {
 					LMM_GuiTriggerSelect.getInventory1().setInventorySlotContents(l + k * 8, null);
 				}
@@ -124,37 +83,6 @@ public class LMM_ContainerTriggerSelect extends ContainerCreative {
 
 		}
 
-	}
-
-	public void setWeaponlist(float f) {
-		// スクロールポジション
-		int i = (weaponSelect.size() / 8 - 4) + 1;
-		weaponOffset = (int) (f * i + 0.5D);
-		if (weaponOffset < 0) {
-			weaponOffset = 0;
-		}
-		for (int k = 0; k < 4; k++) {
-			for (int l = 0; l < 8; l++) {
-				int i1 = l + (k + weaponOffset) * 8;
-				if (i1 >= 0 && i1 < weaponSelect.size()) {
-					LMM_GuiTriggerSelect.getInventory2().setInventorySlotContents(k * 8 + l, weaponSelect.get(i1));
-				} else {
-					LMM_GuiTriggerSelect.getInventory2().setInventorySlotContents(k * 8 + l, null);
-				}
-			}
-		}
-	}
-
-	public void setWeaponSelect(String pUsername, String pName) {
-		weaponSelect.clear();
-		weaponSelectName = pName;
-		weaponSelectList = LMM_TriggerSelect.getuserTriggerList(pUsername, pName);
-		for (Integer li : weaponSelectList) {
-			if (Item.itemsList[li] == null) {
-				continue;
-			}
-			weaponSelect.add(new ItemStack(Item.itemsList[li]));
-		}
 	}
 
 	@Override
@@ -167,7 +95,7 @@ public class LMM_ContainerTriggerSelect extends ContainerCreative {
 			}
 			weaponSelect.set(lk, entityplayer.inventory.getItemStack());
 		}
-
+		
 		if (i == -999) {
 			entityplayer.inventory.setItemStack(null);
 		}
@@ -193,19 +121,88 @@ public class LMM_ContainerTriggerSelect extends ContainerCreative {
 		return itemstack;
 	}
 
-	private void initAllSelections() {
-		// コンテナ表示用アイテムの設定
-		itemList.clear();
-		Item[] var2 = Item.itemsList;
-		int var3 = var2.length;
+	@Override
+	public boolean mergeItemStack(ItemStack itemstack, int i, int j, boolean flag) {
+		// itemstack以外は無効
+		boolean flag1 = false;
+		int k = 0;
+		
+		// 同じのがあったときは追加しない
+		while (itemstack.stackSize > 0 && k < weaponSelect.size()) {
+			ItemStack itemstack1 = weaponSelect.get(k);
+			if (itemstack1 != null) {
+				if (itemstack1.isItemEqual(itemstack)) {
+					// 同一アイテムである
+					flag1 = true;
+					break;
+				}
+			} else {
+				weaponSelect.set(k, itemstack);
+				flag1 = true;
+				break;
+			}
+			k++;
+		}
+		if (!flag1) {
+			weaponSelect.add(itemstack);
+			setWeaponlist(1.0F);
+		} else {
+			int m = (weaponSelect.size() / 8 - 4) + 1;
+			int n = k / 8;
+			float f = (float) n / (float) m;
+			if (f < 0.0F)
+				f = 0.0F;
+			if (f > 1.0F)
+				f = 1.0F;
+			setWeaponlist(f);
+		}
+		
+		return flag1;
+	}
 
-		for (int var4 = 0; var4 < var3; ++var4) {
-			Item var5 = var2[var4];
-
-			if (var5 != null && var5.getCreativeTab() != null) {
-				var5.getSubItems(var5.itemID, (CreativeTabs) null, itemList);
+	public void setWeaponlist(float f) {
+		// スクロールポジション
+		int i = (weaponSelect.size() / 8 - 4) + 1;
+		weaponOffset = (int) ((double) (f * (float) i) + 0.5D);
+		if (weaponOffset < 0) {
+			weaponOffset = 0;
+		}
+		for (int k = 0; k < 4; k++) {
+			for (int l = 0; l < 8; l++) {
+				int i1 = l + (k + weaponOffset) * 8;
+				if (i1 >= 0 && i1 < weaponSelect.size()) {
+					LMM_GuiTriggerSelect.getInventory2().setInventorySlotContents(k * 8 + l, weaponSelect.get(i1));
+				} else {
+					LMM_GuiTriggerSelect.getInventory2().setInventorySlotContents(k * 8 + l, null);
+				}
 			}
 		}
 	}
+
+	public void setWeaponSelect(String pUsername, String pName) {
+		weaponSelect.clear();
+		weaponSelectName = pName;
+		weaponSelectList = LMM_TriggerSelect.getuserTriggerList(pUsername, pName);
+		for (Integer li : weaponSelectList) {
+			if (Item.itemsList[li] == null)
+				continue;
+			weaponSelect.add(new ItemStack(Item.itemsList[li]));
+		}
+	}
+
+	public List getItemList() {
+		return weaponSelectList;
+	}
+
+	@Override
+	public boolean func_94530_a(ItemStack par1ItemStack, Slot par2Slot) {
+		return false;
+	}
+
+	@Override
+	public boolean func_94531_b(Slot par1Slot) {
+		return false;
+	}
+
 
 }

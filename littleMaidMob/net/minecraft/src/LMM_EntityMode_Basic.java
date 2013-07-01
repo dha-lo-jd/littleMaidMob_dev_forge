@@ -61,8 +61,7 @@ public class LMM_EntityMode_Basic extends LMM_EntityModeBase {
 		ltasks[0].addTask(10, new EntityAILeapAtTarget(owner, 0.3F));
 		ltasks[0].addTask(11, owner.aiWander);
 		ltasks[0].addTask(12, new EntityAIWatchClosest2(owner, EntityLiving.class, 10F, 0.02F));
-		ltasks[0].addTask(13,
-				new EntityAIWatchClosest2(owner, net.minecraft.src.LMM_EntityLittleMaid.class, 10F, 0.02F));
+		ltasks[0].addTask(13, new EntityAIWatchClosest2(owner, LMM_EntityLittleMaid.class, 10F, 0.02F));
 		ltasks[0].addTask(13, new EntityAIWatchClosest2(owner, EntityPlayer.class, 10F, 0.02F));
 		ltasks[0].addTask(13, new EntityAILookIdle(owner));
 
@@ -93,7 +92,7 @@ public class LMM_EntityMode_Basic extends LMM_EntityModeBase {
 		}
 
 		// 世界のメイドから
-		for (Object lo : owner.worldObj.getLoadedEntityList()) {
+		for (Object lo : owner.worldObj.loadedEntityList) {
 			if (lo instanceof LMM_EntityLittleMaid) {
 				LMM_EntityLittleMaid lem = (LMM_EntityLittleMaid) lo;
 				//				if (lem.isUsingTile(ltile)) {
@@ -322,7 +321,9 @@ public class LMM_EntityMode_Basic extends LMM_EntityModeBase {
 		if (!owner.isMaidWaitEx()) {
 			double distance;
 			if (myTile instanceof TileEntity) {
-				distance = ((TileEntity) myTile).getDistanceFrom(owner.posX, owner.posY, owner.posZ);
+				//				distance = ((TileEntity)myTile).getDistanceFrom(owner.posX, owner.posY, owner.posZ);
+				distance = owner.getDistance(((TileEntity) myTile).xCoord, ((TileEntity) myTile).yCoord,
+						((TileEntity) myTile).zCoord);
 				if (distance == lastdistance) {
 					// 移動が固まらないように乱数加速
 					mod_LMM_littleMaidMob.Debug("Assert.");

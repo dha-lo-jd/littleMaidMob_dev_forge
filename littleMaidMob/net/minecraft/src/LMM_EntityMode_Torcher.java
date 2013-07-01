@@ -1,6 +1,7 @@
 package net.minecraft.src;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -56,6 +57,8 @@ public class LMM_EntityMode_Torcher extends LMM_EntityModeBase {
 		switch (pMode) {
 		case mmode_Torcher :
 			owner.setBloodsuck(false);
+			owner.aiAttack.setEnable(false);
+			owner.aiShooting.setEnable(false);
 			return true;
 		}
 		
@@ -143,6 +146,38 @@ public class LMM_EntityMode_Torcher extends LMM_EntityModeBase {
 		return false;
 	}
 
+	public boolean canPlaceItemBlockOnSide(World par1World, int par2, int par3, int par4, int par5,
+			EntityPlayer par6EntityPlayer, ItemStack par7ItemStack, ItemBlock pItemBlock) {
+		// TODO:マルチ対策用、ItemBlockから丸パクリバージョンアップ時は確認すること
+		int var8 = par1World.getBlockId(par2, par3, par4);
+		
+		if (var8 == Block.snow.blockID) {
+			par5 = 1;
+		} else if (var8 != Block.vine.blockID && var8 != Block.tallGrass.blockID &&
+				var8 != Block.deadBush.blockID) {
+			if (par5 == 0) {
+				--par3;
+			}
+			if (par5 == 1) {
+				++par3;
+			}
+			if (par5 == 2) {
+				--par4;
+			}
+			if (par5 == 3) {
+				++par4;
+			}
+			if (par5 == 4) {
+				--par2;
+			}
+			if (par5 == 5) {
+				++par2;
+			}
+		}
+		
+		return par1World.canPlaceEntityOnSide(pItemBlock.getBlockID(), par2, par3, par4, false, par5, (Entity)null, par7ItemStack);
+	}
+
 	@Override
 	public void updateAITick(int pMode) {
 		// トーチの設置
@@ -167,7 +202,7 @@ public class LMM_EntityMode_Torcher extends LMM_EntityModeBase {
 					for (int lyi : lil) {
 						int lv = lworld.getBlockLightValue(lxx + x, lyi, lzz + z);
 						if (ll > lv && lii instanceof ItemBlock &&
-								((ItemBlock)lii).canPlaceItemBlockOnSide(lworld, lxx + x, lyi - 1, lzz + z, 1, owner.maidAvatar, lis)
+								canPlaceItemBlockOnSide(lworld, lxx + x, lyi - 1, lzz + z, 1, owner.maidAvatar, lis, (ItemBlock)lii)
 								&& canBlockBeSeen(lxx + x, lyi - 1, lzz + z, true, false, true)) {
 //						if (ll > lv && lworld.getBlockMaterial(lxx + x, lyi - 1, lzz + z).isSolid()
 //								&& (lworld.getBlockMaterial(lxx + x, lyi, lzz + z) == Material.air

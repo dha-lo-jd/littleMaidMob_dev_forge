@@ -95,7 +95,7 @@ public class LMM_EntityAIAttackOnCollide extends EntityAIBase implements LMM_IEn
 	@Override
 	public void resetTask() {
 		entityTarget = null;
-		theMaid.getNavigator().clearPathEntity();
+//		theMaid.getNavigator().clearPathEntity();
 	}
 
 	@Override

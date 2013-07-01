@@ -7,6 +7,7 @@ import java.util.Random;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonNextPage;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,7 +38,7 @@ public class LMM_GuiInventory extends GuiContainer {
 
 	// Method
 	public LMM_GuiInventory(EntityPlayer pPlayer, LMM_EntityLittleMaid elmaid) {
-		super(new LMM_ContainerInventory(pPlayer.inventory, elmaid.maidInventory));
+		super(new LMM_ContainerInventory(pPlayer.inventory, elmaid));
 		rand = new Random();
 		upperChestInventory = pPlayer.inventory;
 		lowerChestInventory = elmaid.maidInventory;
@@ -115,7 +116,8 @@ public class LMM_GuiInventory extends GuiContainer {
 		GL11.glPopMatrix();
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
-		
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F / 1.0F, 240F / 1.0F);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
@@ -305,7 +307,7 @@ public class LMM_GuiInventory extends GuiContainer {
 				}
 			}
 			isChangeTexture = false;
-			mc.displayGuiScreen(new LMM_GuiTextureSelect(this, entitylittlemaid, ldye, true));
+			mc.displayGuiScreen(new MMM_GuiTextureSelect(this, entitylittlemaid, ldye, true));
 		}
 	}
 

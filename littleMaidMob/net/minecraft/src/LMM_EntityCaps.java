@@ -6,17 +6,19 @@ import java.util.Map;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 
+
 /**
  * Entityのデータ読み取り用のクラス
  * 別にEntityにインターフェース付けてもOK
  */
-public class LMM_EntityCaps implements MMM_IModelCaps {
+public class LMM_EntityCaps extends MMM_EntityCaps {
 
 	private LMM_EntityLittleMaid owner;
 	private static Map<String, Integer> caps;
 
 	static {
 		caps = new HashMap<String, Integer>();
+		caps.putAll(getStaticModelCaps());
 		caps.put("isBloodsuck", caps_isBloodsuck);
 		caps.put("isFreedom", caps_isFreedom);
 		caps.put("isTracer", caps_isTracer);
@@ -35,16 +37,18 @@ public class LMM_EntityCaps implements MMM_IModelCaps {
 		caps.put("isMasked", caps_isMasked);
 		caps.put("isCamouflage", caps_isCamouflage);
 		caps.put("isPlanter", caps_isPlanter);
+		caps.put("isOverdrive", caps_isOverdrive);
+		caps.put("isOverdriveDelay", caps_isOverdriveDelay);
 		caps.put("entityIdFactor", caps_entityIdFactor);
 		caps.put("height", caps_height);
 		caps.put("width", caps_width);
 		caps.put("YOffset", caps_YOffset);
 		caps.put("mountedYOffset", caps_mountedYOffset);
 		caps.put("dominantArm", caps_dominantArm);
-		//		caps.put("render", caps_render);
-		//		caps.put("Arms", caps_Arms);
+//		caps.put("render", caps_render);
+//		caps.put("Arms", caps_Arms);
 		caps.put("HeadMount", caps_HeadMount);
-		//		caps.put("HardPoint", caps_HardPoint);
+//		caps.put("HardPoint", caps_HardPoint);
 		caps.put("stabiliser", caps_stabiliser);
 		caps.put("Items", caps_Items);
 		caps.put("Actions", caps_Actions);
@@ -52,20 +56,29 @@ public class LMM_EntityCaps implements MMM_IModelCaps {
 		caps.put("Ground", caps_Ground);
 		caps.put("Inventory", caps_Inventory);
 		caps.put("interestedAngle", caps_interestedAngle);
-		caps.put("Entity", caps_Entity);
-		caps.put("health", caps_health);
+//		caps.put("Entity", caps_Entity);
+//		caps.put("health", caps_health);
+		caps.put("currentArmor", caps_currentArmor);
+		caps.put("currentEquippedItem", caps_currentEquippedItem);
 	}
 
 	public LMM_EntityCaps(LMM_EntityLittleMaid pOwner) {
+		super(pOwner);
 		owner = pOwner;
 	}
 
-	public Object getCapsValue(int pIndex, Object... pArg) {
-		int li = 0;
+	@Override
+	public Map<String, Integer> getModelCaps() {
+		return caps;
+	}
 
+	@Override
+	public Object getCapsValue(int pIndex, Object ...pArg) {
+		int li = 0;
+		
 		switch (pIndex) {
-		case caps_Entity:
-			return owner;
+//		case caps_Entity:
+//			return owner;
 		case caps_health:
 			return owner.getHealth();
 		case caps_isBloodsuck:
@@ -91,9 +104,9 @@ public class LMM_EntityCaps implements MMM_IModelCaps {
 		case caps_isWorkingDelay:
 			return owner.isWorkingDelay();
 		case caps_isContract:
-			return owner.isMaidContract();
+			return owner.isContract();
 		case caps_isContractEX:
-			return owner.isMaidContractEX();
+			return owner.isContractEX();
 		case caps_isRemainsC:
 			return owner.isRemainsContract();
 		case caps_isClock:
@@ -104,6 +117,10 @@ public class LMM_EntityCaps implements MMM_IModelCaps {
 			return owner.isCamouflage();
 		case caps_isPlanter:
 			return owner.isPlanter();
+		case caps_isOverdrive:
+			return owner.maidOverDriveTime.isEnable();
+		case caps_isOverdriveDelay:
+			return owner.maidOverDriveTime.isDelay();
 		case caps_entityIdFactor:
 			return owner.entityIdFactor;
 		case caps_height:
@@ -116,13 +133,13 @@ public class LMM_EntityCaps implements MMM_IModelCaps {
 			return owner.textureBox[0] == null ? null : owner.textureBox[0].getMountedYOffset();
 		case caps_dominantArm:
 			return owner.maidDominantArm;
-			//		case caps_mountedYOffset:
-			//			return owner.textureModel0 == null ? null : owner.textureModel0.getHeight();
-			//		case caps_render:
-			//		case caps_Arms:
+//		case caps_mountedYOffset:
+//			return owner.textureModel0 == null ? null : owner.textureModel0.getHeight();
+//		case caps_render:
+//		case caps_Arms:
 		case caps_HeadMount:
 			return owner.maidInventory.getStackInSlot(17);
-			//		case caps_HardPoint:
+//		case caps_HardPoint:
 		case caps_stabiliser:
 			return owner.maidStabilizer;
 		case caps_Items:
@@ -145,25 +162,26 @@ public class LMM_EntityCaps implements MMM_IModelCaps {
 			return lgrounds;
 		case caps_Ground:
 			// float (int pIndex, int pDefVal)
-			if (owner.mstatSwingStatus.length < (Integer) pArg[0]) {
+			if (owner.mstatSwingStatus.length < (Integer)pArg[0]) {
 				return pArg[1];
 			}
-			return owner.mstatSwingStatus[(Integer) pArg[0]].onGround;
+			return owner.mstatSwingStatus[(Integer)pArg[0]].onGround;
 		case caps_Inventory:
 			return owner.maidInventory;
 		case caps_interestedAngle:
-			return owner.getInterestedAngle((Float) pArg[0]);
+			return owner.getInterestedAngle((Float)pArg[0]);
+		case caps_currentArmor:
+			return owner.getCurrentArmor((Integer)pArg[0]);
+		case caps_currentEquippedItem:
+			return owner.getCurrentEquippedItem();
 		}
-
-		return null;
+		
+		return super.getCapsValue(pIndex, pArg);
 	}
 
-	public Map<String, Integer> getModelCaps() {
-		return caps;
-	}
-
+	@Override
 	public boolean setCapsValue(int pIndex, Object... pArg) {
-		return false;
+		return super.setCapsValue(pIndex, pArg);
 	}
 
 }

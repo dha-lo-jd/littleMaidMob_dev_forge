@@ -59,8 +59,8 @@ public class LMM_EntityMode_Test extends LMM_EntityModeBase implements ICommand 
 //		llist.add("stat:" + owner.statusMessage);
 		llist.add(String.format("working:%b, sneak:%b, sugar:%b", owner.isWorking(), owner.isSneaking(), owner.isLookSuger()));
 		llist.add(String.format("%s[%s]", owner.getMaidModeString(), owner.maidActiveModeClass == null ? "" : owner.maidActiveModeClass.getClass().getSimpleName()));
-		llist.add(String.format("Limit: %b[%b]", owner.isMaidContract(), owner.isMaidContractEX()));
-		int li = owner.dataWatcher.getWatchableObjectInt(LMM_EntityLittleMaid.dataWatch_Texture);
+		llist.add(String.format("Limit: %b[%b]", owner.isContract(), owner.isContractEX()));
+		int li = owner.dataWatcher.getWatchableObjectInt(LMM_Statics.dataWatch_Texture);
 		llist.add(String.format("Texture=%s(%x/ %x), %s(%x / %x)",
 				owner.textureBox[0].textureName, owner.textureIndex[0], li & 0xffff,
 				owner.textureBox[1].textureName, owner.textureIndex[1], (li >>> 16)
@@ -128,22 +128,22 @@ public class LMM_EntityMode_Test extends LMM_EntityModeBase implements ICommand 
 			case 2:
 				// textureIndex
 				var1.sendChatToPlayer("textureServer:");
-				for (int li = 0; li < MMM_TextureManager.textureServer.size(); li++) {
-					MMM_TextureBoxServer lb = MMM_TextureManager.getTextureBoxServer(li);
+				for (int li = 0; li < MMM_TextureManager.instance.textureServer.size(); li++) {
+					MMM_TextureBoxServer lb = MMM_TextureManager.instance.getTextureBoxServer(li);
 					var1.sendChatToPlayer(String.format("%4d : %04x : %s", li, lb.wildColor, lb.textureName));
 				}
 				break;
 			case 3:
 				// textures
 				var1.sendChatToPlayer("textures:");
-				for (MMM_TextureBox ltb : MMM_TextureManager.textures) {
+				for (MMM_TextureBox ltb : MMM_TextureManager.instance.textures) {
 					var1.sendChatToPlayer(ltb.textureName);
 				}
 				break;
 			case 4:
 				// textures
 				var1.sendChatToPlayer("textureServerIndex:");
-				for (Entry<MMM_TextureBox, Integer> ltb : MMM_TextureManager.textureServerIndex.entrySet()) {
+				for (Entry<MMM_TextureBox, Integer> ltb : MMM_TextureManager.instance.textureServerIndex.entrySet()) {
 					var1.sendChatToPlayer(String.format("%04x, %s", ltb.getValue(), ltb.getKey().textureName));
 				}
 				break;

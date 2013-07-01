@@ -10,15 +10,12 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class LMM_EntityAIAttackArrow extends EntityAIBase implements LMM_IEntityAI {
 
 	public boolean fEnable;
-
+	
 	public LMM_EntityLittleMaid fMaid;
 	public LMM_EntityLittleMaidAvatar fAvatar;
 	public LMM_InventoryLittleMaid fInventory;
@@ -27,6 +24,7 @@ public class LMM_EntityAIAttackArrow extends EntityAIBase implements LMM_IEntity
 	public EntityLiving fTarget;
 	public int fForget;
 
+	
 	public LMM_EntityAIAttackArrow(LMM_EntityLittleMaid pEntityLittleMaid) {
 		fMaid = pEntityLittleMaid;
 		fAvatar = pEntityLittleMaid.maidAvatar;
@@ -36,33 +34,18 @@ public class LMM_EntityAIAttackArrow extends EntityAIBase implements LMM_IEntity
 		fEnable = false;
 		setMutexBits(3);
 	}
-
-	@Override
-	public boolean continueExecuting() {
-		return shouldExecute() || !fMaid.getNavigator().noPath();
-	}
-
-	public boolean getEnable() {
-		return fEnable;
-	}
-
-	@Override
-	public void resetTask() {
-		fTarget = null;
-	}
-
-	public void setEnable(boolean pFlag) {
-		fEnable = pFlag;
-	}
-
+	
 	@Override
 	public boolean shouldExecute() {
 		EntityLiving entityliving = fMaid.getAttackTarget();
-
+		
 		if (!fEnable || entityliving == null || entityliving.isDead) {
 			fMaid.setAttackTarget(null);
 			fMaid.setTarget(null);
-			fMaid.getNavigator().clearPathEntity();
+			if (entityliving != null) {
+				fMaid.getNavigator().clearPathEntity();
+			}
+			fTarget = null;
 			return false;
 		} else {
 			fTarget = entityliving;
@@ -77,21 +60,31 @@ public class LMM_EntityAIAttackArrow extends EntityAIBase implements LMM_IEntity
 	}
 
 	@Override
+	public boolean continueExecuting() {
+		return shouldExecute() || (fTarget != null && !fMaid.getNavigator().noPath());
+	}
+
+	@Override
+	public void resetTask() {
+		fTarget = null;
+	}
+
+	@Override
 	public void updateTask() {
 		double lrange = 225D;
 		double ldist = fMaid.getDistanceSqToEntity(fTarget);
 		boolean lsee = fMaid.getEntitySenses().canSee(fTarget);
-
+	
 		// 視界の外に出たら一定時間で飽きる
 		if (lsee) {
 			fForget = 0;
 		} else {
 			fForget++;
 		}
-
+		
 		// 攻撃対象を見る
 		fMaid.getLookHelper().setLookPositionWithEntity(fTarget, 30F, 30F);
-
+		
 		if (ldist < lrange) {
 			// 有効射程内
 			double atx = fTarget.posX - fMaid.posX;
@@ -107,21 +100,21 @@ public class LMM_EntityAIAttackArrow extends EntityAIBase implements LMM_IEntity
 				if (masterEntity != null) {
 					// 主とのベクトル
 					double amx = masterEntity.posX - fMaid.posX;
-					double amy = masterEntity.posY - fMaid.posY - 2D;
+					double amy = masterEntity.posY - fMaid.posY;//-2D
 					double amz = masterEntity.posZ - fMaid.posZ;
-
+					
 					// この値が０～１ならターゲットとの間に主がいる
 					il = (amx * atx + amy * aty + amz * atz) / atl;
-
+					
 					// 射線ベクトルと主との垂直ベクトル
 					double mix = (fMaid.posX + il * atx) - masterEntity.posX;
-					double miy = (fMaid.posY + il * aty) - masterEntity.posY + 2D;
+					double miy = (fMaid.posY + il * aty) - masterEntity.posY;// + 2D;
 					double miz = (fMaid.posZ + il * atz) - masterEntity.posZ;
 					// 射線から主との距離
 					milsq = mix * mix + miy * miy + miz * miz;
-					//                	mod_littleMaidMob.Debug(String.format("il:%f, milsq:%f", il, milsq));
+//					mod_LMM_littleMaidMob.Debug("il:%f, milsq:%f", il, milsq);
 				}
-
+				
 				if (litemstack != null && !(litemstack.getItem() instanceof ItemFood) && !fMaid.weaponReload) {
 					int lastentityid = worldObj.loadedEntityList.size();
 					int itemcount = litemstack.stackSize;
@@ -132,71 +125,76 @@ public class LMM_EntityAIAttackArrow extends EntityAIBase implements LMM_IEntity
 					int helmid = !fMaid.isMaskedMaid() ? 0 : fInventory.armorInventory[3].getItem().itemID;
 					if (helmid == Item.helmetDiamond.itemID || helmid == Item.helmetGold.itemID) {
 						// 射線軸の確認
-						List list = worldObj.getEntitiesWithinAABBExcludingEntity(fMaid,
-								fMaid.boundingBox.expand(16D, 16D, 16D));
-						Vec3 vec3d = Vec3.createVectorHelper(fMaid.posX, fMaid.posY, fMaid.posZ);
-						Vec3 vec3d1 = Vec3.createVectorHelper(fTarget.posX, fTarget.posY, fTarget.posZ);
-						for (int l = 0; l < list.size(); l++) {
-							Entity entity1 = (Entity) list.get(l);
-							// 自分や味方以外に中るなら撃つ
-							if (entity1 == fMaid || entity1 == fTarget || !entity1.canBeCollidedWith()
-									|| !fMaid.getIFF(entity1)) {
-								continue;
-							}
-							float f5 = 0.3F;
-							AxisAlignedBB axisalignedbb1 = entity1.boundingBox.expand(f5, f5, f5);
-							MovingObjectPosition movingobjectposition1 = axisalignedbb1.calculateIntercept(vec3d,
-									vec3d1);
-							if (movingobjectposition1 == null) {
-								continue;
-							}
+						double tpr = Math.sqrt(atl);
+						Entity lentity = MMM_Helper.getRayTraceEntity(fMaid.maidAvatar, tpr, 1.0F, 1.0F);
+						if (lentity != null && fMaid.getIFF(lentity)) {
 							fsh = false;
-							mod_LMM_littleMaidMob.Debug(String.format("ID:%d-friendly fire to ID:%d.", fMaid.entityId,
-									entity1.entityId));
+//							mod_LMM_littleMaidMob.Debug("ID:%d-friendly fire to ID:%d.", fMaid.entityId, lentity.entityId);
 						}
 					}
 					fsh &= (milsq > 3D || il < 0D);
-					//            		mod_littleMaidMob.Debug(String.format("id:%d at:%d", entityId, attackTime));
-					if (((fMaid.weaponFullAuto && !fsh) || (fsh && fMaid.getSwingStatusDominant().canAttack()))
-							&& fAvatar.isItemTrigger) {
+					// 横移動
+					if (!fsh) {
+						// 射撃位置を確保する
+						double tpx = fMaid.posX;
+						double tpy = fMaid.posY;
+						double tpz = fMaid.posZ;
+						double tpr = Math.sqrt(atl) * 0.5D;
+						if (fMaid.isBloodsuck()) {
+							// 左回り
+							tpx += (atz / tpr);
+							tpz -= (atx / tpr);
+						} else {
+							// 右回り
+							tpx -= (atz / tpr);
+							tpz += (atx / tpr);
+						}
+						fMaid.getNavigator().tryMoveToXYZ(tpx, tpy, tpz, fMaid.getAIMoveSpeed());
+					}
+					else if (lsee & ldist < 100) {
+						fMaid.getNavigator().clearPathEntity();
+//						mod_LMM_littleMaidMob.Debug("Shooting Range.");
+					}
+					
+					fsh &= lsee;
+//            		mod_littleMaidMob.Debug(String.format("id:%d at:%d", entityId, attackTime));
+					if (((fMaid.weaponFullAuto && !fsh) || (fsh && fMaid.getSwingStatusDominant().canAttack())) && fAvatar.isItemTrigger) {
 						// シュート
-						mod_LMM_littleMaidMob.Debug(String.format("id:%d shoot.", fMaid.entityId));
+						// フルオート武器は射撃停止
+						mod_LMM_littleMaidMob.Debug("id:%d shoot.", fMaid.entityId);
 						fAvatar.stopUsingItem();
 						fMaid.setSwing(30, LMM_EnumSound.shoot);
 					} else {
 						// チャージ
 						if (litemstack.getMaxItemUseDuration() > 500) {
-							//                			mod_littleMaidMob.Debug(String.format("non reload.%b", isMaskedMaid));
+//                			mod_littleMaidMob.Debug(String.format("non reload.%b", isMaskedMaid));
 							// リロード無しの通常兵装
 							if (!fAvatar.isUsingItemLittleMaid()) {
 								// 構え
 								if (!fMaid.weaponFullAuto || fsh) {
 									// フルオート兵装の場合は射線確認
-									int at = ((helmid == Item.helmetIron.itemID) || (helmid == Item.helmetDiamond.itemID)) ? 26
-											: 16;
+									int at = ((helmid == Item.helmetIron.itemID) || (helmid == Item.helmetDiamond.itemID)) ? 26 : 16;
 									if (swingState.attackTime < at) {
 										fMaid.setSwing(at, LMM_EnumSound.sighting);
 										litemstack = litemstack.useItemRightClick(worldObj, fAvatar);
-										mod_LMM_littleMaidMob.Debug(String.format("id:%d redygun.", fMaid.entityId));
+										mod_LMM_littleMaidMob.Debug("id:%d redygun.", fMaid.entityId);
 									}
 								} else {
-									mod_LMM_littleMaidMob.Debug(String.format("ID:%d-friendly fire FullAuto.",
-											fMaid.entityId));
+									mod_LMM_littleMaidMob.Debug(String.format("ID:%d-friendly fire FullAuto.", fMaid.entityId));
 								}
 							}
-						} else if (litemstack.getMaxItemUseDuration() == 0) {
+						} 
+						else if (litemstack.getMaxItemUseDuration() == 0) {
 							// 通常投擲兵装
 							if (swingState.canAttack() && !fAvatar.isUsingItem()) {
 								if (fsh) {
 									litemstack = litemstack.useItemRightClick(worldObj, fAvatar);
 									// 意図的にショートスパンで音が鳴るようにしてある
 									fMaid.mstatAimeBow = false;
-									fMaid.setSwing(10, (litemstack.stackSize == itemcount) ? LMM_EnumSound.shoot_burst
-											: LMM_EnumSound.Null);
+									fMaid.setSwing(10, (litemstack.stackSize == itemcount) ? LMM_EnumSound.shoot_burst : LMM_EnumSound.Null);
 									mod_LMM_littleMaidMob.Debug(String.format("id:%d throw weapon.", fMaid.entityId));
 								} else {
-									mod_LMM_littleMaidMob.Debug(String.format("ID:%d-friendly fire throw weapon.",
-											fMaid.entityId));
+									mod_LMM_littleMaidMob.Debug(String.format("ID:%d-friendly fire throw weapon.", fMaid.entityId));
 								}
 							}
 						} else {
@@ -209,7 +207,7 @@ public class LMM_EntityAIAttackArrow extends EntityAIBase implements LMM_IEntity
 							swingState.attackTime = 5;
 						}
 					}
-					//            		maidAvatarEntity.setValueRotation();
+//            		maidAvatarEntity.setValueRotation();
 					fAvatar.setValueVector();
 					// アイテムが亡くなった
 					if (litemstack.stackSize <= 0) {
@@ -218,10 +216,9 @@ public class LMM_EntityAIAttackArrow extends EntityAIBase implements LMM_IEntity
 					} else {
 						fInventory.setInventoryCurrentSlotContents(litemstack);
 					}
-
+					
 					// 発生したEntityをチェックしてmaidAvatarEntityが居ないかを確認
-					List<Entity> newentitys = worldObj.loadedEntityList.subList(lastentityid,
-							worldObj.loadedEntityList.size());
+					List<Entity> newentitys = worldObj.loadedEntityList.subList(lastentityid, worldObj.loadedEntityList.size());
 					boolean shootingflag = false;
 					if (newentitys != null && newentitys.size() > 0) {
 						mod_LMM_littleMaidMob.Debug(String.format("new FO entity %d", newentitys.size()));
@@ -233,7 +230,7 @@ public class LMM_EntityAIAttackArrow extends EntityAIBase implements LMM_IEntity
 							try {
 								// 飛翔体の主を置き換える
 								Field fd[] = te.getClass().getDeclaredFields();
-								//                				mod_littleMaidMob.Debug(String.format("%s, %d", e.getClass().getName(), fd.length));
+//                				mod_littleMaidMob.Debug(String.format("%s, %d", e.getClass().getName(), fd.length));
 								for (Field ff : fd) {
 									// 変数を検索しAvatarと同じ物を自分と置き換える
 									ff.setAccessible(true);
@@ -243,7 +240,8 @@ public class LMM_EntityAIAttackArrow extends EntityAIBase implements LMM_IEntity
 										mod_LMM_littleMaidMob.Debug("Replace FO Owner.");
 									}
 								}
-							} catch (Exception exception) {
+							}
+							catch (Exception exception) {
 							}
 						}
 					}
@@ -251,43 +249,42 @@ public class LMM_EntityAIAttackArrow extends EntityAIBase implements LMM_IEntity
 					if (shootingflag) {
 						for (Object obj : worldObj.loadedEntityList) {
 							if (obj instanceof EntityCreature && !(obj instanceof LMM_EntityLittleMaid)) {
-								EntityCreature ecr = (EntityCreature) obj;
+								EntityCreature ecr = (EntityCreature)obj;
 								if (ecr.entityToAttack == fAvatar) {
 									ecr.entityToAttack = fMaid;
 								}
 							}
 						}
 					}
-
 				}
-
 			}
-
-			//オービットの処理？これ有効か？
-			/*
-			        	// TODO:多分変なことになってるんで一時停止
-			        	if (fMaid.isBloodsuck()) {
-			        		// Bloodsuck系は逆周り
-			            	fMaid.rotationYaw = (float)((Math.atan2(atz, atx) * 180D) / 3.1415927410125732D) + 100F;
-			        	} else {
-			            	fMaid.rotationYaw = (float)((Math.atan2(atz, atx) * 180D) / 3.1415927410125732D) - 90F;
-			        	}
-			*/
 		} else {
 			// 有効射程外
-			fMaid.getNavigator().tryMoveToEntityLiving(fTarget, fMaid.getAIMoveSpeed());
 			if (fMaid.getNavigator().noPath()) {
+				fMaid.getNavigator().tryMoveToEntityLiving(fTarget, fMaid.getAIMoveSpeed());
+			}
+			if (fMaid.getNavigator().noPath()) {
+				mod_LMM_littleMaidMob.Debug("id:%d Target renge out.", fMaid.entityId);
 				fMaid.setAttackTarget(null);
 			}
-			mod_LMM_littleMaidMob.Debug(String.format("id:%d Target renge out.", fMaid.entityId));
 			if (fMaid.weaponFullAuto && fAvatar.isItemTrigger) {
 				fAvatar.stopUsingItem();
 			} else {
 				fAvatar.clearItemInUse();
 			}
-
+			
 		}
+		
+	}
 
+	@Override
+	public void setEnable(boolean pFlag) {
+		fEnable = pFlag;
+	}
+
+	@Override
+	public boolean getEnable() {
+		return fEnable;
 	}
 
 }

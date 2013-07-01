@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.multiplayer.NetClientHandler;
+import net.minecraft.client.stats.StatPlaceholder;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,8 @@ import net.minecraft.network.NetServerHandler;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
+import net.minecraft.stats.StatBase;
+import net.minecraft.stats.StatList;
 import net.minecraft.world.biome.BiomeGenBase;
 
 public class mod_LMM_littleMaidMob extends BaseMod {
@@ -104,13 +107,13 @@ public class mod_LMM_littleMaidMob extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.5.2-1";
+		return "1.5.2-5";
 	}
 
 	@Override
 	public void load() {
 		// MMMLibのRevisionチェック
-		MMM_Helper.checkRevision("2");
+		MMM_Helper.checkRevision("6");
 
 		//		UniqueEntityId = UniqueEntityId == 0 ? MMM_Helper.getNextEntityID(true) : UniqueEntityId;
 		defaultTexture = defaultTexture.trim();
@@ -124,21 +127,51 @@ public class mod_LMM_littleMaidMob extends BaseMod {
 		ModLoader.addLocalization("entity.LittleMaid.name", "ja_JP", "リトルメイド");
 		if (enableSpawnEgg) {
 			// 招喚用レシピを追加
-			ModLoader.addRecipe(new ItemStack(Item.monsterPlacer, 1, UniqueEntityId), new Object[] { "scs", "sbs",
-					" e ", Character.valueOf('s'), Item.sugar, Character.valueOf('c'),
-					new ItemStack(Item.dyePowder, 1, 3), Character.valueOf('b'), Item.slimeBall,
-					Character.valueOf('e'), Item.egg, });
+			ModLoader.addRecipe(new ItemStack(Item.monsterPlacer, 1, UniqueEntityId), new Object[] {
+					"scs",
+					"sbs",
+					" e ",
+					Character.valueOf('s'),
+					Item.sugar,
+					Character.valueOf('c'),
+					new ItemStack(Item.dyePowder, 1, 3),
+					Character.valueOf('b'),
+					Item.slimeBall,
+					Character.valueOf('e'),
+					Item.egg,
+			});
 		}
 
 		if (MMM_Helper.isClient) {
 			// アチ実験用
 			if (AchievementID != 0) {
-				ac_Contract = new Achievement(AchievementID, "littleMaid", 1, -4, Item.cake, AchievementList.bakeCake)
-						.registerAchievement();
-				//                ModLoader.AddAchievementDesc(ac_Contract, "(21)", "Capture the LittleMaid!");
-				ModLoader.addAchievementDesc(ac_Contract, "Enlightenment!", "Capture the LittleMaid!");
-				ModLoader.addLocalization("achievement.littleMaid", "ja_JP", "悟り。");
-				ModLoader.addLocalization("achievement.littleMaid.desc", "ja_JP", "メイドさんを入手しました。");
+				while (true) {
+					// アチーブを獲得した状態で未登録だと、UNKNOWNのアチーブが登録されているので削除する。
+					int laid = 5242880 + AchievementID;
+					StatBase lsb = StatList.getOneShotStat(laid);
+					boolean lflag = false;
+					if (lsb != null) {
+						if (lsb instanceof StatPlaceholder) {
+							StatList.oneShotStats.remove(Integer.valueOf(laid));
+							Debug("Replace Achievement: %d(%d)", AchievementID, laid);
+							lflag = true;
+						} else {
+							Debug("Already Achievement: %d(%d) - %s(%s)", AchievementID, laid, lsb.statGuid, lsb
+									.getClass().getSimpleName());
+							break;
+						}
+					}
+					ac_Contract = new Achievement(AchievementID, "littleMaid", 1, -4, Item.cake,
+							AchievementList.bakeCake).registerAchievement();
+					//	                ModLoader.AddAchievementDesc(ac_Contract, "(21)", "Capture the LittleMaid!");
+					ModLoader.addAchievementDesc(ac_Contract, "Enlightenment!", "Capture the LittleMaid!");
+					ModLoader.addLocalization("achievement.littleMaid", "ja_JP", "悟り。");
+					ModLoader.addLocalization("achievement.littleMaid.desc", "ja_JP", "メイドさんを入手しました。");
+					if (lflag) {
+						LMM_Client.setAchievement();
+					}
+					break;
+				}
 			}
 
 			// 名称変換テーブル
@@ -162,8 +195,8 @@ public class mod_LMM_littleMaidMob extends BaseMod {
 	@Override
 	public void modsLoaded() {
 		// デフォルトモデルの設定
-		MMM_TextureManager.setDefaultTexture(LMM_EntityLittleMaid.class,
-				MMM_TextureManager.getTextureBox("default_Orign"));
+		MMM_TextureManager.instance.setDefaultTexture(LMM_EntityLittleMaid.class,
+				MMM_TextureManager.instance.getTextureBox("default_Orign"));
 
 		if (UniqueEntityId == -1) {
 			return;

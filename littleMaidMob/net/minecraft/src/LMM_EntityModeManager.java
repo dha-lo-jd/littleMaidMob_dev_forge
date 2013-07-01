@@ -3,7 +3,7 @@ package net.minecraft.src;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LMM_EntityModeManager extends MMM_ManagerBase<LMM_EntityModeBase> {
+public class LMM_EntityModeManager extends MMM_ManagerBase {
 
 	public static final String prefix = "EntityMode";
 	public static List<LMM_EntityModeBase> maidModeList = new ArrayList<LMM_EntityModeBase>();
@@ -34,7 +34,7 @@ public class LMM_EntityModeManager extends MMM_ManagerBase<LMM_EntityModeBase> {
 	}
 
 	@Override
-	public boolean append(Class<? extends LMM_EntityModeBase> pclass) {
+	public boolean append(Class pclass) {
 		// プライオリティー順に追加
 		// ソーター使う？
 		if (!LMM_EntityModeBase.class.isAssignableFrom(pclass)) {
@@ -43,7 +43,8 @@ public class LMM_EntityModeManager extends MMM_ManagerBase<LMM_EntityModeBase> {
 
 		try {
 			LMM_EntityModeBase lemb = null;
-			lemb = pclass.getConstructor(LMM_EntityLittleMaid.class).newInstance((LMM_EntityLittleMaid) null);
+			lemb = (LMM_EntityModeBase) pclass.getConstructor(LMM_EntityLittleMaid.class).newInstance(
+					(LMM_EntityLittleMaid) null);
 			lemb.init();
 
 			if (maidModeList.isEmpty() || lemb.priority() >= maidModeList.get(maidModeList.size() - 1).priority()) {

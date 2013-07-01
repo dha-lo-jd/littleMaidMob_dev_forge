@@ -135,16 +135,28 @@ public class LMM_EntityMode_Archer extends LMM_EntityModeBase {
 		return (pItemStack.getItem() instanceof ItemBow) || (pItemStack.itemID == Item.arrow.itemID) 
 				|| LMM_TriggerSelect.checkWeapon(ls, "Bow", pItemStack) || LMM_TriggerSelect.checkWeapon(ls, "Arrow", pItemStack);
 	}
-	
+
+	@Override
+	public void onUpdate(int pMode) {
+		switch (pMode) {
+		case mmode_Archer:
+		case mmode_Blazingstar:
+			owner.getWeaponStatus();
+//			updateGuns();
+			break;
+		}
+
+	}
+
 	@Override
 	public void updateAITick(int pMode) {
 		switch (pMode) {
 		case mmode_Archer:
-			owner.getWeaponStatus();
+//			owner.getWeaponStatus();
 			updateGuns();
 			break;
 		case mmode_Blazingstar:
-			owner.getWeaponStatus();
+//			owner.getWeaponStatus();
 			updateGuns();
 			// Blazingstarの特殊効果
 			World lworld = owner.worldObj;
@@ -165,7 +177,7 @@ public class LMM_EntityMode_Archer extends LMM_EntityModeBase {
 			break;
 		}
 	}
-	
+
 	public void updateGuns() {
 		if (owner.getAttackTarget() == null || !owner.getAttackTarget().isEntityAlive()) {
 			// 対象が死んだ
@@ -187,7 +199,7 @@ public class LMM_EntityMode_Archer extends LMM_EntityModeBase {
 		if (owner.weaponReload && !owner.maidAvatar.isUsingItem()) {
 			// 特殊リロード
 			owner.maidInventory.getCurrentItem().useItemRightClick(owner.worldObj, owner.maidAvatar);
-			mod_LMM_littleMaidMob.Debug(String.format("id:%d force reload.", owner.entityId));
+			mod_LMM_littleMaidMob.Debug("id:%d force reload.", owner.entityId);
 			owner.mstatAimeBow = true;
 		}
 

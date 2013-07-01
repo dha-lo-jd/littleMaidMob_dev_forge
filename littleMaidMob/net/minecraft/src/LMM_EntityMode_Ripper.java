@@ -91,8 +91,8 @@ public class LMM_EntityMode_Ripper extends LMM_EntityModeBase {
 				// なんでPrivateにかえたし
 				try {
 					lis.damageItem(
-							(Integer) ModLoader.getPrivateValue(EntityCreeper.class, (EntityCreeper) pEntity, 1),
-							owner.maidAvatar);
+							(Integer) ModLoader.getPrivateValue(EntityCreeper.class, (EntityCreeper) pEntity, 1), owner);
+					//							(EntityCreeper)pEntity, 1), owner.maidAvatar);
 					ModLoader.setPrivateValue(EntityCreeper.class, (EntityCreeper) pEntity, 1, 0);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -101,7 +101,8 @@ public class LMM_EntityMode_Ripper extends LMM_EntityModeBase {
 				owner.setSwing(20, LMM_EnumSound.attack_bloodsuck);
 			} else if (pEntity instanceof EntityTNTPrimed) {
 				pEntity.setDead();
-				lis.damageItem(1, owner.maidAvatar);
+				lis.damageItem(1, owner);
+				//				lis.damageItem(1, owner.maidAvatar);
 				owner.setSwing(20, LMM_EnumSound.attack_bloodsuck);
 			} else {
 				owner.maidAvatar.interactWith(pEntity);
@@ -187,7 +188,7 @@ public class LMM_EntityMode_Ripper extends LMM_EntityModeBase {
 		if (pMode == mmode_Detonator && LMM_InventoryLittleMaid.isItemExplord(owner.getCurrentEquippedItem())) {
 			if (timeSinceIgnited == -1) {
 				owner.playSound("random.fuse", 1.0F, 0.5F);
-				owner.dataWatcher.updateObject(LMM_EntityLittleMaid.dataWatch_Free, Integer.valueOf(1));
+				owner.dataWatcher.updateObject(LMM_Statics.dataWatch_Free, Integer.valueOf(1));
 			}
 			//        	if (owner.entityToAttack == null)
 			owner.setMaidWait(true);
@@ -251,8 +252,8 @@ public class LMM_EntityMode_Ripper extends LMM_EntityModeBase {
 		if (pMode == mmode_Detonator && owner.isEntityAlive()) {
 			if (timeSinceIgnited < 0) {
 				if (lastTimeSinceIgnited != timeSinceIgnited) {
-					owner.dataWatcher.updateObject(LMM_EntityLittleMaid.dataWatch_Free, Integer.valueOf(0));
-				} else if (owner.dataWatcher.getWatchableObjectInt(LMM_EntityLittleMaid.dataWatch_Free) == 1) {
+					owner.dataWatcher.updateObject(LMM_Statics.dataWatch_Free, Integer.valueOf(0));
+				} else if (owner.dataWatcher.getWatchableObjectInt(LMM_Statics.dataWatch_Free) == 1) {
 					lastTimeSinceIgnited = timeSinceIgnited = 0;
 				}
 			}
