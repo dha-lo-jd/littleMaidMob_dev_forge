@@ -1,5 +1,8 @@
 package net.minecraft.src;
 
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.entity.RendererLivingEntity;
+
 public class MMM_ModelBaseNihil extends ModelBase {
 
 	public RendererLivingEntity rendererLivingEntity;
@@ -7,8 +10,8 @@ public class MMM_ModelBaseNihil extends ModelBase {
 	public boolean isAlphablend;
 	public boolean isModelAlphablend;
 	public MMM_IModelBaseMMM capsLink;
-	protected MMM_IModelCaps entityCaps;
-	protected boolean isRendering;
+	public MMM_IModelCaps entityCaps;
+	public boolean isRendering;
 
 
 //	@Override

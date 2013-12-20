@@ -1,10 +1,16 @@
 package net.minecraft.src;
 
-import java.lang.reflect.InvocationTargetException;
+import net.minecraft.block.Block;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.SlotArmor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
 
 public class MMM_SlotArmor extends SlotArmor {
 
-	protected final Container parent;
+	public final Container parent;
 
 
 
@@ -17,7 +23,7 @@ public class MMM_SlotArmor extends SlotArmor {
 	public boolean isItemValid(ItemStack par1ItemStack) {
 		if (par1ItemStack == null) return false;
 		Item litem = par1ItemStack.getItem();
-		// Ç‡Å[
+		// „ÇÇ„Éº
 		if (MMM_Helper.isForge) {
 			try {
 				Item.class.getMethod("isValidArmor", ItemStack.class, int.class).invoke(litem, par1ItemStack, armorType);

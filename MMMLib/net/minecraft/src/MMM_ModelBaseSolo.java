@@ -2,6 +2,13 @@ package net.minecraft.src;
 
 import java.util.Map;
 
+import net.minecraft.client.model.TextureOffset;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelBaseMMM {
@@ -38,17 +45,17 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 			}
 		}
 		if (textures.length > 2 && textures[2] != null) {
-			// Actors—p
+			// Actorsç”¨
 			model.setRotationAngles(par2, par3, par4, par5, par6, par7, entityCaps);
 			// Face
-			// TODO:ƒeƒNƒXƒ`ƒƒ‚Ìƒ[ƒh‚Í‚È‚ñ‚©l‚¦‚éB
+			// TODO:ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ­ãƒ¼ãƒ‰ã¯ãªã‚“ã‹è€ƒãˆã‚‹ã€‚
 			MMM_Client.setTexture(textures[2]);
 			model.setCapsValue(caps_renderFace, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 			// Body
 			MMM_Client.setTexture(textures[0]);
 			model.setCapsValue(caps_renderBody, entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
 		} else {
-			// ’Êí
+			// é€šå¸¸
 			if (textures.length > 0 && textures[0] != null) {
 				MMM_Client.setTexture(textures[0]);
 			}
@@ -56,7 +63,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 		}
 		isAlphablend = false;
 		if (textures.length > 1 && textures[1] != null) {
-			// ”­Œõƒp[ƒc
+			// ç™ºå…‰ãƒ‘ãƒ¼ãƒ„
 			MMM_Client.setTexture(textures[1]);
 			float var4 = 1.0F;
 			GL11.glEnable(GL11.GL_BLEND);
@@ -65,7 +72,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 //			GL11.glDisable(GL11.GL_LIGHTING);
 			
-			if (par1Entity.isInvisible()) {
+			if (!isRendering) {
 				GL11.glDepthMask(false);
 			} else {
 				GL11.glDepthMask(true);
@@ -75,7 +82,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 			MMM_Client.setLightmapTextureCoords(0x00f0);//61680
 //			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
-			model.render(entityCaps, par2, par3, par4, par5, par6, par7, isRendering);
+			model.render(entityCaps, par2, par3, par4, par5, par6, par7, true);
 			
 			MMM_Client.setLightmapTextureCoords(par1Entity.getBrightnessForRender(par2));
 			
@@ -100,7 +107,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 	}
 
 
-	// IModelMMM’Ç‰Á•ª
+	// IModelMMMè¿½åŠ åˆ†
 
 	@Override
 	public void renderItems(EntityLivingBase pEntity, Render pRender) {
@@ -117,8 +124,8 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 	}
 
 	/**
-	 * Renderer•Ó‚Å‚±‚Ì•Ï”‚ğİ’è‚·‚éB
-	 * İ’è’l‚ÍMMM_IModelCaps‚ğŒp³‚µ‚½Entitiy‚Æ‚©‚ğ‘z’èB
+	 * Rendererè¾ºã§ã“ã®å¤‰æ•°ã‚’è¨­å®šã™ã‚‹ã€‚
+	 * è¨­å®šå€¤ã¯MMM_IModelCapsã‚’ç¶™æ‰¿ã—ãŸEntitiyã¨ã‹ã‚’æƒ³å®šã€‚
 	 */
 	@Override
 	public void setEntityCaps(MMM_IModelCaps pEntityCaps) {
@@ -141,7 +148,7 @@ public class MMM_ModelBaseSolo extends MMM_ModelBaseNihil implements MMM_IModelB
 	}
 
 
-	// IModelCaps’Ç‰Á•ª
+	// IModelCapsè¿½åŠ åˆ†
 
 	@Override
 	public Map<String, Integer> getModelCaps() {

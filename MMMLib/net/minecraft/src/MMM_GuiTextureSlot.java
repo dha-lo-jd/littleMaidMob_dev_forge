@@ -4,27 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class MMM_GuiTextureSlot extends GuiSlot {
 
 	public MMM_GuiTextureSelect owner;
-	protected int selected;
-	protected MMM_EntitySelect entity;
-	protected List<MMM_TextureBox> indexTexture;
-	protected List<MMM_TextureBox> indexArmor;
+	public int selected;
+	public MMM_EntitySelect entity;
+	public List<MMM_TextureBox> indexTexture;
+	public List<MMM_TextureBox> indexArmor;
 	public boolean mode;
 	public int texsel[] = new int[2];
 	public int color;
-	protected int selectColor;
+	public int selectColor;
 	private ItemStack armors[] = new ItemStack[] {
 			new ItemStack(Item.bootsLeather),
 			new ItemStack(Item.legsLeather),
 			new ItemStack(Item.plateLeather),
 			new ItemStack(Item.helmetLeather)
 	};
-	protected boolean isContract;
-	protected static MMM_TextureBox blankBox;
+	public boolean isContract;
+	public static MMM_TextureBox blankBox;
 
 
 	public MMM_GuiTextureSlot(MMM_GuiTextureSelect pOwner) {
@@ -68,12 +76,12 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 	}
 
 	@Override
-	protected int getSize() {
+	public int getSize() {
 		return mode ? indexArmor.size() : indexTexture.size();
 	}
 
 	@Override
-	protected void elementClicked(int var1, boolean var2) {
+	public void elementClicked(int var1, boolean var2) {
 		if (mode) {
 			selected = var1;
 			texsel[1] = var1;
@@ -93,18 +101,18 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 	}
 
 	@Override
-	protected boolean isSelected(int var1) {
+	public boolean isSelected(int var1) {
 		return selected == var1;
 	}
 
 	@Override
-	protected void drawBackground() {
+	public void drawBackground() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5) {
+	public void drawSlot(int var1, int var2, int var3, int var4, Tessellator var5) {
 		GL11.glPushMatrix();
 		
 		if (!mode) {
@@ -143,7 +151,7 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 		entity.rotationYawHead = 15F;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 		if (mode) {
-			// アーマー
+			// 繧｢繝ｼ繝槭�ｼ
 			ResourceLocation ltxname[];
 			GL11.glTranslatef(1F, 0, 0);
 			Map<Integer, ResourceLocation> lmap = lbox.armors.get("default");
@@ -169,7 +177,7 @@ public class MMM_GuiTextureSlot extends GuiSlot {
 				}
 			}
 		} else {
-			// テクスチャ表示
+			// 繝�繧ｯ繧ｹ繝√Ε陦ｨ遉ｺ
 			for (int li = 0; li < 16; li++) {
 				GL11.glTranslatef(1F, 0, 0);
 				if (lbox.hasColor(li, isContract)) {

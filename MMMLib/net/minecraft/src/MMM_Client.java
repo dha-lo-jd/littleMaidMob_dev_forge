@@ -1,8 +1,22 @@
 package net.minecraft.src;
 
-import static net.minecraft.src.mod_MMM_MMMLib.Debug;
+import static net.minecraft.src.mod_MMM_MMMLib.*;
 
 import java.util.Random;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.NetClientHandler;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
@@ -23,11 +37,11 @@ public class MMM_Client {
 			mod_MMM_MMMLib.Debug("replace RenderManager.itemRenderer.");
 			RenderManager.instance.itemRenderer = itemRenderer;
 		}
-		// GUI‚Ì•\¦‚ğ•Ï‚¦‚é‚É‚ÍíŠÄ‹‚ª•K—vH
+		// GUIã®è¡¨ç¤ºã‚’å¤‰ãˆã‚‹ã«ã¯å¸¸æ™‚ç›£è¦–ãŒå¿…è¦ï¼Ÿ
 	}
 
 	public static void clientCustomPayload(NetClientHandler var1, Packet250CustomPayload var2) {
-		// ƒNƒ‰ƒCƒAƒ“ƒg‘¤‚Ì“ÁêƒpƒPƒbƒgóM“®ì
+		// ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå´ã®ç‰¹æ®Šãƒ‘ã‚±ãƒƒãƒˆå—ä¿¡å‹•ä½œ
 		byte lmode = var2.data[0];
 		int leid = 0;
 		Entity lentity = null;
@@ -40,11 +54,11 @@ public class MMM_Client {
 		
 		switch (lmode) {
 		case MMM_Statics.Client_SetTextureIndex:
-			// –â‚¢‡‚í‚¹‚½ƒeƒNƒXƒ`ƒƒƒpƒbƒN‚ÌŠÇ—”Ô†‚ğó‚¯æ‚é
+			// å•ã„åˆã‚ã›ãŸãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ‘ãƒƒã‚¯ã®ç®¡ç†ç•ªå·ã‚’å—ã‘å–ã‚‹
 			MMM_TextureManager.instance.reciveFormServerSetTexturePackIndex(var2.data);
 			break;
 		case MMM_Statics.Client_SetTexturePackName:
-			// ŠÇ—”Ô†‚É“o˜^‚³‚ê‚Ä‚¢‚éƒeƒNƒXƒ`ƒƒƒpƒbƒN‚Ìî•ñ‚ğó‚¯æ‚é
+			// ç®¡ç†ç•ªå·ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ‘ãƒƒã‚¯ã®æƒ…å ±ã‚’å—ã‘å–ã‚‹
 			MMM_TextureManager.instance.reciveFromServerSetTexturePackName(var2.data);
 			break;
 		}
@@ -76,7 +90,7 @@ public class MMM_Client {
 	}
 
 	/**
-	 * Duo‚ğg‚¤‚Í•K‚¸Render‘¤‚Ì‚±‚ÌŠÖ”‚ğ’u‚«Š·‚¦‚é‚±‚ÆB
+	 * Duoã‚’ä½¿ã†æ™‚ã¯å¿…ãšRenderå´ã®ã“ã®é–¢æ•°ã‚’ç½®ãæ›ãˆã‚‹ã“ã¨ã€‚
 	 * @param par1EntityLiving
 	 * @param par2
 	 */

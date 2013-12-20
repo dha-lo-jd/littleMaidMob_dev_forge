@@ -1,6 +1,12 @@
 package net.minecraft.src;
 
-import java.util.Map;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.EXTRescaleNormal;
 import org.lwjgl.opengl.GL11;
@@ -8,13 +14,13 @@ import org.lwjgl.opengl.GL11;
 public class MMM_GuiTextureSelect extends GuiScreen {
 
 	private String screenTitle = "Texture Select";
-	protected GuiScreen owner;
-	protected MMM_GuiTextureSlot selectPanel;
-	protected GuiButton modeButton[] = new GuiButton[2];
-	protected MMM_ITextureEntity target;
+	public GuiScreen owner;
+	public MMM_GuiTextureSlot selectPanel;
+	public GuiButton modeButton[] = new GuiButton[2];
+	public MMM_ITextureEntity target;
 	public int canSelectColor;
 	public int selectColor;
-	protected boolean toServer;
+	public boolean toServer;
 
 
 	public MMM_GuiTextureSelect(GuiScreen pOwner, MMM_ITextureEntity pTarget, int pColor, boolean pToServer) {
@@ -36,7 +42,7 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 	}
 
 	@Override
-	protected void keyTyped(char par1, int par2) {
+	public void keyTyped(char par1, int par2) {
 		if (par2 == 1) {
 			mc.displayGuiScreen(owner);
 		}
@@ -87,7 +93,7 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton par1GuiButton) {
+	public void actionPerformed(GuiButton par1GuiButton) {
 		switch (par1GuiButton.id) {
 		case 100:
 			modeButton[0].enabled = false;
@@ -111,9 +117,9 @@ public class MMM_GuiTextureSelect extends GuiScreen {
 			if (toServer) {
 /*
 				if (selectColor != selectPanel.color) {
-					// êFèÓïÒÇÃê›íË
+					// Ëâ≤ÊÉÖÂ†±„ÅÆË®≠ÂÆö
 //					theMaid.maidColor = selectPanel.color | 0x010000 | (selectColor << 8);
-					// ÉTÅ[ÉoÅ[Ç÷êıóøÇÃégópÇí ím
+					// „Çµ„Éº„Éê„Éº„Å∏ÊüìÊñô„ÅÆ‰ΩøÁî®„ÇíÈÄöÁü•
 					byte ldata[] = new byte[2];
 					ldata[0] = LMM_Statics.LMN_Server_DecDyePowder;
 					ldata[1] = (byte)selectColor;

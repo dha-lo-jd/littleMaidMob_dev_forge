@@ -3,8 +3,12 @@ package net.minecraft.src;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 /**
- * ƒ}[ƒJ[‚ğ•\¦‚µ‚Ü‚·B
+ * ãƒãƒ¼ã‚«ãƒ¼ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚
  */
 public class MMM_EntityDummy extends Entity {
 	
@@ -13,7 +17,7 @@ public class MMM_EntityDummy extends Entity {
 	private int entityColor;
 	public Entity entityOwner;
 	/**
-	 * —LŒø”»’è
+	 * æœ‰åŠ¹åˆ¤å®š
 	 */
 	public static boolean isEnable = false;
 	
@@ -29,15 +33,15 @@ public class MMM_EntityDummy extends Entity {
 	}
 	
 	@Override
-	protected void entityInit() {
+	public void entityInit() {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+	public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+	public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 	}
 
 	@Override
@@ -70,7 +74,7 @@ public class MMM_EntityDummy extends Entity {
 	}
 
 	/**
-	 * w’è‚³‚ê‚½ƒI[ƒi[‚É‘Î‰‚·‚éƒ}[ƒJ[‚ğíœ‚µ‚Ü‚·B
+	 * æŒ‡å®šã•ã‚ŒãŸã‚ªãƒ¼ãƒŠãƒ¼ã«å¯¾å¿œã™ã‚‹ãƒãƒ¼ã‚«ãƒ¼ã‚’å‰Šé™¤ã—ã¾ã™ã€‚
 	 */
 	public static void clearDummyEntity(Entity entity) {
 		if (!isEnable) return;
@@ -85,13 +89,13 @@ public class MMM_EntityDummy extends Entity {
 	}
 
 	/**
-	 * ƒ}[ƒJ[‚ğ•\¦‚·‚é
+	 * ãƒãƒ¼ã‚«ãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹
 	 */
 	public static void setDummyEntity(Entity owner, int color, double posx, double posy, double posz) {
 		if (!isEnable) return;
 		if (!MMM_Helper.isClient) return;
 		
-		// ƒT[ƒo[‘¤‚Å‚µ‚©ŒÄ‚Î‚ê‚È‚¢‚Á‚Û‚¢
+		// ã‚µãƒ¼ãƒãƒ¼å´ã§ã—ã‹å‘¼ã°ã‚Œãªã„ã£ã½ã„
 		if (owner.worldObj.isRemote) {
 			mod_MMM_MMMLib.Debug("L");
 		}

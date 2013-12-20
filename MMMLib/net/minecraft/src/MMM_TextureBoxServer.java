@@ -2,8 +2,8 @@ package net.minecraft.src;
 
 public class MMM_TextureBoxServer extends MMM_TextureBoxBase {
 
-	// ローカルでモデルを保持している時にリンク
-	protected MMM_TextureBox localBox;
+	// 繝ｭ繝ｼ繧ｫ繝ｫ縺ｧ繝｢繝�繝ｫ繧剃ｿ晄戟縺励※縺�繧区凾縺ｫ繝ｪ繝ｳ繧ｯ
+	public MMM_TextureBox localBox;
 
 
 	public MMM_TextureBoxServer() {

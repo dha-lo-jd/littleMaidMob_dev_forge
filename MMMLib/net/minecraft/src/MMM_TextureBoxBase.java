@@ -7,13 +7,13 @@ import java.util.Random;
 public abstract class MMM_TextureBoxBase {
 
 	public String textureName;
-	protected int contractColor;
-	protected int wildColor;
-	protected float modelHeight;
-	protected float modelWidth;
-	protected float modelYOffset;
-	protected float modelMountedYOffset;
-	protected boolean isUpdateSize;
+	public int contractColor;
+	public int wildColor;
+	public float modelHeight;
+	public float modelWidth;
+	public float modelYOffset;
+	public float modelMountedYOffset;
+	public boolean isUpdateSize;
 
 
 	public void setModelSize(float pHeight, float pWidth, float pYOffset, float pMountedYOffset) {
@@ -23,7 +23,7 @@ public abstract class MMM_TextureBoxBase {
 		modelMountedYOffset = pMountedYOffset;
 	}
 
-	protected int getRandomColor(int pColor, Random pRand) {
+	public int getRandomColor(int pColor, Random pRand) {
 		List<Integer> llist = new ArrayList<Integer>();
 		for (int li = 0; li < 16; li++) {
 			if ((pColor & 0x01) > 0) {
@@ -40,28 +40,28 @@ public abstract class MMM_TextureBoxBase {
 	}
 
 	/**
-	 * �_��F�̗L�����r�b�g�z��ɂ��ĕԂ�
+	 * 契約色の有無をビット配列にして返す
 	 */
 	public int getContractColorBits() {
 		return contractColor;
 	}
 
 	/**
-	 * �쐶�F�̗L�����r�b�g�z��ɂ��ĕԂ�
+	 * 野生色の有無をビット配列にして返す
 	 */
 	public int getWildColorBits() {
 		return wildColor;
 	}
 
 	/**
-	 * �쐶�̃��C�h�̐F�������_���ŕԂ�
+	 * 野生のメイドの色をランダムで返す
 	 */
 	public int getRandomWildColor(Random pRand) {
 		return getRandomColor(getWildColorBits(), pRand);
 	}
 
 	/**
-	 * �_��̃��C�h�̐F�������_���ŕԂ�
+	 * 契約のメイドの色をランダムで返す
 	 */
 	public int getRandomContractColor(Random pRand) {
 		return getRandomColor(getContractColorBits(), pRand);

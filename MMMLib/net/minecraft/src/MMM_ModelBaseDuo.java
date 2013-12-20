@@ -1,32 +1,38 @@
 package net.minecraft.src;
 
 import java.util.Map;
-import java.util.Random;
+
+import net.minecraft.client.model.TextureOffset;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 /**
- * ƒA[ƒ}[‚Ì“ñd•`‰æ—pƒNƒ‰ƒXB
- * •K‚¸Inner‘¤‚É‚Íƒ‚ƒfƒ‹‚ğİ’è‚·‚é‚±‚ÆB
- * ’Êí‚ÌRenderer‚Å•`‰æ‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX‚È‚Ì‚ÅARender‚ğ‚¿‚á‚ñ‚Æ‹Lq‚·‚é‚È‚ç‚¢‚ç‚È‚¢ƒNƒ‰ƒX‚Å‚·B
+ * ã‚¢ãƒ¼ãƒãƒ¼ã®äºŒé‡æç”»ç”¨ã‚¯ãƒ©ã‚¹ã€‚
+ * å¿…ãšInnerå´ã«ã¯ãƒ¢ãƒ‡ãƒ«ã‚’è¨­å®šã™ã‚‹ã“ã¨ã€‚
+ * é€šå¸¸ã®Rendererã§æç”»ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ãªã®ã§ã€Renderã‚’ã¡ã‚ƒã‚“ã¨è¨˜è¿°ã™ã‚‹ãªã‚‰ã„ã‚‰ãªã„ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
  */
 public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBaseMMM {
 
 	public MMM_ModelMultiBase modelOuter;
 	public MMM_ModelMultiBase modelInner;
 	/**
-	 * •”ˆÊ–ˆ‚ÌƒA[ƒ}[ƒeƒNƒXƒ`ƒƒ‚Ìw’èB
-	 * ŠO‘¤B
+	 * éƒ¨ä½æ¯ã®ã‚¢ãƒ¼ãƒãƒ¼ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æŒ‡å®šã€‚
+	 * å¤–å´ã€‚
 	 */
 	public ResourceLocation[] textureOuter;
 	/**
-	 * •”ˆÊ–ˆ‚ÌƒA[ƒ}[ƒeƒNƒXƒ`ƒƒ‚Ìw’èB
-	 * “à‘¤B
+	 * éƒ¨ä½æ¯ã®ã‚¢ãƒ¼ãƒãƒ¼ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æŒ‡å®šã€‚
+	 * å†…å´ã€‚
 	 */
 	public ResourceLocation[] textureInner;
 	/**
-	 * •`‰æ‚³‚ê‚éƒA[ƒ}[‚Ì•”ˆÊB
-	 * shouldRenderPass‚Æ‚©‚Åw’è‚·‚éB
+	 * æç”»ã•ã‚Œã‚‹ã‚¢ãƒ¼ãƒãƒ¼ã®éƒ¨ä½ã€‚
+	 * shouldRenderPassã¨ã‹ã§æŒ‡å®šã™ã‚‹ã€‚
 	 */
 	public int renderParts;
 
@@ -97,7 +103,7 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 	}
 
 
-	// IModelMMM’Ç‰Á•ª
+	// IModelMMMè¿½åŠ åˆ†
 
 	@Override
 	public void renderItems(EntityLivingBase pEntity, Render pRender) {
@@ -117,8 +123,8 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 	}
 
 	/**
-	 * Renderer•Ó‚Å‚±‚Ì•Ï”‚ğİ’è‚·‚éB
-	 * İ’è’l‚ÍMMM_IModelCaps‚ğŒp³‚µ‚½Entitiy‚Æ‚©‚ğ‘z’èB
+	 * Rendererè¾ºã§ã“ã®å¤‰æ•°ã‚’è¨­å®šã™ã‚‹ã€‚
+	 * è¨­å®šå€¤ã¯MMM_IModelCapsã‚’ç¶™æ‰¿ã—ãŸEntitiyã¨ã‹ã‚’æƒ³å®šã€‚
 	 */
 	@Override
 	public void setEntityCaps(MMM_IModelCaps pEntityCaps) {
@@ -144,7 +150,7 @@ public class MMM_ModelBaseDuo extends MMM_ModelBaseNihil implements MMM_IModelBa
 	}
 
 
-	// IModelCaps’Ç‰Á•ª
+	// IModelCapsè¿½åŠ åˆ†
 
 	@Override
 	public Map<String, Integer> getModelCaps() {

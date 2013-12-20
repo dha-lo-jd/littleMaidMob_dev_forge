@@ -7,14 +7,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.BossStatus;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
+
 public abstract class MMM_GuiMobSelect extends GuiScreen {
 
 	public Map<String, Entity> entityMap;
 	public static Map<Class, String> entityMapClass = new HashMap<Class, String>();
 	public static List<String> exclusionList = new ArrayList<String>();
 	
-	protected String screenTitle;
-	protected GuiSlot selectPanel;
+	public String screenTitle;
+	public GuiSlot selectPanel;
 
 
 
@@ -30,7 +40,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 
 
 	public void initEntitys(World world, boolean pForce) {
-		// •\¦—pEntityList‚Ì‰Šú‰»
+		// è¡¨ç¤ºç”¨EntityListã®åˆæœŸåŒ–
 		if (entityMapClass.isEmpty()) {
 			try {
 				Map lmap = (Map)ModLoader.getPrivateValue(EntityList.class, null, 1);
@@ -49,9 +59,10 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 			int li = 0;
 			Entity lentity = null;
 			try {
-				// •\¦—p‚ÌEntity‚ğì‚é
+				// è¡¨ç¤ºç”¨ã®Entityã‚’ä½œã‚‹
 				do {
-					lentity = (EntityLivingBase)EntityList.createEntityByName(le.getValue(), world);
+					lentity = (EntityLivingBase)le.getKey().getConstructor(World.class).newInstance(world);
+//					lentity = (EntityLivingBase)EntityList.createEntityByName(le.getValue(), world);
 				} while (lentity != null && checkEntity(le.getValue(), lentity, li++));
 			} catch (Exception e) {
 				mod_MMM_MMMLib.Debug("Entity [" + le.getValue() + "] can't created.");
@@ -60,10 +71,10 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 	}
 
 	/**
-	 * “n‚³‚ê‚½Entity‚Ìƒ`ƒFƒbƒN‹y‚Ñ‰ÁHB
-	 * true‚ğ•Ô‚·‚Æ“¯‚¶ƒNƒ‰ƒX‚ÌƒGƒ“ƒeƒBƒeƒB‚ğÄ“x“n‚µ‚Ä‚­‚éA‚»‚Ì‚Æ‚«pIndex‚ÍƒJƒEƒ“ƒgƒAƒbƒv‚³‚ê‚é
+	 * æ¸¡ã•ã‚ŒãŸEntityã®ãƒã‚§ãƒƒã‚¯åŠã³åŠ å·¥ã€‚
+	 * trueã‚’è¿”ã™ã¨åŒã˜ã‚¯ãƒ©ã‚¹ã®ã‚¨ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã‚’å†åº¦æ¸¡ã—ã¦ãã‚‹ã€ãã®ã¨ãpIndexã¯ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—ã•ã‚Œã‚‹
 	 */
-	protected boolean checkEntity(String pName, Entity pEntity, int pIndex) {
+	public boolean checkEntity(String pName, Entity pEntity, int pIndex) {
 		entityMap.put(pName, pEntity);
 		return false;
 	}
@@ -86,7 +97,7 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 		drawCenteredString(fontRenderer, StatCollector.translateToLocal(screenTitle), width / 2, 20, 0xffffff);
 		super.drawScreen(px, py, pf);
 		
-		// GUI‚Å•\¦‚µ‚½•ª‚Ìƒ{ƒX‚ÌƒXƒe[ƒ^ƒX‚ğ•\¦‚µ‚È‚¢
+		// GUIã§è¡¨ç¤ºã—ãŸåˆ†ã®ãƒœã‚¹ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’è¡¨ç¤ºã—ãªã„
 		BossStatus.healthScale = lhealthScale;
 		BossStatus.statusBarLength = lstatusBarLength;
 		BossStatus.bossName = lbossName;
@@ -94,12 +105,12 @@ public abstract class MMM_GuiMobSelect extends GuiScreen {
 	}
 
 	/**
-	 *  ƒXƒƒbƒg‚ªƒNƒŠƒbƒN‚³‚ê‚½
+	 *  ã‚¹ãƒ­ãƒƒãƒˆãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚ŒãŸ
 	 */
 	public abstract void clickSlot(int pIndex, boolean pDoubleClick, String pName, EntityLivingBase pEntity);
 
 	/**
-	 *  ƒXƒƒbƒg‚Ì•`‰æ
+	 *  ã‚¹ãƒ­ãƒƒãƒˆã®æç”»
 	 */
 	public abstract void drawSlot(int pSlotindex, int pX, int pY, int pDrawheight, Tessellator pTessellator, String pName, Entity pEntity);
 	

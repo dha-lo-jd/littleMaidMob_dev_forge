@@ -1,16 +1,15 @@
 package net.minecraft.src;
 
-import javax.print.attribute.standard.PDLOverrideSupported;
 
 /**
- * ƒJƒEƒ“ƒ^—pB
+ * ã‚«ã‚¦ãƒ³ã‚¿ç”¨ã€‚
  */
 public class MMM_Counter {
 
-	protected int fSetValue;
-	protected int fMaxValue;
-	protected int fDelayValue;
-	protected int fCounter;
+	public int fSetValue;
+	public int fMaxValue;
+	public int fDelayValue;
+	public int fCounter;
 
 
 	public MMM_Counter() {

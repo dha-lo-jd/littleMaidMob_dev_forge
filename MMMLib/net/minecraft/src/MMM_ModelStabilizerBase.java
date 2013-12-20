@@ -1,49 +1,52 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+
 public abstract class MMM_ModelStabilizerBase extends MMM_ModelBase {
 
 	public MMM_ModelStabilizerBase() {
 	}
 
 	/**
-	 * g—p‚³‚ê‚éƒeƒNƒXƒ`ƒƒ‚ğ•Ô‚·B
+	 * ä½¿ç”¨ã•ã‚Œã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’è¿”ã™ã€‚
 	 */
 	public ResourceLocation getTexture() {
 		return null;
 	}
 
 	/**
-	 * ‚»‚Ìƒn[ƒhƒ|ƒCƒ“ƒg‚É‘•”õ‰Â”\‚©‚Ç‚¤‚©‚ğ•Ô‚·B
-	 * pName:ƒn[ƒhƒ|ƒCƒ“ƒg‚Ì¯•Ê–¼ÌB
+	 * ãã®ãƒãƒ¼ãƒ‰ãƒã‚¤ãƒ³ãƒˆã«è£…å‚™å¯èƒ½ã‹ã©ã†ã‹ã‚’è¿”ã™ã€‚
+	 * pName:ãƒãƒ¼ãƒ‰ãƒã‚¤ãƒ³ãƒˆã®è­˜åˆ¥åç§°ã€‚
 	 */
 	public boolean checkEquipment(String pName) {
 		return true;
 	}
 
 	/**
-	 * ƒp[ƒc‚Ì–¼ÌB
+	 * ãƒ‘ãƒ¼ãƒ„ã®åç§°ã€‚
 	 */
 	public abstract String getName();
 
 	/**
-	 * “¯‚¶ƒn[ƒhƒ|ƒCƒ“ƒg‚É‘•”õ‚Å‚«‚é‚©‚Ç‚¤‚©B
+	 * åŒã˜ãƒãƒ¼ãƒ‰ãƒã‚¤ãƒ³ãƒˆã«è£…å‚™ã§ãã‚‹ã‹ã©ã†ã‹ã€‚
 	 */
 	public int getExclusive() {
 		return 0;
 	}
 
 	/**
-	 * ƒƒCƒh‚³‚ñ‚ÌƒeƒNƒXƒ`ƒƒ‚ğ‚»‚Ì‚Ü‚Üg‚í‚¸‚ÉAˆá‚¤ƒeƒNƒXƒ`ƒƒ‚ğg‚¤‚©H
+	 * ãƒ¡ã‚¤ãƒ‰ã•ã‚“ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ãã®ã¾ã¾ä½¿ã‚ãšã«ã€é•ã†ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ä½¿ã†ã‹ï¼Ÿ
 	 */
 	public boolean isLoadAnotherTexture() {
 		return false;
 	}
 
 	/**
-	 * ‰Šú‰»‚ÉÀs‚³‚ê‚é
+	 * åˆæœŸåŒ–æ™‚ã«å®Ÿè¡Œã•ã‚Œã‚‹
 	 */
 	public void init(MMM_EquippedStabilizer pequipped) {
-		// •Ï”‚È‚Ç‚ğ’è‹`‚·‚é
+		// å¤‰æ•°ãªã©ã‚’å®šç¾©ã™ã‚‹
 	}
 /*	
 	@Deprecated
@@ -53,7 +56,7 @@ public abstract class MMM_ModelStabilizerBase extends MMM_ModelBase {
 	}
 
 	/**
-	 * ƒŒƒ“ƒ_ƒŠƒ“ƒO‚ÍŠî–{‚±‚¿‚ç‚ğŒÄ‚Ô‚±‚Æ
+	 * ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã¯åŸºæœ¬ã“ã¡ã‚‰ã‚’å‘¼ã¶ã“ã¨
 	 */
 	public void render(MMM_ModelMultiBase pModel, Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7) {
 //		render(par1Entity, par2, par3, par4, par5, par6, par7);

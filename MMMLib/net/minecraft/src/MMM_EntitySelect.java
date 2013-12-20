@@ -2,6 +2,10 @@ package net.minecraft.src;
 
 import java.util.Map;
 
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+
 public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MMM_ITextureEntity {
 
 	public int color;
@@ -14,7 +18,7 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 			{ null, null , null , null },
 			{ null, null , null , null }
 	};
-	protected MMM_EntityCaps entityCaps;
+	public MMM_EntityCaps entityCaps;
 
 
 
@@ -24,12 +28,12 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 	}
 
 	@Override
-	protected void entityInit() {
-		// Select—p‚¾‚©‚çA‚±‚ê•Ê‚É‚¢‚ç‚ñ‚¯‚Ç‚ÈB
+	public void entityInit() {
+		// Selectç”¨ã ã‹ã‚‰ã€ã“ã‚Œåˆ¥ã«ã„ã‚‰ã‚“ã‘ã©ãªã€‚
 		super.entityInit();
 		// color
 		dataWatcher.addObject(19, Integer.valueOf(0));
-		// 20:‘I‘ğƒeƒNƒXƒ`ƒƒƒCƒ“ƒfƒbƒNƒX
+		// 20:é¸æŠãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 		dataWatcher.addObject(20, Integer.valueOf(0));
 	}
 
@@ -72,7 +76,7 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 		dataWatcher.updateObject(20, (Integer.valueOf(textureIndex[0]) & 0xffff) | ((Integer.valueOf(textureIndex[1]) & 0xffff) << 16));
 		textureBox[0] = MMM_TextureManager.instance.getTextureBoxServer(textureIndex[0]);
 		textureBox[1] = MMM_TextureManager.instance.getTextureBoxServer(textureIndex[1]);
-		// ƒTƒCƒY‚Ì•ÏX
+		// ã‚µã‚¤ã‚ºã®å¤‰æ›´
 		setSize(textureBox[0].getWidth(entityCaps), textureBox[0].getHeight(entityCaps));
 	}
 
@@ -82,17 +86,17 @@ public class MMM_EntitySelect extends EntityLiving implements MMM_IModelCaps, MM
 		textureBox[0] = pTextureBox[0];
 		textureBox[1] = pTextureBox[1];
 		setTextureNames();
-		// g’·•ÏX—p
+		// èº«é•·å¤‰æ›´ç”¨
 		setSize(textureBox[0].getWidth(null), textureBox[0].getHeight(null));
 		setPosition(posX, posY, posZ);
-		// ƒ‚ƒfƒ‹‚Ì‰Šú‰»
+		// ãƒ¢ãƒ‡ãƒ«ã®åˆæœŸåŒ–
 		((MMM_TextureBox)textureBox[0]).models[0].setCapsValue(MMM_IModelCaps.caps_changeModel, this);
 	}
 
 	/**
-	 * ƒeƒNƒXƒ`ƒƒ‚Ìƒtƒ@ƒCƒ‹–¼‚ğŠl“¾
+	 * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’ç²å¾—
 	 */
-	protected void setTextureNames() {
+	public void setTextureNames() {
 		textures[0][0] = ((MMM_TextureBox)textureBox[0]).getTextureName(color + (contract ? 0 : MMM_TextureManager.tx_wild));
 		textures[0][1] = ((MMM_TextureBox)textureBox[0]).getTextureName(color + (contract ? MMM_TextureManager.tx_eyecontract : MMM_TextureManager.tx_eyewild));
 		textures[1][0] = ((MMM_TextureBox)textureBox[1]).getArmorTextureName(MMM_TextureManager.tx_armor1, getCurrentItemOrArmor(1));

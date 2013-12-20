@@ -4,49 +4,58 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.Modifier;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.reflections.Reflections;
+
 public abstract class MMM_ManagerBase {
 
-	protected abstract String getPreFix();
 	/**
-	 * ’Ç‰Áˆ—‚Ì–{‘Ì
+	 * è¿½åŠ å‡¦ç†ã®æœ¬ä½“
 	 */
-	protected abstract boolean append(Class pclass);
+	public abstract boolean append(Class pclass);
 
+	public abstract String getPreFix();
 
-	protected void load() {
-		// ƒ[ƒh
-		
-		// ŠJ”­—p
+	public void load(Class<?> cls) {
+		// ãƒ­ãƒ¼ãƒ‰
+		{
+			Set<? extends Class<?>> classes = new Reflections("").getSubTypesOf(cls);
+			for (Class<?> lclass : classes) {
+				if (Modifier.isAbstract(lclass.getModifiers())) {
+					continue;
+				}
+				append(lclass);
+			}
+		}
+
+		// é–‹ç™ºç”¨
 		Package lpackage = mod_MMM_MMMLib.class.getPackage();
 		String ls = "";
 		if (lpackage != null) {
 			ls = mod_MMM_MMMLib.class.getPackage().getName().replace('.', File.separatorChar);
 		}
 		File lf1 = new File(MMM_FileManager.minecraftJar, ls);
-		
+
 		if (lf1.isDirectory()) {
-			// ƒfƒBƒŒƒNƒgƒŠ‚Ì‰ğÍ
+			// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®è§£æ
 			decodeDirectory(lf1);
 		} else {
-			// Zip‚Ì‰ğÍ
+			// Zipã®è§£æ
 			decodeZip(lf1);
 		}
-		
-		
+
 		// mods
 		for (Entry<String, List<File>> le : MMM_FileManager.fileList.entrySet()) {
 			for (File lf : le.getValue()) {
 				if (lf.isDirectory()) {
-					// ƒfƒBƒŒƒNƒgƒŠ‚Ì‰ğÍ
+					// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®è§£æ
 					decodeDirectory(lf);
 				} else {
-					// Zip‚Ì‰ğÍ
+					// Zipã®è§£æ
 					decodeZip(lf);
 				}
 			}
@@ -54,12 +63,12 @@ public abstract class MMM_ManagerBase {
 	}
 
 	private void decodeDirectory(File pfile) {
-		// ƒfƒBƒŒƒNƒgƒŠ“à‚ÌƒNƒ‰ƒX‚ğŒŸõ
+		// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå†…ã®ã‚¯ãƒ©ã‚¹ã‚’æ¤œç´¢
 		for (File lf : pfile.listFiles()) {
 			if (lf.isFile()) {
 				String lname = lf.getName();
 				if (lname.indexOf(getPreFix()) > 0 && lname.endsWith(".class")) {
-					// ‘ÎÛƒNƒ‰ƒXƒtƒ@ƒCƒ‹‚È‚Ì‚Åƒ[ƒh
+					// å¯¾è±¡ã‚¯ãƒ©ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ãªã®ã§ãƒ­ãƒ¼ãƒ‰
 					loadClass(lf.getName());
 				}
 			}
@@ -67,15 +76,15 @@ public abstract class MMM_ManagerBase {
 	}
 
 	private void decodeZip(File pfile) {
-		// zipƒtƒ@ƒCƒ‹‚ğ‰ğÍ
+		// zipãƒ•ã‚¡ã‚¤ãƒ«ã‚’è§£æ
 		try {
 			FileInputStream fileinputstream = new FileInputStream(pfile);
 			ZipInputStream zipinputstream = new ZipInputStream(fileinputstream);
 			ZipEntry zipentry;
-			
+
 			do {
 				zipentry = zipinputstream.getNextEntry();
-				if(zipentry == null) {
+				if (zipentry == null) {
 					break;
 				}
 				if (!zipentry.isDirectory()) {
@@ -84,26 +93,26 @@ public abstract class MMM_ManagerBase {
 						loadClass(zipentry.getName());
 					}
 				}
-			} while(true);
-			
+			} while (true);
+
 			zipinputstream.close();
 			fileinputstream.close();
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			mod_MMM_MMMLib.Debug("add%sZip-Exception.", getPreFix());
 		}
-		
+
 	}
 
 	private void loadClass(String pname) {
-		// ‘ÎÛƒtƒ@ƒCƒ‹‚ğƒNƒ‰ƒX‚Æ‚µ‚Äƒ[ƒh
+		// å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¯ãƒ©ã‚¹ã¨ã—ã¦ãƒ­ãƒ¼ãƒ‰
 		try {
 			ClassLoader lclassLoader = mod_MMM_MMMLib.class.getClassLoader();
 			Package lpackage = mod_MMM_MMMLib.class.getPackage();
 			String lclassname = pname.replace(".class", "");
 			Class lclass;
-			if(lpackage != null) {
-				lclassname = (new StringBuilder(String.valueOf(lpackage.getName()))).append(".").append(lclassname).toString();
+			if (lpackage != null) {
+				lclassname = (new StringBuilder(String.valueOf(lpackage.getName()))).append(".").append(lclassname)
+						.toString();
 				lclass = lclassLoader.loadClass(lclassname);
 			} else {
 				lclass = Class.forName(lclassname);
@@ -117,24 +126,22 @@ public abstract class MMM_ManagerBase {
 				mod_MMM_MMMLib.Debug("get%sClass-fail: %s", getPreFix(), lclassname);
 			}
 			/*
-            if (!(MMM_ModelStabilizerBase.class).isAssignableFrom(lclass) || Modifier.isAbstract(lclass.getModifiers())) {
-            	mod_MMM_MMMLib.Debug(String.format(String.format("get%sClass-fail: %s", pprefix, lclassname)));
-                return;
-            }
-            
-            MMM_ModelStabilizerBase lms = (MMM_ModelStabilizerBase)lclass.newInstance();
-            pmap.put(lms.getName(), lms);
-            mod_MMM_MMMLib.Debug(String.format("get%sClass-done: %s[%s]", pprefix, lclassname, lms.getName()));
-            */
-		}
-		catch (Exception exception) {
+			if (!(MMM_ModelStabilizerBase.class).isAssignableFrom(lclass) || Modifier.isAbstract(lclass.getModifiers())) {
+				mod_MMM_MMMLib.Debug(String.format(String.format("get%sClass-fail: %s", pprefix, lclassname)));
+			    return;
+			}
+
+			MMM_ModelStabilizerBase lms = (MMM_ModelStabilizerBase)lclass.newInstance();
+			pmap.put(lms.getName(), lms);
+			mod_MMM_MMMLib.Debug(String.format("get%sClass-done: %s[%s]", pprefix, lclassname, lms.getName()));
+			*/
+		} catch (Exception exception) {
 			mod_MMM_MMMLib.Debug("get%sClass-Exception.", getPreFix());
-		}
-		catch (Error error) {
+		} catch (Error error) {
 			mod_MMM_MMMLib.Debug("get%sClass-Error: %s", getPreFix(), pname);
+			error.printStackTrace();
 		}
-		
+
 	}
-	
-	
+
 }

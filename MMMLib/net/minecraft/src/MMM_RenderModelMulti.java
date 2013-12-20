@@ -1,11 +1,19 @@
 package net.minecraft.src;
 
+import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class MMM_RenderModelMulti extends RenderLiving {
 
 	public MMM_ModelBaseSolo modelMain;
 	public MMM_ModelBaseDuo modelFATT;
+	public MMM_IModelCaps fcaps;
 
 
 
@@ -21,8 +29,8 @@ public class MMM_RenderModelMulti extends RenderLiving {
 		setRenderPassModel(modelFATT);
 	}
 
-	protected int showArmorParts(EntityLivingBase par1EntityLiving, int par2, float par3) {
-		// ƒA[ƒ}[‚Ì•\¦İ’è
+	public int showArmorParts(EntityLivingBase par1EntityLiving, int par2, float par3) {
+		// ã‚¢ãƒ¼ãƒãƒ¼ã®è¡¨ç¤ºè¨­å®š
 		modelFATT.renderParts = par2;
 		ItemStack is = par1EntityLiving.getCurrentItemOrArmor(par2 + 1);
 		if (is != null && is.stackSize > 0) {
@@ -33,19 +41,19 @@ public class MMM_RenderModelMulti extends RenderLiving {
 		return -1;
 	}
 	@Override
-	protected int shouldRenderPass(EntityLivingBase par1EntityLiving, int par2, float par3) {
-		return showArmorParts((EntityLiving)par1EntityLiving, par2, par3);
+	public int shouldRenderPass(EntityLivingBase par1EntityLiving, int par2, float par3) {
+		return showArmorParts((EntityLivingBase)par1EntityLiving, par2, par3);
 	}
 
 	@Override
-	protected void preRenderCallback(EntityLivingBase entityliving, float f) {
+	public void preRenderCallback(EntityLivingBase entityliving, float f) {
 		Float lscale = (Float)modelMain.getCapsValue(MMM_IModelCaps.caps_ScaleFactor);
 		if (lscale != null) {
 			GL11.glScalef(lscale, lscale, lscale);
 		}
 	}
 
-	public void setModelValues(EntityLiving par1EntityLiving, double par2,
+	public void setModelValues(EntityLivingBase par1EntityLiving, double par2,
 			double par4, double par6, float par8, float par9, MMM_IModelCaps pEntityCaps) {
 		if (par1EntityLiving instanceof MMM_ITextureEntity) {
 			MMM_ITextureEntity ltentity = (MMM_ITextureEntity)par1EntityLiving;
@@ -74,45 +82,61 @@ public class MMM_RenderModelMulti extends RenderLiving {
 		modelMain.setCapsValue(MMM_IModelCaps.caps_ticksExisted, par1EntityLiving.ticksExisted);
 	}
 
+//	public void renderModelMulti(EntityLivingBase par1EntityLiving, double par2,
 	public void renderModelMulti(EntityLiving par1EntityLiving, double par2,
 			double par4, double par6, float par8, float par9, MMM_IModelCaps pEntityCaps) {
 		setModelValues(par1EntityLiving, par2, par4, par6, par8, par9, pEntityCaps);
+		// TODO:ãªãœã‹å¤‰ãªã¨ã“ã«é£›ã‚“ã§ãƒ«ãƒ¼ãƒ—ã™ã‚‹
+//		super.func_130000_a(par1EntityLiving, par2, par4, par6, par8, par9);
 		super.doRenderLiving(par1EntityLiving, par2, par4, par6, par8, par9);
 	}
 
 	@Override
 	public void doRenderLiving(EntityLiving par1EntityLiving, double par2,
 			double par4, double par6, float par8, float par9) {
-		renderModelMulti(par1EntityLiving, par2, par4, par6, par8, par9, (MMM_IModelCaps)par1EntityLiving);
+		fcaps = (MMM_IModelCaps)par1EntityLiving;
+		renderModelMulti(par1EntityLiving, par2, par4, par6, par8, par9, fcaps);
 	}
 
 	@Override
-	protected void renderModel(EntityLivingBase par1EntityLiving, float par2,
+	public void func_110827_b(EntityLiving par1EntityLiving, double par2,
+			double par4, double par6, float par8, float par9) {
+		// ç¸„ã®ä½ç½®ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+		// TODOï¼šMCP-804å¯¾ç­–
+		float lf = 0F;
+		if (modelMain.model != null && fcaps != null) {
+			lf = modelMain.model.getLeashOffset(fcaps);
+		}
+		super.func_110827_b(par1EntityLiving, par2, par4 - lf, par6, par8, par9);
+	}
+
+	@Override
+	public void renderModel(EntityLivingBase par1EntityLiving, float par2,
 			float par3, float par4, float par5, float par6, float par7) {
 		if (!par1EntityLiving.isInvisible()) {
 			modelMain.setArmorRendering(true);
 		} else {
 			modelMain.setArmorRendering(false);
 		}
-		// ƒAƒCƒeƒ€‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒOˆÊ’u‚ğŠl“¾‚·‚é‚½‚ßrender‚ğŒÄ‚Ô•K—v‚ª‚ ‚é
+		// ã‚¢ã‚¤ãƒ†ãƒ ã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ä½ç½®ã‚’ç²å¾—ã™ã‚‹ãŸã‚renderã‚’å‘¼ã¶å¿…è¦ãŒã‚ã‚‹
 		mainModel.render(par1EntityLiving, par2, par3, par4, par5, par6, par7);
 	}
 
 	@Override
-	protected void renderEquippedItems(EntityLivingBase par1EntityLiving, float par2) {
-		// ƒn[ƒhƒ|ƒCƒ“ƒg‚Ì•`‰æ
+	public void renderEquippedItems(EntityLivingBase par1EntityLiving, float par2) {
+		// ãƒãƒ¼ãƒ‰ãƒã‚¤ãƒ³ãƒˆã®æç”»
 		modelMain.renderItems(par1EntityLiving, this);
 		renderArrowsStuckInEntity(par1EntityLiving, par2);
 	}
 
 	@Override
-	protected void renderArrowsStuckInEntity(EntityLivingBase par1EntityLiving, float par2) {
+	public void renderArrowsStuckInEntity(EntityLivingBase par1EntityLiving, float par2) {
 		MMM_Client.renderArrowsStuckInEntity(par1EntityLiving, par2, this, modelMain.model);
 	}
 
 	@Override
-	protected ResourceLocation func_110775_a(Entity var1) {
-		// ƒeƒNƒXƒ`ƒƒƒŠƒ\[ƒX‚ğ•Ô‚·‚Æ‚±‚ë‚¾‚¯‚ê‚ÇAŠî–{“I‚Ég—p‚µ‚È‚¢B
+	public ResourceLocation func_110775_a(Entity var1) {
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚½ãƒ¼ã‚¹ã‚’è¿”ã™ã¨ã“ã‚ã ã‘ã‚Œã©ã€åŸºæœ¬çš„ã«ä½¿ç”¨ã—ãªã„ã€‚
 		return null;
 	}
 

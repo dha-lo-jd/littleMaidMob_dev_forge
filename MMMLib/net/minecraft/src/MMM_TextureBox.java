@@ -4,26 +4,30 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 public class MMM_TextureBox extends MMM_TextureBoxBase {
 
 	/**
-	 * ƒeƒNƒXƒ`ƒƒƒpƒbƒN‚Ì–¼ÌAƒ‚ƒfƒ‹w’èŒ‚Ì‘O‚Ü‚Å‚Ì•¶š—ñB
+	 * ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ‘ãƒƒã‚¯ã®åç§°ã€ãƒ¢ãƒ‡ãƒ«æŒ‡å®šè©ã®å‰ã¾ã§ã®æ–‡å­—åˆ—ã€‚
 	 */
 	public String packegeName;
 	/**
-	 * ƒeƒNƒXƒ`ƒƒƒtƒ@ƒCƒ‹‚Ìƒtƒ@ƒCƒ‹–¼ƒŠƒXƒgB
+	 * ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«åãƒªã‚¹ãƒˆã€‚
 	 */
 	public Map<Integer, ResourceLocation> textures;
 	/**
-	 * ƒA[ƒ}[ƒtƒ@ƒCƒ‹‚Ìƒtƒ@ƒCƒ‹–¼ƒŠƒXƒgB
+	 * ã‚¢ãƒ¼ãƒãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚¡ã‚¤ãƒ«åãƒªã‚¹ãƒˆã€‚
 	 */
 	public Map<String, Map<Integer, ResourceLocation>> armors;
 	/**
-	 * ƒ‚ƒfƒ‹w’èŒ
+	 * ãƒ¢ãƒ‡ãƒ«æŒ‡å®šè©
 	 */
 	public String modelName;
 	/**
-	 * ƒ}ƒ‹ƒ`ƒ‚ƒfƒ‹ƒNƒ‰ƒX
+	 * ãƒãƒ«ãƒãƒ¢ãƒ‡ãƒ«ã‚¯ãƒ©ã‚¹
 	 */
 	public MMM_ModelMultiBase[] models;
 	/**
@@ -31,7 +35,7 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 	 */
 	public String[] textureDir;
 	/**
-	 * ƒeƒNƒXƒ`ƒƒ‚ÌŠi”[‚³‚ê‚Ä‚¢‚éƒpƒbƒN‚Ì–¼‘Oiƒ‚ƒfƒ‹‚ÉŠÖŒW‚È‚µj
+	 * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æ ¼ç´ã•ã‚Œã¦ã„ã‚‹ãƒ‘ãƒƒã‚¯ã®åå‰ï¼ˆãƒ¢ãƒ‡ãƒ«ã«é–¢ä¿‚ãªã—ï¼‰
 	 */
 	public String fileName;
 
@@ -68,8 +72,8 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 	}
 
 	/**
-	 * ƒeƒNƒXƒ`ƒƒ‚Ìƒtƒ‹ƒpƒX‚ğ•Ô‚·B
-	 * “o˜^ƒCƒ“ƒfƒbƒNƒX‚ª–³‚¢ê‡‚ÍNULL‚ğ•Ô‚·B
+	 * ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ•ãƒ«ãƒ‘ã‚¹ã‚’è¿”ã™ã€‚
+	 * ç™»éŒ²ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãŒç„¡ã„å ´åˆã¯NULLã‚’è¿”ã™ã€‚
 	 */
 	public ResourceLocation getTextureName(int pIndex) {
 		if (textures.containsKey(pIndex)) {
@@ -83,8 +87,8 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 	}
 
 	public ResourceLocation getArmorTextureName(int pIndex, ItemStack itemstack) {
-		// index‚Í0x40,0x50”Ô‘ä
-		// light‚à’Ç‰Á
+		// indexã¯0x40,0x50ç•ªå°
+		// lightã‚‚è¿½åŠ 
 		if (armors.isEmpty() || itemstack == null) return null;
 		if (!(itemstack.getItem() instanceof ItemArmor)) return null;
 		
@@ -95,7 +99,7 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		return getArmorTextureName(pIndex, MMM_TextureManager.armorFilenamePrefix[((ItemArmor)itemstack.getItem()).renderIndex], l);
 	}
 	public ResourceLocation getArmorTextureName(int pIndex, String pArmorPrefix, int pDamage) {
-		// index‚Í0x40,0x50”Ô‘ä
+		// indexã¯0x40,0x50ç•ªå°
 		if (armors.isEmpty() || pArmorPrefix == null) return null;
 		
 		Map<Integer, ResourceLocation> m = armors.get(pArmorPrefix);
@@ -116,7 +120,7 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 	}
 
 	/**
-	 * Œ_–ñF‚Ì—L–³‚ğƒrƒbƒg”z—ñ‚É‚µ‚Ä•Ô‚·
+	 * å¥‘ç´„è‰²ã®æœ‰ç„¡ã‚’ãƒ“ãƒƒãƒˆé…åˆ—ã«ã—ã¦è¿”ã™
 	 */
 	@Override
 	public int getContractColorBits() {
@@ -132,7 +136,7 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		return contractColor;
 	}
 	/**
-	 * –ì¶F‚Ì—L–³‚ğƒrƒbƒg”z—ñ‚É‚µ‚Ä•Ô‚·
+	 * é‡ç”Ÿè‰²ã®æœ‰ç„¡ã‚’ãƒ“ãƒƒãƒˆé…åˆ—ã«ã—ã¦è¿”ã™
 	 */
 	@Override
 	public int getWildColorBits() {
@@ -201,7 +205,7 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		if (pLocation.startsWith(ls)) {
 			pLocation = pLocation.substring(ls.length());
 		} else {
-			pLocation = "../../" + pLocation;
+			pLocation = "../.." + pLocation;
 		}
 		boolean lflag = false;
 		switch ((pIndex & 0xfff0)) {
@@ -211,7 +215,7 @@ public class MMM_TextureBox extends MMM_TextureBoxBase {
 		case MMM_TextureManager.tx_armor2light:
 		case MMM_TextureManager.tx_oldarmor1:
 		case MMM_TextureManager.tx_oldarmor2:
-			ls = pLocation.substring(pLocation.lastIndexOf("/"), pLocation.lastIndexOf("_"));
+			ls = pLocation.substring(pLocation.lastIndexOf("/") + 1, pLocation.lastIndexOf("_"));
 			Map<Integer, ResourceLocation> lmap;
 			if (armors.containsKey(ls)) {
 				lmap = armors.get(ls);

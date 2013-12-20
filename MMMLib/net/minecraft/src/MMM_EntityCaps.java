@@ -3,9 +3,14 @@ package net.minecraft.src;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+
 public class MMM_EntityCaps implements MMM_IModelCaps {
 
-	protected EntityLivingBase owner;
+	public EntityLivingBase owner;
 	private static Map<String, Integer> caps;
 
 	static {

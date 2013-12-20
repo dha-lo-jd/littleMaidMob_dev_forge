@@ -1,5 +1,7 @@
 package net.minecraft.src;
 
+import net.minecraft.client.gui.GuiButton;
+
 
 public class MMM_GuiToggleButton extends GuiButton {
 
@@ -14,7 +16,7 @@ public class MMM_GuiToggleButton extends GuiButton {
 		super(par1, par2, par3, par4, par5, par6Str);
 	}
 
-	protected int getHoverState(boolean par1) {
+	public int getHoverState(boolean par1) {
 		if (!enabled || isDown) {
 			return 0;
 		} else if (par1) {

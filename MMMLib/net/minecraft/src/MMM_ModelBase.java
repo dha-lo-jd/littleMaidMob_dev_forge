@@ -6,13 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.client.model.TextureOffset;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.util.MathHelper;
+
 public abstract class MMM_ModelBase {
 	
 	public static final float PI = (float)Math.PI;
 
 	public Render render;
 
-	// ModelBase‚Æ‚ ‚é’ö“xŒİŠ·
+	// ModelBaseã¨ã‚ã‚‹ç¨‹åº¦äº’æ›
 	public int textureWidth = 64;
 	public int textureHeight = 32;
 	public float onGrounds[] = new float[] {0.0F, 0.0F};
@@ -24,7 +28,7 @@ public abstract class MMM_ModelBase {
 
 
 
-	// ModelBaseŒİŠ·ŠÖ”ŒQ
+	// ModelBaseäº’æ›é–¢æ•°ç¾¤
 
 	public void render(MMM_IModelCaps pEntityCaps, float par2, float par3,
 			float ticksExisted, float pheadYaw, float pheadPitch, float par7, boolean pIsRender) {
@@ -38,14 +42,14 @@ public abstract class MMM_ModelBase {
 	}
 
 	public MMM_ModelRenderer getRandomModelBox(Random par1Random) {
-		// •G‚É–î‚ğó‚¯‚Ä‚µ‚Ü‚Á‚Ä‚ÈEEE
+		// è†ã«çŸ¢ã‚’å—ã‘ã¦ã—ã¾ã£ã¦ãªãƒ»ãƒ»ãƒ»
 		int li = par1Random.nextInt(this.boxList.size());
 		MMM_ModelRenderer lmr = (MMM_ModelRenderer)this.boxList.get(li);
 		for (int lj = 0; lj < boxList.size(); lj++) {
 			if (!lmr.cubeList.isEmpty()) {
 				break;
 			}
-			// ” ‚ª‚È‚¢
+			// ç®±ãŒãªã„
 			if (++li >= boxList.size()) {
 				li = 0;
 			}
@@ -54,20 +58,20 @@ public abstract class MMM_ModelBase {
 		return lmr;
 	}
 
-	protected void setTextureOffset(String par1Str, int par2, int par3) {
+	public void setTextureOffset(String par1Str, int par2, int par3) {
 		modelTextureMap.put(par1Str, new TextureOffset(par2, par3));
 	}
 
 	/**
-	 * „§‚³‚ê‚Ü‚¹‚ñB
+	 * æ¨å¥¨ã•ã‚Œã¾ã›ã‚“ã€‚
 	 */
 	public TextureOffset getTextureOffset(String par1Str) {
-		// ‚±‚Ì‚Ü‚Ü‚¾‚ÆˆÓ–¡‚È‚¢‚ÈB
+		// ã“ã®ã¾ã¾ã ã¨æ„å‘³ãªã„ãªã€‚
 		return modelTextureMap.get(par1Str);
 	}
 
 
-	// MathHelperƒgƒ“ƒlƒ‹ŠÖ”ŒQ
+	// MathHelperãƒˆãƒ³ãƒãƒ«é–¢æ•°ç¾¤
 
 	public static final float mh_sin(float f) {
 		f = f % 6.283185307179586F;

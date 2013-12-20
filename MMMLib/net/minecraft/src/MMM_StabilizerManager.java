@@ -5,67 +5,66 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 /**
- * ’Ç‰Áƒp[ƒc‚½‚éƒXƒ^ƒrƒ‰ƒCƒU[‚ğŠÇ—‚·‚é
+ * è¿½åŠ ãƒ‘ãƒ¼ãƒ„ãŸã‚‹ã‚¹ã‚¿ãƒ“ãƒ©ã‚¤ã‚¶ãƒ¼ã‚’ç®¡ç†ã™ã‚‹
  */
 public class MMM_StabilizerManager extends MMM_ManagerBase {
 
 	public static final String preFix = "ModelStabilizer";
 	public static Map<String, MMM_ModelStabilizerBase> stabilizerList = new TreeMap<String, MMM_ModelStabilizerBase>();
-	
-	
-	public static void init() {
-		// “Á’è–¼Ì‚ğƒvƒŠƒtƒBƒbƒNƒX‚É‚Âmodƒtƒ@ƒC‚ğ‚ğŠl“¾
-		MMM_FileManager.getModFile("Stabilizer", preFix);
-	}
-
-	public static void loadStabilizer() {
-		(new MMM_StabilizerManager()).load();
-	}
-
-	@Override
-	protected String getPreFix() {
-		return preFix;
-	}
-
-	@Override
-	protected boolean append(Class pclass) {
-		if (!(MMM_ModelStabilizerBase.class).isAssignableFrom(pclass)) {
-			return false;
-		}
-		
-		try {
-			MMM_ModelStabilizerBase lms = (MMM_ModelStabilizerBase)pclass.newInstance();
-			stabilizerList.put(lms.getName(), lms);
-			return true;
-		} catch (Exception e) {
-		}
-		
-		return false;
-	}
 
 	/**
-	 * w’è‚³‚ê‚½–¼Ì‚ÌƒXƒ^ƒrƒ‰ƒCƒU[ƒ‚ƒfƒ‹‚ğ•Ô‚·B
+	 * æŒ‡å®šã•ã‚ŒãŸåç§°ã®ã‚¹ã‚¿ãƒ“ãƒ©ã‚¤ã‚¶ãƒ¼ãƒ¢ãƒ‡ãƒ«ã‚’è¿”ã™ã€‚
 	 */
 	public static MMM_EquippedStabilizer getStabilizer(String pname, String pequippoint) {
 		if (!stabilizerList.containsKey(pname)) {
 			return null;
 		}
-		
+
 		MMM_EquippedStabilizer lequip = new MMM_EquippedStabilizer();
 		lequip.stabilizer = stabilizerList.get(pname);
 		lequip.stabilizer.init(lequip);
 		lequip.equipPointName = pequippoint;
-		
+
 		return lequip;
 	}
 
+	public static void init() {
+		// ç‰¹å®šåç§°ã‚’ãƒ—ãƒªãƒ•ã‚£ãƒƒã‚¯ã‚¹ã«æŒã¤modãƒ•ã‚¡ã‚¤ã‚’ã‚’ç²å¾—
+		MMM_FileManager.getModFile("Stabilizer", preFix);
+	}
+
+	public static void loadStabilizer() {
+		(new MMM_StabilizerManager()).load(MMM_ModelStabilizerBase.class);
+	}
+
 	/**
-	 * À‘•êŠ‚ÌƒAƒbƒvƒf[ƒg
+	 * å®Ÿè£…å ´æ‰€ã®ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
 	 */
 	public static void updateEquippedPoint(Map<String, MMM_EquippedStabilizer> pMap, MMM_ModelBase pModel) {
 		for (Entry<String, MMM_EquippedStabilizer> le : pMap.entrySet()) {
 			le.getValue().updateEquippedPoint(pModel);
 		}
+	}
+
+	@Override
+	public boolean append(Class pclass) {
+		if (!(MMM_ModelStabilizerBase.class).isAssignableFrom(pclass)) {
+			return false;
+		}
+
+		try {
+			MMM_ModelStabilizerBase lms = (MMM_ModelStabilizerBase) pclass.newInstance();
+			stabilizerList.put(lms.getName(), lms);
+			return true;
+		} catch (Exception e) {
+		}
+
+		return false;
+	}
+
+	@Override
+	public String getPreFix() {
+		return preFix;
 	}
 
 }

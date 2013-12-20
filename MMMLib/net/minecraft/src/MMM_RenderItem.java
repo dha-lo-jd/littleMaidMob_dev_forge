@@ -1,8 +1,12 @@
 package net.minecraft.src;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Random;
+
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.EXTRescaleNormal;
 import org.lwjgl.opengl.GL11;
@@ -22,9 +26,9 @@ public class MMM_RenderItem extends RenderItem {
 		MMM_ItemRenderManager lirm = MMM_ItemRenderManager.getEXRender(lis.getItem());
 		if (!lirm.isRenderItemWorld()) return false;
 		
-		// テクスチャ
+		// 繝�繧ｯ繧ｹ繝√Ε
 		MMM_Client.setTexture(lirm.getRenderTexture());
-		// 描画
+		// 謠冗判
 		random.setSeed(187L);
 		GL11.glPushMatrix();
 		float f2 = MathHelper.sin(((float)entityitem.age + f1) / 10F + entityitem.hoverStart) * 0.1F + 0.1F;

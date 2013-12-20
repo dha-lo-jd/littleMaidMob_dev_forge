@@ -1,34 +1,36 @@
 package net.minecraft.src;
 
+import net.minecraft.util.ResourceLocation;
+
 /**
- * MMM_Textured—l‚ÌƒeƒNƒXƒ`ƒƒƒpƒbƒNİ’è‚É‘Î‰‚µ‚Ä‚¢‚éEntity‚ÖŒp³‚³‚¹‚éB
+ * MMM_Textureä»•æ§˜ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ‘ãƒƒã‚¯è¨­å®šã«å¯¾å¿œã—ã¦ã„ã‚‹Entityã¸ç¶™æ‰¿ã•ã›ã‚‹ã€‚
  */
 public interface MMM_ITextureEntity {
 
 	/**
-	 * Server—pB
-	 * TextureManager‚ªƒT[ƒo[‘¤‚ÌEntity‚ÖƒeƒNƒXƒ`ƒƒ•ÏX‚Ì’Ê’m‚ğs‚¤B
+	 * Serverç”¨ã€‚
+	 * TextureManagerãŒã‚µãƒ¼ãƒãƒ¼å´ã®Entityã¸ãƒ†ã‚¯ã‚¹ãƒãƒ£å¤‰æ›´ã®é€šçŸ¥ã‚’è¡Œã†ã€‚
 	 * @param pIndex
-	 * İ’è‚³‚ê‚éƒeƒNƒXƒ`ƒƒƒpƒbƒN‚ÌƒCƒ“ƒfƒbƒNƒXiTextureBoxServerj
+	 * è¨­å®šã•ã‚Œã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ‘ãƒƒã‚¯ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ï¼ˆTextureBoxServerï¼‰
 	 */
 	public void setTexturePackIndex(int pColor, int[] pIndex);
 
 	/**
-	 * Client—pB
-	 * TextureManager‚ªƒNƒ‰ƒCƒAƒ“ƒg‘¤‚ÌEntity‚ÖƒeƒNƒXƒ`ƒƒ•ÏX‚Ì’Ê’m‚ğs‚¤B
+	 * Clientç”¨ã€‚
+	 * TextureManagerãŒã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆå´ã®Entityã¸ãƒ†ã‚¯ã‚¹ãƒãƒ£å¤‰æ›´ã®é€šçŸ¥ã‚’è¡Œã†ã€‚
 	 * @param pPackName
-	 * İ’è‚³‚ê‚éƒeƒNƒXƒ`ƒƒƒpƒbƒN‚Ì–¼ÌiTextureBoxClientj
+	 * è¨­å®šã•ã‚Œã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ‘ãƒƒã‚¯ã®åç§°ï¼ˆTextureBoxClientï¼‰
 	 */
 	public void setTexturePackName(MMM_TextureBox[] pTextureBox);
 
 	/**
-	 * Œ»İ‚ÌEntity‚ÉF‚ğİ’è‚·‚éB
+	 * ç¾åœ¨ã®Entityã«è‰²ã‚’è¨­å®šã™ã‚‹ã€‚
 	 * @param pColor
 	 */
 	public void setColor(int pColor);
 
 	/**
-	 * Œ»İ‚ÌEntity‚Éİ’è‚³‚ê‚Ä‚¢‚éF‚ğ•Ô‚·B
+	 * ç¾åœ¨ã®Entityã«è¨­å®šã•ã‚Œã¦ã„ã‚‹è‰²ã‚’è¿”ã™ã€‚
 	 * @return
 	 */
 	public int getColor();
