@@ -1,12 +1,30 @@
 package net.minecraft.src;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.EXTRescaleNormal;
-import org.lwjgl.opengl.GL11;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiButtonNextPage;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeInstance;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+
+import org.lwjgl.opengl.EXTRescaleNormal;
+import org.lwjgl.opengl.GL11;
 
 public class LMM_GuiInventory extends GuiContainer {
 	// Field
@@ -23,7 +41,7 @@ public class LMM_GuiInventory extends GuiContainer {
 	public GuiButton selectbutton;
 	public boolean isChangeTexture;
 	
-	protected static ResourceLocation fguiTex = new ResourceLocation("textures/gui/container/littlemaidinventory.png");
+	public static ResourceLocation fguiTex = new ResourceLocation("textures/gui/container/littlemaidinventory.png");
 
 	// Method
 	public LMM_GuiInventory(EntityPlayer pPlayer, LMM_EntityLittleMaid elmaid) {
@@ -55,7 +73,7 @@ public class LMM_GuiInventory extends GuiContainer {
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
+	public void drawGuiContainerForegroundLayer(int par1, int par2) {
 		String ls;
 		fontRenderer.drawString(StatCollector.translateToLocal(
 				lowerChestInventory.getInvName()), 8, 64, 0x404040);
@@ -72,7 +90,7 @@ public class LMM_GuiInventory extends GuiContainer {
 				"littleMaidMob.mode.".concat(entitylittlemaid.getMaidModeString())), 86, 61, 0x404040);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		// ƒLƒƒƒ‰
+		// ã‚­ãƒ£ãƒ©
 		int lj = 0;
 		int lk = 0;
 		GL11.glEnable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
@@ -112,8 +130,8 @@ public class LMM_GuiInventory extends GuiContainer {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		// ”wŒi
+	public void drawGuiContainerBackgroundLayer(float f, int i, int j) {
+		// èƒŒæ™¯
 		ResourceLocation lrl = entitylittlemaid.textureData.getGUITexture();
 		if (lrl == null) {
 			lrl = fguiTex;
@@ -188,7 +206,7 @@ public class LMM_GuiInventory extends GuiContainer {
 */
 	}
 
-	protected void drawHeathArmor(int par1, int par2) {
+	public void drawHeathArmor(int par1, int par2) {
 		boolean var3 = entitylittlemaid.hurtResistantTime / 3 % 2 == 1;
 		
 		if (entitylittlemaid.hurtResistantTime < 10) {
@@ -317,14 +335,14 @@ public class LMM_GuiInventory extends GuiContainer {
 		int ii = i - guiLeft;
 		int jj = j - guiTop;
 		if (ii > 25 && ii < 78 && jj > 7 && jj < 60) {
-			// ƒ{ƒ^ƒ“‚Ì•\Ž¦
+			// ãƒœã‚¿ãƒ³ã®è¡¨ç¤º
 			txbutton[0].drawButton = true;
 			txbutton[1].drawButton = true;
 			txbutton[2].drawButton = true;
 			txbutton[3].drawButton = true;
 			selectbutton.drawButton = true;
 			
-			// ƒeƒNƒXƒ`ƒƒ–¼Ì‚Ì•\Ž¦
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£åç§°ã®è¡¨ç¤º
 			GL11.glPushMatrix();
 			GL11.glTranslatef(i - ii, j - jj, 0.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -369,18 +387,18 @@ public class LMM_GuiInventory extends GuiContainer {
 	}
 
 	@Override
-	protected void mouseClicked(int i, int j, int k) {
+	public void mouseClicked(int i, int j, int k) {
 		super.mouseClicked(i, j, k);
 /*
 		// 26,8-77,59
 		int ii = i - guiLeft;
 		int jj = j - guiTop;
 		
-		// TODO:ƒƒCƒhƒAƒZƒ“ƒuƒ‹‰æ–Ê‚ðì‚é
+		// TODO:ãƒ¡ã‚¤ãƒ‰ã‚¢ã‚»ãƒ³ãƒ–ãƒ«ç”»é¢ã‚’ä½œã‚‹
 		if (ii > 25 && ii < 78 && jj > 7 && jj < 60) {
-			// ‰¾—…•\Ž¦—Ìˆæ
+			// ä¼½ç¾…è¡¨ç¤ºé ˜åŸŸ
 			if (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54)) {
-				// Shift+‚Å‹tŽü‚è
+				// Shift+ã§é€†å‘¨ã‚Š
 				LMM_Client.setPrevTexturePackege(entitylittlemaid, k);
 			} else {
 				LMM_Client.setNextTexturePackege(entitylittlemaid, k);
@@ -391,7 +409,7 @@ public class LMM_GuiInventory extends GuiContainer {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton par1GuiButton) {
+	public void actionPerformed(GuiButton par1GuiButton) {
 		switch (par1GuiButton.id) {
 		case 100:
 			entitylittlemaid.setNextTexturePackege(0);
@@ -435,7 +453,7 @@ public class LMM_GuiInventory extends GuiContainer {
 	}
 
 	private void displayDebuffEffects() {
-		// ƒ|[ƒVƒ‡ƒ“ƒGƒtƒFƒNƒg‚Ì•\Ž¦
+		// ãƒãƒ¼ã‚·ãƒ§ãƒ³ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®è¡¨ç¤º
 		int lx = guiLeft - 124;
 		int ly = guiTop;
 		Collection collection = entitylittlemaid.getActivePotionEffects();

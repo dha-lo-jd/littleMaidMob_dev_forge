@@ -1,11 +1,12 @@
 package net.minecraft.src;
 
-import java.util.Map.Entry;
-
-import javax.jws.Oneway;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class LMM_RenderLittleMaid extends MMM_RenderModelMulti {
 
@@ -43,12 +44,12 @@ public class LMM_RenderLittleMaid extends MMM_RenderModelMulti {
 		modelMain.setCapsValue(MMM_IModelCaps.caps_entityIdFactor, lmaid.entityIdFactor);
 		modelMain.setCapsValue(MMM_IModelCaps.caps_ticksExisted, lmaid.ticksExisted);
 		modelMain.setCapsValue(MMM_IModelCaps.caps_dominantArm, lmaid.maidDominantArm);
-		// ‚¾‚ª–³ˆÓ–¡‚¾
+		// ã ãŒç„¡æ„å‘³ã 
 //		plittleMaid.textureModel0.isChild = plittleMaid.textureModel1.isChild = plittleMaid.textureModel2.isChild = plittleMaid.isChild();
 	}
 
-	protected void renderString(LMM_EntityLittleMaid plittleMaid, double px, double py, double pz, float f, float f1) {
-		// ‚Ğ‚à
+	public void renderString(LMM_EntityLittleMaid plittleMaid, double px, double py, double pz, float f, float f1) {
+		// ã²ã‚‚
 		if(plittleMaid.mstatgotcha != null && plittleMaid.mstatgotcha instanceof EntityLivingBase) {
 			EntityLivingBase lel = (EntityLivingBase)plittleMaid.mstatgotcha;
 			py -= 0.5D;
@@ -99,12 +100,12 @@ public class LMM_RenderLittleMaid extends MMM_RenderModelMulti {
 	}
 /*
 	public void doRenderLitlleMaid(LMM_EntityLittleMaid plittleMaid, double px, double py, double pz, float f, float f1) {
-		// ‚¢‚­‚Â‚©d•¡‚µ‚Ä‚é‚Ì‚Å‚ ‚Æ‚ÅŠm”F
-		// p¨‚É‚æ‚é‚‚³’²®
+		// ã„ãã¤ã‹é‡è¤‡ã—ã¦ã‚‹ã®ã§ã‚ã¨ã§ç¢ºèª
+		// å§¿å‹¢ã«ã‚ˆã‚‹é«˜ã•èª¿æ•´
 		
-		// ‚±‚±‚Í–{—ˆ“I‚É‚Í—v‚ç‚È‚¢B
+		// ã“ã“ã¯æœ¬æ¥çš„ã«ã¯è¦ã‚‰ãªã„ã€‚
 		if (plittleMaid.worldObj instanceof WorldServer) {
-			// RSHUD-ACV—p
+			// RSHUD-ACVç”¨
 			MMM_TextureBox ltbox0 = ((MMM_TextureBoxServer)plittleMaid.textureData.textureBox[0]).localBox;
 			MMM_TextureBox ltbox1 = ((MMM_TextureBoxServer)plittleMaid.textureData.textureBox[1]).localBox;
 			modelMain.model = ltbox0.models[0];
@@ -140,35 +141,35 @@ public class LMM_RenderLittleMaid extends MMM_RenderModelMulti {
 //		doRenderLitlleMaid(lmm, par2, par4, par6, par8, par9);
 		renderModelMulti(lmm, par2, par4, par6, par8, par9, fcaps);
 		renderString(lmm, par2, par4, par6, par8, par9);
-		// ƒ[ƒv
+		// ãƒ­ãƒ¼ãƒ—
 //		func_110827_b(lmm, par2, par4 - modelMain.model.getLeashOffset(lmm.maidCaps), par6, par8, par9);
 	}
 
 	@Override
-	protected void renderModel(EntityLivingBase par1EntityLiving, float par2,
+	public void renderModel(EntityLivingBase par1EntityLiving, float par2,
 			float par3, float par4, float par5, float par6, float par7) {
 		if (!par1EntityLiving.isInvisible()) {
 			modelMain.setArmorRendering(true);
 		} else {
 			modelMain.setArmorRendering(false);
 		}
-		// ƒAƒCƒeƒ€‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒOˆÊ’u‚ğŠl“¾‚·‚é‚½‚ßrender‚ğŒÄ‚Ô•K—v‚ª‚ ‚é
+		// ã‚¢ã‚¤ãƒ†ãƒ ã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ä½ç½®ã‚’ç²å¾—ã™ã‚‹ãŸã‚renderã‚’å‘¼ã¶å¿…è¦ãŒã‚ã‚‹
 		mainModel.render(par1EntityLiving, par2, par3, par4, par5, par6, par7);
 	}
 
 	@Override
-	protected void passSpecialRender(EntityLivingBase par1EntityLiving, double par2, double par4, double par6) {
+	public void passSpecialRender(EntityLivingBase par1EntityLiving, double par2, double par4, double par6) {
 		super.passSpecialRender(par1EntityLiving, par2, par4, par6);
 		
 		LMM_EntityLittleMaid llmm = (LMM_EntityLittleMaid)par1EntityLiving;
-		// ’Ç‰Á•ª
+		// è¿½åŠ åˆ†
 		for (int li = 0; li < llmm.maidEntityModeList.size(); li++) {
 			llmm.maidEntityModeList.get(li).showSpecial(this, par2, par4, par6);
 		}
 	}
 
 	@Override
-	protected int getColorMultiplier(EntityLivingBase par1EntityLiving, float par2, float par3) {
+	public int getColorMultiplier(EntityLivingBase par1EntityLiving, float par2, float par3) {
 		return ((LMM_EntityLittleMaid)par1EntityLiving).colorMultiplier(par2, par3);
 	}
 

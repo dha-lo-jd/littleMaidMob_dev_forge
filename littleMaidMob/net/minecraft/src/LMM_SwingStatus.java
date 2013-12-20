@@ -1,21 +1,28 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Vec3;
+
 public class LMM_SwingStatus {
 
-	/** g—p’†‚ÌƒAƒCƒeƒ€ƒXƒƒbƒg */
+	/** ä½¿ç”¨ä¸­ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆ */
 	public int index;
 	public int lastIndex;
-	/* ˜rU‚èŠÖ˜A•Ï” */
+	/* è…•æŒ¯ã‚Šé–¢é€£å¤‰æ•° */
 	public boolean isSwingInProgress;
 	public float swingProgress;
 	public float prevSwingProgress;
 	public int swingProgressInt;
 	public float onGround;
-	/** ƒN[ƒ‹ƒ^ƒCƒ€ */
+	/** ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ  */
 	public int attackTime;
 //	public int usingCount;
 	public int itemInUseCount;
-	protected ItemStack itemInUse;
+	public ItemStack itemInUse;
 
 
 
@@ -30,14 +37,14 @@ public class LMM_SwingStatus {
 	}
 
 	/**
-	 * TODO:”’l‚ÌXV—pAonEntityUpdate“à‚ÅŒÄ‚Ô–:‚¢‚ç‚ñ‚©H
+	 * TODO:æ•°å€¤ã®æ›´æ–°ç”¨ã€onEntityUpdateå†…ã§å‘¼ã¶äº‹:ã„ã‚‰ã‚“ã‹ï¼Ÿ
 	 */
 	public void onEntityUpdate(LMM_EntityLittleMaid pEntity) {
 		prevSwingProgress = swingProgress;
 	}
 
 	/**
-	 * ”’l‚ÌXV—pAonUpdate“à‚ÅŒÄ‚Ô–
+	 * æ•°å€¤ã®æ›´æ–°ç”¨ã€onUpdateå†…ã§å‘¼ã¶äº‹
 	 */
 	public void onUpdate(LMM_EntityLittleMaid pEntity) {
 		prevSwingProgress = swingProgress;
@@ -45,7 +52,7 @@ public class LMM_SwingStatus {
 			attackTime--;
 		}
 		
-		// ˜rU‚è
+		// è…•æŒ¯ã‚Š
 		int li = pEntity.getSwingSpeedModifier();
 		if (isSwingInProgress) {
 			swingProgressInt++;
@@ -66,7 +73,7 @@ public class LMM_SwingStatus {
 				clearItemInUse(lrentity);
 			} else {
 				if (itemInUseCount <= 25 && itemInUseCount % 4 == 0) {
-					// H‚×‚©‚·‚Æ‚©
+					// é£Ÿã¹ã‹ã™ã¨ã‹
 					updateItemUse(pEntity, 5);
 				}
 				if (--itemInUseCount <= 0 && lrentity != null) {
@@ -77,7 +84,7 @@ public class LMM_SwingStatus {
 	}
 
 	/**
-	 * ‘I‘ğ’†‚ÌƒXƒƒbƒg”Ô†‚ğİ’è
+	 * é¸æŠä¸­ã®ã‚¹ãƒ­ãƒƒãƒˆç•ªå·ã‚’è¨­å®š
 	 */
 	public void setSlotIndex(int pIndex) {
 		index = pIndex;
@@ -85,7 +92,7 @@ public class LMM_SwingStatus {
 	}
 
 	/**
-	 * ‘I‘ğ’†‚ÌƒCƒ“ƒxƒ“ƒgƒŠ“àƒAƒCƒeƒ€ƒXƒ^ƒbƒN‚ğ•Ô‚·
+	 * é¸æŠä¸­ã®ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªå†…ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ã‚¿ãƒƒã‚¯ã‚’è¿”ã™
 	 */
 	public ItemStack getItemStack(LMM_EntityLittleMaid pEntity) {
 		if (index > -1) {
@@ -101,7 +108,7 @@ public class LMM_SwingStatus {
 
 
 
-// ˜rU‚èŠÖŒW
+// è…•æŒ¯ã‚Šé–¢ä¿‚
 
 
 	public float getSwingProgress(float ltime) {
@@ -125,7 +132,7 @@ public class LMM_SwingStatus {
 
 
 	/**
-	 * •ÏX‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğ•Ô‚µAƒtƒ‰ƒO‚ğƒNƒŠƒA‚·‚éB
+	 * å¤‰æ›´ãŒã‚ã‚‹ã‹ã©ã†ã‹ã‚’è¿”ã—ã€ãƒ•ãƒ©ã‚°ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹ã€‚
 	 */
 	public boolean checkChanged() {
 		boolean lflag = index != lastIndex;
@@ -133,7 +140,7 @@ public class LMM_SwingStatus {
 		return lflag;
 	}
 
-// ƒAƒCƒeƒ€‚Ìg—p‚ÉŠÖ‚í‚éŠÖ”ŒQ
+// ã‚¢ã‚¤ãƒ†ãƒ ã®ä½¿ç”¨ã«é–¢ã‚ã‚‹é–¢æ•°ç¾¤
 
 	public ItemStack getItemInUse() {
 		return itemInUse;
@@ -154,7 +161,7 @@ public class LMM_SwingStatus {
 	/**
 	 * 
 	 * @param pEntity
-	 * ƒT[ƒo[‚Ì‚ÍEntity‚ğİ’è‚·‚éB
+	 * ã‚µãƒ¼ãƒãƒ¼ã®æ™‚ã¯Entityã‚’è¨­å®šã™ã‚‹ã€‚
 	 */
 	public void stopUsingItem(Entity pEntity) {
 		if (itemInUse != null && pEntity instanceof EntityPlayer) {
@@ -167,7 +174,7 @@ public class LMM_SwingStatus {
 	/**
 	 * 
 	 * @param pEntity
-	 * ƒT[ƒo[‚Ì‚ÍEntity‚ğİ’è‚·‚éB
+	 * ã‚µãƒ¼ãƒãƒ¼ã®æ™‚ã¯Entityã‚’è¨­å®šã™ã‚‹ã€‚
 	 */
 	public void clearItemInUse(Entity pEntity) {
 		itemInUse = null;
@@ -187,7 +194,7 @@ public class LMM_SwingStatus {
 	 * @param par1ItemStack
 	 * @param par2
 	 * @param pEntity
-	 * ƒT[ƒo[‚Ì‚ÍEntity‚ğİ’è‚·‚éB
+	 * ã‚µãƒ¼ãƒãƒ¼ã®æ™‚ã¯Entityã‚’è¨­å®šã™ã‚‹ã€‚
 	 */
 	public void setItemInUse(ItemStack par1ItemStack, int par2, Entity pEntity) {
 		if (par1ItemStack != itemInUse) {
@@ -200,7 +207,7 @@ public class LMM_SwingStatus {
 		}
 	}
 
-	protected void updateItemUse(Entity pEntity, int par2) {
+	public void updateItemUse(Entity pEntity, int par2) {
 		if (itemInUse.getItemUseAction() == EnumAction.drink) {
 			pEntity.playSound("random.drink", 0.5F, pEntity.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 		}
@@ -221,7 +228,7 @@ public class LMM_SwingStatus {
 		}
 	}
 
-	protected void onItemUseFinish(EntityPlayer pEntityPlayer) {
+	public void onItemUseFinish(EntityPlayer pEntityPlayer) {
 		if (this.itemInUse != null) {
 			this.updateItemUse(pEntityPlayer, 16);
 			int var1 = this.itemInUse.stackSize;

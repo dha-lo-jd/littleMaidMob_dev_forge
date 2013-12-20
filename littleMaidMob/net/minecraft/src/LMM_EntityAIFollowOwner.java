@@ -1,5 +1,10 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.world.World;
+
 public class LMM_EntityAIFollowOwner extends EntityAIBase implements LMM_IEntityAI {
 
 	private LMM_EntityLittleMaid theMaid;
@@ -8,12 +13,12 @@ public class LMM_EntityAIFollowOwner extends EntityAIBase implements LMM_IEntity
 	private float moveSpeed;
 	private PathNavigate petPathfinder;
 	private int field_48310_h;
-	protected double maxDist;
-	protected double minDist;
-	protected double sprintDist;
-	protected double toDistance;
+	public double maxDist;
+	public double minDist;
+	public double sprintDist;
+	public double toDistance;
 	private boolean lastAvoidWater;
-	protected boolean isEnable;
+	public boolean isEnable;
 
 	public LMM_EntityAIFollowOwner(LMM_EntityLittleMaid par1EntityLittleMaid,
 			float pSpeed, double pMin, double pMax, double pSprintDistSQ) {
@@ -92,7 +97,7 @@ public class LMM_EntityAIFollowOwner extends EntityAIBase implements LMM_IEntity
 		if (theMaid.isSitting()) {
 			return;
 		}
-		// 指定距離以上ならダッシュ
+		// 謖�螳夊ｷ晞屬莉･荳翫↑繧峨ム繝�繧ｷ繝･
 		theMaid.setSprinting(toDistance > sprintDist);
 		if (--field_48310_h > 0) {
 			return;

@@ -2,13 +2,22 @@ package net.minecraft.src;
 
 import java.util.List;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class LMM_GuiTriggerSelect extends GuiContainer {
 
-	protected float scrolleWeaponset;
-	protected float scrolleContainer;
+	public float scrolleWeaponset;
+	public float scrolleContainer;
 	private static InventoryBasic inventory1 = new InventoryBasic("tmpsel", false, 40);
 	private static InventoryBasic inventory2 = new InventoryBasic("tmpwep", false, 32);
 	private int lastX;
@@ -19,8 +28,8 @@ public class LMM_GuiTriggerSelect extends GuiContainer {
 	private GuiButton[] guiButton = new GuiButton[3];
 	private LMM_ContainerTriggerSelect inventoryTrigger;
 	private int selectPage;
-	protected EntityPlayer target;
-	protected static ResourceLocation fguiTex = new ResourceLocation("textures/gui/container/littlemaidtrigger.png");
+	public EntityPlayer target;
+	public static ResourceLocation fguiTex = new ResourceLocation("textures/gui/container/littlemaidtrigger.png");
 
 
 	public LMM_GuiTriggerSelect(EntityPlayer entityplayer, LMM_GuiIFF guiowner) {
@@ -46,7 +55,7 @@ public class LMM_GuiTriggerSelect extends GuiContainer {
 	}
 
 	@Override
-	protected void keyTyped(char c, int i) {
+	public void keyTyped(char c, int i) {
 		if (i == 1) {
 			mc.displayGuiScreen(owner);
 		}
@@ -54,7 +63,7 @@ public class LMM_GuiTriggerSelect extends GuiContainer {
 
 	@Override
 	public void onGuiClosed() {
-		// ê›íËílÇÃÉfÉRÅ[Éh
+		// Ë®≠ÂÆöÂÄ§„ÅÆ„Éá„Ç≥„Éº„Éâ
 		setItemList();
 
 		super.onGuiClosed();
@@ -66,7 +75,7 @@ public class LMM_GuiTriggerSelect extends GuiContainer {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton guibutton) {
+	public void actionPerformed(GuiButton guibutton) {
 		setItemList();
 		if (guibutton.id == 100) {
 			if (--selectPage < 0) {
@@ -88,7 +97,7 @@ public class LMM_GuiTriggerSelect extends GuiContainer {
 	}
 
 	@Override
-	protected void handleMouseClick(Slot slot, int i, int j, int flag) {
+	public void handleMouseClick(Slot slot, int i, int j, int flag) {
 		boolean var5 = flag == 1;
 		flag = i == -999 && flag == 0 ? 4 : flag;
 		if (slot != null) {
@@ -98,7 +107,7 @@ public class LMM_GuiTriggerSelect extends GuiContainer {
 				ItemStack itemstack4 = slot.getStack();
 				if (itemstack1 != null && itemstack4 != null
 						&& itemstack1.itemID == itemstack4.itemID) {
-					// ëIëÉAÉCÉeÉÄÇ™ãÛÇ≈ÇÕÇ»Ç¢éû
+					// ÈÅ∏Êäû„Ç¢„Ç§„ÉÜ„É†„ÅåÁ©∫„Åß„ÅØ„Å™„ÅÑÊôÇ
 					if (j != 0) {
 						inventoryplayer.setItemStack(null);
 					}
@@ -116,14 +125,14 @@ public class LMM_GuiTriggerSelect extends GuiContainer {
 //								(slot.slotNumber - inventorySlots.inventorySlots.size()) + 9 + 36);
 			}
 		} else {
-			// Slotà»äOÇÃÇ∆Ç±ÇÎÇÕéÃÇƒÇÈ
+			// Slot‰ª•Â§ñ„ÅÆ„Å®„Åì„Çç„ÅØÊç®„Å¶„Çã
 			InventoryPlayer inventoryplayer1 = mc.thePlayer.inventory;
 			inventoryplayer1.setItemStack(null);
 		}
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
+	public void drawGuiContainerForegroundLayer(int par1, int par2) {
 		fontRenderer.drawString("Item selection", 8, 6, 0x404040);
 		fontRenderer.drawString("Trigger Items", 8, 110, 0x404040);
 	}
@@ -222,7 +231,7 @@ public class LMM_GuiTriggerSelect extends GuiContainer {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
+	public void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		MMM_Client.setTexture(fguiTex);
 		int l = guiLeft;

@@ -1,10 +1,13 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.ai.EntityAIBase;
+
 public class LMM_EntityAIRestrictRain extends EntityAIBase implements
 		LMM_IEntityAI {
 
-	protected EntityLiving theEntity;
-	protected boolean isEnable;
+	public EntityLiving theEntity;
+	public boolean isEnable;
 
 	public LMM_EntityAIRestrictRain(EntityLiving par1EntityLiving) {
 		theEntity = par1EntityLiving;
@@ -26,7 +29,7 @@ public class LMM_EntityAIRestrictRain extends EntityAIBase implements
 		theEntity.getNavigator().setAvoidSun(false);
 	}
 
-	// 実行可能フラグ
+	// 螳溯｡悟庄閭ｽ繝輔Λ繧ｰ
 	@Override
 	public void setEnable(boolean pFlag) {
 		isEnable = pFlag;

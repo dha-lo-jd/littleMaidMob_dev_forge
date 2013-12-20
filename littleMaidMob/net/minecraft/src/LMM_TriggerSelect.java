@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.item.ItemStack;
+
 /**
- * ƒ‚[ƒhØ‚è‘Ö‚¦—pƒgƒŠƒK[ƒAƒCƒeƒ€‚ÌƒRƒ“ƒeƒiB
- * ƒ}ƒ‹ƒ`‘Îô—pB
- * ƒf[ƒ^‚Ì“Ç‚İ‚İ‚ÍIFF‚Ås‚Á‚Ä‚¢‚éB
+ * ãƒ¢ãƒ¼ãƒ‰åˆ‡ã‚Šæ›¿ãˆç”¨ãƒˆãƒªã‚¬ãƒ¼ã‚¢ã‚¤ãƒ†ãƒ ã®ã‚³ãƒ³ãƒ†ãƒŠã€‚
+ * ãƒãƒ«ãƒå¯¾ç­–ç”¨ã€‚
+ * ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿ã¯IFFã§è¡Œã£ã¦ã„ã‚‹ã€‚
  */
 public class LMM_TriggerSelect {
 
@@ -22,13 +24,13 @@ public class LMM_TriggerSelect {
 			return defaultTrigger;
 		}
 		if (MMM_Helper.isLocalPlay()) {
-			// ƒVƒ“ƒOƒ‹Às‚Í–¼Ìƒuƒ‰ƒ“ƒN‚ÉB
+			// ã‚·ãƒ³ã‚°ãƒ«å®Ÿè¡Œæ™‚ã¯åç§°ãƒ–ãƒ©ãƒ³ã‚¯ã«ã€‚
 			pUsername = "";
 		}
-		// ‘¶İƒ`ƒFƒbƒNA–³‚©‚Á‚½‚ç’Ç‰Á
+		// å­˜åœ¨ãƒã‚§ãƒƒã‚¯ã€ç„¡ã‹ã£ãŸã‚‰è¿½åŠ 
 		if (!usersTrigger.containsKey(pUsername)) {
 			if (pUsername.isEmpty()) {
-				// –¼Ì‚ªƒuƒ‰ƒ“ƒN‚Ì‚ÍƒfƒtƒHƒ‹ƒg‚Ì‚à‚Ì‚ÖƒŠƒ“ƒNB
+				// åç§°ãŒãƒ–ãƒ©ãƒ³ã‚¯ã®æ™‚ã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚‚ã®ã¸ãƒªãƒ³ã‚¯ã€‚
 				usersTrigger.put(pUsername, defaultTrigger);
 			} else {
 				Map<Integer, List<Integer>> lmap = new HashMap<Integer, List<Integer>>();
@@ -58,15 +60,15 @@ public class LMM_TriggerSelect {
 
 
 	/**
-	 * ƒ†[ƒU[–ˆ‚ÉƒgƒŠƒK[ƒAƒCƒeƒ€‚ğİ’è‚·‚éB
+	 * ãƒ¦ãƒ¼ã‚¶ãƒ¼æ¯ã«ãƒˆãƒªã‚¬ãƒ¼ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¨­å®šã™ã‚‹ã€‚
 	 */
 	public static void appendTriggerItem(String pUsername, String pSelector, String pIndexstr) {
-		// ƒgƒŠƒK[ƒAƒCƒeƒ€‚Ì’Ç‰Á
+		// ãƒˆãƒªã‚¬ãƒ¼ã‚¢ã‚¤ãƒ†ãƒ ã®è¿½åŠ 
 		appendWeaponsIndex(pIndexstr, getuserTriggerList(pUsername, pSelector));
 	}
 
 	/**
-	 * ƒgƒŠƒK[ƒAƒCƒeƒ€‚ğ‰ğÍ‚µ‚Ä“o˜^B
+	 * ãƒˆãƒªã‚¬ãƒ¼ã‚¢ã‚¤ãƒ†ãƒ ã‚’è§£æã—ã¦ç™»éŒ²ã€‚
 	 */
 	private static void appendWeaponsIndex(String indexstr, List<Integer> indexlist) {
 		if (indexstr.isEmpty()) return;
@@ -77,7 +79,7 @@ public class LMM_TriggerSelect {
 	}
 
 	/**
-	 * ƒAƒCƒeƒ€‚ªw’è‚³‚ê‚½ƒgƒŠƒK[‚É“o˜^‚³‚ê‚Ä‚¢‚é‚©‚ğ”»’è
+	 * ã‚¢ã‚¤ãƒ†ãƒ ãŒæŒ‡å®šã•ã‚ŒãŸãƒˆãƒªã‚¬ãƒ¼ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ã‚’åˆ¤å®š
 	 */
 	public static boolean checkWeapon(String pUsername, String pSelector, ItemStack pItemStack) {
 		if (!selector.contains(pSelector)) {

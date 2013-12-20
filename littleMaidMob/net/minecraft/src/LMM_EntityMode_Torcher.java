@@ -1,5 +1,17 @@
 package net.minecraft.src;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialLiquid;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+
 public class LMM_EntityMode_Torcher extends LMM_EntityModeBase {
 	
 	public static final int mmode_Torcher = 0x0020;
@@ -63,14 +75,14 @@ public class LMM_EntityMode_Torcher extends LMM_EntityModeBase {
 		int li;
 		ItemStack litemstack;
 		
-		// ƒ‚[ƒh‚É‰‚¶‚½¯•Ê”»’èA‘¬“x—Dæ
+		// ãƒ¢ãƒ¼ãƒ‰ã«å¿œã˜ãŸè­˜åˆ¥åˆ¤å®šã€é€Ÿåº¦å„ªå…ˆ
 		switch (pMode) {
 		case mmode_Torcher : 
 			for (li = 0; li < owner.maidInventory.maxInventorySize; li++) {
 				litemstack = owner.maidInventory.getStackInSlot(li);
 				if (litemstack == null) continue;
 				
-				// ¼–¾
+				// æ¾æ˜
 				if (litemstack.itemID == Block.torchWood.blockID || LMM_TriggerSelect.checkWeapon(owner.getMaidMaster(), "Torch", litemstack)) {
 					return li;
 				}
@@ -96,7 +108,7 @@ public class LMM_EntityMode_Torcher extends LMM_EntityModeBase {
 		return !(owner.getCurrentEquippedItem() == null);
 	}
 
-	protected int getBlockLighting(int i, int j, int k) {
+	public int getBlockLighting(int i, int j, int k) {
 		World worldObj = owner.worldObj;
 		if (worldObj.getBlockMaterial(i, j - 1, k).isSolid() && worldObj.getBlockId(i, j, k) == 0) {
 			return worldObj.getBlockLightValue(i, j, k);
@@ -123,7 +135,7 @@ public class LMM_EntityMode_Torcher extends LMM_EntityModeBase {
 		if (lis == null) return false;
 		
 		int li = lis.stackSize;
-		// TODO:“–‚½‚è”»’è‚ğ‚Ç‚¤‚·‚é‚©
+		// TODO:å½“ãŸã‚Šåˆ¤å®šã‚’ã©ã†ã™ã‚‹ã‹
 		if (lis.tryPlaceItemIntoWorld(owner.maidAvatar, owner.worldObj, px, py - 1, pz, 1, 0.5F, 1.0F, 0.5F)) {
 			owner.setSwing(10, LMM_EnumSound.installation);
 			
@@ -141,7 +153,7 @@ public class LMM_EntityMode_Torcher extends LMM_EntityModeBase {
 
 	public boolean canPlaceItemBlockOnSide(World par1World, int par2, int par3, int par4, int par5,
 			EntityPlayer par6EntityPlayer, ItemStack par7ItemStack, ItemBlock pItemBlock) {
-		// TODO:ƒ}ƒ‹ƒ`‘Îô—pAItemBlock‚©‚çŠÛƒpƒNƒŠƒo[ƒWƒ‡ƒ“ƒAƒbƒv‚ÍŠm”F‚·‚é‚±‚Æ
+		// TODO:ãƒãƒ«ãƒå¯¾ç­–ç”¨ã€ItemBlockã‹ã‚‰ä¸¸ãƒ‘ã‚¯ãƒªãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚¢ãƒƒãƒ—æ™‚ã¯ç¢ºèªã™ã‚‹ã“ã¨
 		int var8 = par1World.getBlockId(par2, par3, par4);
 		
 		if (var8 == Block.snow.blockID) {
@@ -178,14 +190,14 @@ public class LMM_EntityMode_Torcher extends LMM_EntityModeBase {
 
 	@Override
 	public void updateAITick(int pMode) {
-		// ƒg[ƒ`‚Ìİ’u
+		// ãƒˆãƒ¼ãƒã®è¨­ç½®
 		if (pMode == mmode_Torcher && owner.getNextEquipItem()) {
 			ItemStack lis = owner.getCurrentEquippedItem();
 			int lic = lis.stackSize;
 			Item lii = lis.getItem();
 			World lworld = owner.worldObj;
 			
-			// üˆÍ‚ğŒŸõ
+			// å‘¨å›²ã‚’æ¤œç´¢
 			int lxx = MathHelper.floor_double(owner.posX);
 			int lyy = MathHelper.floor_double(owner.posY);
 			int lzz = MathHelper.floor_double(owner.posZ);

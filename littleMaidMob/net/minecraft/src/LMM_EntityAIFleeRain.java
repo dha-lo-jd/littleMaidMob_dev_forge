@@ -2,15 +2,21 @@ package net.minecraft.src;
 
 import java.util.Random;
 
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+
 public class LMM_EntityAIFleeRain extends EntityAIBase implements LMM_IEntityAI {
 
-	protected EntityCreature theCreature;
-	protected double shelterX;
-	protected double shelterY;
-	protected double shelterZ;
-	protected float movespeed;
-	protected World theWorld;
-	protected boolean isEnable;
+	public EntityCreature theCreature;
+	public double shelterX;
+	public double shelterY;
+	public double shelterZ;
+	public float movespeed;
+	public World theWorld;
+	public boolean isEnable;
 
 	public LMM_EntityAIFleeRain(EntityCreature par1EntityCreature, float pMoveSpeed) {
 		theCreature = par1EntityCreature;
@@ -79,7 +85,7 @@ public class LMM_EntityAIFleeRain extends EntityAIBase implements LMM_IEntityAI 
 		return null;
 	}
 
-	// 実行可能フラグ
+	// 螳溯｡悟庄閭ｽ繝輔Λ繧ｰ
 	@Override
 	public void setEnable(boolean pFlag) {
 		isEnable = pFlag;

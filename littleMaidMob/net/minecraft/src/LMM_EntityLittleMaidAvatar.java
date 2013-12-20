@@ -2,15 +2,31 @@ package net.minecraft.src;
 
 import java.util.Collection;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.BaseAttributeMap;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet18Animation;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.stats.StatBase;
+import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+
 
 public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 
 	public LMM_EntityLittleMaid avatar;
-	/** ‚¢‚ç‚ñH **/
+	/** ã„ã‚‰ã‚“ï¼Ÿ **/
 	public boolean isItemTrigger;
-	/** ‚¢‚ç‚ñH **/
+	/** ã„ã‚‰ã‚“ï¼Ÿ **/
 	public boolean isItemReload;
-	/** ‚¢‚ç‚ñH **/
+	/** ã„ã‚‰ã‚“ï¼Ÿ **/
 	private boolean isItemPreReload;
 	private double appendX;
 	private double appendY;
@@ -20,7 +36,7 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	public LMM_EntityLittleMaidAvatar(World par1World, LMM_EntityLittleMaid par2EntityLittleMaid) {
 		super(par1World, "");
 		
-		// ‰Šúİ’è
+		// åˆæœŸè¨­å®š
 		avatar = par2EntityLittleMaid;
 		dataWatcher = avatar.dataWatcher;
 		
@@ -29,9 +45,9 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	}
 
 	@Override
-	protected void func_110147_ax() {
-		// ‰Šúİ’èE‚µ
-		// ‰Šúİ’è’l‚Íƒ_ƒ~[‚Éİ’è‚³‚ê‚éB
+	public void func_110147_ax() {
+		// åˆæœŸè¨­å®šæ®ºã—
+		// åˆæœŸè¨­å®šå€¤ã¯ãƒ€ãƒŸãƒ¼ã«è¨­å®šã•ã‚Œã‚‹ã€‚
 		super.func_110147_ax();
 //		this.func_110148_a(SharedMonsterAttributes.field_111263_d).func_111128_a(0.13000000417232513D);
 
@@ -43,12 +59,12 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	}
 
 	@Override
-	protected String getHurtSound() {
+	public String getHurtSound() {
 		return null;
 	}
 
 	@Override
-	protected String getDeathSound() {
+	public String getDeathSound() {
 		return null;
 	}
 
@@ -83,7 +99,7 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 
 	@Override
 	public void onItemPickup(Entity entity, int i) {
-		// ƒAƒCƒeƒ€‰ñû‚ÌƒGƒtƒFƒNƒg
+		// ã‚¢ã‚¤ãƒ†ãƒ å›åã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 		if (worldObj.isRemote) {
 			// Client
 			LMM_Client.onItemPickup(this, entity, i);
@@ -151,14 +167,14 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	}
 /*
 	@Override
-	protected void alertWolves(EntityLivingBase par1EntityLiving, boolean par2) {
-		// ‚±‚±‚ğİ’è‚µ‚¿‚á‚¤‚Æ’Êí‚Å‚Í‚Ê‚é‚Û—‚¿‚·‚é
+	public void alertWolves(EntityLivingBase par1EntityLiving, boolean par2) {
+		// ã“ã“ã‚’è¨­å®šã—ã¡ã‚ƒã†ã¨é€šå¸¸ã§ã¯ã¬ã‚‹ã½è½ã¡ã™ã‚‹
 	}
 */
 	@Override
 	public void destroyCurrentEquippedItem() {
-		// ƒAƒCƒeƒ€‚ª‰ó‚ê‚½‚Ì‚ÅŸ‚Ì‘•”õ‚ğ‘I‘ğ
-		// TODO:’A‚µAForge“™‚ÅƒvƒŒ[ƒ„[ƒCƒxƒ“ƒg‚ğİ’è‚µ‚Ä‚¢‚é‚à‚Ì‚¾‚Æ‚Ê‚é‚Û—‚¿‚·‚é‚Ì‚ÅA‰½‚ç‚©‚Ì‘Îô‚ª•K—vB
+		// ã‚¢ã‚¤ãƒ†ãƒ ãŒå£Šã‚ŒãŸã®ã§æ¬¡ã®è£…å‚™ã‚’é¸æŠ
+		// TODO:ä½†ã—ã€Forgeç­‰ã§ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã‚¤ãƒ™ãƒ³ãƒˆã‚’è¨­å®šã—ã¦ã„ã‚‹ã‚‚ã®ã ã¨ã¬ã‚‹ã½è½ã¡ã™ã‚‹ã®ã§ã€ä½•ã‚‰ã‹ã®å¯¾ç­–ãŒå¿…è¦ã€‚
 //		super.destroyCurrentEquippedItem();
 		inventory.setInventorySlotContents(inventory.currentItem, (ItemStack)null);
 		avatar.getNextEquipItem();
@@ -169,11 +185,11 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 		avatar.onKillEntity(entityliving);
 	}
 
-	protected Entity getEntityServer() {
+	public Entity getEntityServer() {
 		return worldObj.isRemote ? null : this;
 	}
 
-	// Itemg—pŠÖ˜A
+	// Itemä½¿ç”¨é–¢é€£
 
 	public int getItemInUseDuration(int pIndex) {
 		return avatar.getSwingStatus(pIndex).getItemInUseDuration();
@@ -287,7 +303,7 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	}
 
 	@Override
-	protected void setFlag(int par1, boolean par2) {
+	public void setFlag(int par1, boolean par2) {
 		avatar.setFlag(par1, par2);
 	}
 
@@ -308,16 +324,16 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 
 	@Override
 	public void sendChatToPlayer(ChatMessageComponent var1) {
-		// ƒ`ƒƒƒbƒgƒƒbƒZ[ƒW‚Íg‚í‚È‚¢B
+		// ãƒãƒ£ãƒƒãƒˆãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã¯ä½¿ã‚ãªã„ã€‚
 	}
 
-	// •s—vH
+	// ä¸è¦ï¼Ÿ
 
 	@Override
-	protected void setHideCape(int par1, boolean par2) {}
+	public void setHideCape(int par1, boolean par2) {}
 
 	@Override
-	protected boolean getHideCape(int par1) {
+	public boolean getHideCape(int par1) {
 		return false;
 	}
 
@@ -338,7 +354,7 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	}
 
 	/**
-	 * ‘®«’lƒŠƒXƒg‚ğæ“¾
+	 * å±æ€§å€¤ãƒªã‚¹ãƒˆã‚’å–å¾—
 	 */
 	public BaseAttributeMap func_110140_aT() {
 //		return super.func_110140_aT();
@@ -366,12 +382,12 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	}
 
 	@Override
-	protected void onChangedPotionEffect(PotionEffect par1PotionEffect, boolean par2) {
+	public void onChangedPotionEffect(PotionEffect par1PotionEffect, boolean par2) {
 		avatar.onChangedPotionEffect(par1PotionEffect, par2);
 	}
 
 	public void getValue() {
-		// EntityLittleMaid‚©‚ç’l‚ğƒRƒs[
+		// EntityLittleMaidã‹ã‚‰å€¤ã‚’ã‚³ãƒ”ãƒ¼
 		setPosition(avatar.posX, avatar.posY, avatar.posZ);
 		prevPosX = avatar.prevPosX;
 		prevPosY = avatar.prevPosY;
@@ -388,7 +404,7 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	}
 
 	public void getValueVector(double atx, double aty, double atz, double atl) {
-		// EntityLittleMaid‚©‚ç’l‚ğƒRƒs[
+		// EntityLittleMaidã‹ã‚‰å€¤ã‚’ã‚³ãƒ”ãƒ¼
 		double l = MathHelper.sqrt_double(atl);
 		appendX = atx / l;
 		appendY = aty / l;
@@ -415,10 +431,10 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	}
 
 	/**
-	 * ËŒ‚ŠÇ§—pArotation‚ğ“ª‚É‡‚í‚¹‚é
+	 * å°„æ’ƒç®¡åˆ¶ç”¨ã€rotationã‚’é ­ã«åˆã‚ã›ã‚‹
 	 */
 	public void getValueVectorFire(double atx, double aty, double atz, double atl) {
-		// EntityLittleMaid‚©‚ç’l‚ğƒRƒs[
+		// EntityLittleMaidã‹ã‚‰å€¤ã‚’ã‚³ãƒ”ãƒ¼
 		double l = MathHelper.sqrt_double(atl);
 		appendX = atx / l;
 		appendY = aty / l;
@@ -444,7 +460,7 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 		isSwingInProgress = avatar.getSwinging();
 	}
 
-	protected float updateDirection(float pValue) {
+	public float updateDirection(float pValue) {
 		pValue %= 360F;
 		if (pValue < 0) pValue += 360F;
 		return pValue;
@@ -452,7 +468,7 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 
 
 	public void setValue() {
-		// EntityLittleMiad‚Ö’l‚ğƒRƒs[
+		// EntityLittleMiadã¸å€¤ã‚’ã‚³ãƒ”ãƒ¼
 		avatar.setPosition(posX, posY, posZ);
 		avatar.prevPosX = prevPosX;
 		avatar.prevPosY = prevPosY;
@@ -468,7 +484,7 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	}
 
 	public void setValueRotation() {
-		// EntityLittleMiad‚Ö’l‚ğƒRƒs[
+		// EntityLittleMiadã¸å€¤ã‚’ã‚³ãƒ”ãƒ¼
 		avatar.rotationPitch = rotationPitch;
 		avatar.rotationYaw = rotationYaw;
 		avatar.prevRotationPitch = prevRotationPitch;
@@ -483,7 +499,7 @@ public class LMM_EntityLittleMaidAvatar extends EntityPlayer {
 	}
 
 	public void setValueVector() {
-		// EntityLittleMiad‚Ö’l‚ğƒRƒs[
+		// EntityLittleMiadã¸å€¤ã‚’ã‚³ãƒ”ãƒ¼
 		avatar.posX = posX - appendX;
 		avatar.posY = posY - appendY;
 		avatar.posZ = posZ - appendZ;

@@ -1,15 +1,19 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+
 public class LMM_EntityAIFindBlock extends EntityAIBase implements LMM_IEntityAI {
 
-	protected boolean isEnable;
-	protected LMM_EntityLittleMaid theMaid;
-	protected LMM_EntityModeBase fmodeBase;
-//	protected MovingObjectPosition theBlock;
-//	protected int tileX;
-//	protected int tileY;
-//	protected int tileZ;
-//	protected boolean isFind;
+	public boolean isEnable;
+	public LMM_EntityLittleMaid theMaid;
+	public LMM_EntityModeBase fmodeBase;
+//	public MovingObjectPosition theBlock;
+//	public int tileX;
+//	public int tileY;
+//	public int tileZ;
+//	public boolean isFind;
 	
 	
 	public LMM_EntityAIFindBlock(LMM_EntityLittleMaid pEntityLittleMaid) {
@@ -32,7 +36,7 @@ public class LMM_EntityAIFindBlock extends EntityAIBase implements LMM_IEntityAI
 			return fmodeBase.shouldBlock(theMaid.maidMode);
 		}
 		
-		// ƒ^[ƒQƒbƒg‚ğƒT[ƒ`
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’ã‚µãƒ¼ãƒ
 		int lx = MathHelper.floor_double(theMaid.posX);
 		int ly = MathHelper.floor_double(theMaid.posY);
 		int lz = MathHelper.floor_double(theMaid.posZ);
@@ -45,7 +49,7 @@ public class LMM_EntityAIFindBlock extends EntityAIBase implements LMM_IEntityAI
 		MMM_EntityDummy.clearDummyEntity(theMaid);
 		boolean flagdammy = false;
 		
-		// CW•ûŒü‚ÉŒŸõ—Ìˆæ‚ğL‚°‚é 
+		// CWæ–¹å‘ã«æ¤œç´¢é ˜åŸŸã‚’åºƒã’ã‚‹ 
 		for (int d = 0; d < 4; d++) {
 			for (int a = 0; a < 18; a += 2) {
 				int del = a / 2;
@@ -128,19 +132,19 @@ public class LMM_EntityAIFindBlock extends EntityAIBase implements LMM_IEntityAI
 	@Override
 	public boolean continueExecuting() {
 		fmodeBase.updateBlock();
-		// ˆÚ“®’†‚ÍŒp‘±
+		// ç§»å‹•ä¸­ã¯ç¶™ç¶š
 		if (!theMaid.getNavigator().noPath()) return true;
 		
 		double ld = theMaid.getDistanceTilePos();
 		if (ld > 100.0D) {
-			// õ“G”ÍˆÍŠO
+			// ç´¢æ•µç¯„å›²å¤–
 			theMaid.getActiveModeClass().farrangeBlock();
 			return false;
 		} else if (ld > 5.0D) {
-			// Ë’ö‹——£ŠO
+			// å°„ç¨‹è·é›¢å¤–
 			return theMaid.getActiveModeClass().outrangeBlock(theMaid.maidMode);
 		} else {
-			// Ë’ö‹——£
+			// å°„ç¨‹è·é›¢
 			return theMaid.getActiveModeClass().executeBlock(theMaid.maidMode);
 		}
 	}
@@ -157,7 +161,7 @@ public class LMM_EntityAIFindBlock extends EntityAIBase implements LMM_IEntityAI
 
 	@Override
 	public void updateTask() {
-		// ƒ^[ƒQƒbƒg‚ğŒ©‚Â‚¯‚Ä‚¢‚é
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¦‹ã¤ã‘ã¦ã„ã‚‹
 		theMaid.looksTilePos();
 	}
 
