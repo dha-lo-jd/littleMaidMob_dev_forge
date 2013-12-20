@@ -30,7 +30,7 @@ public class LMM_EntityModeManager extends MMM_ManagerBase {
 	}
 
 	public static void loadEntityMode() {
-		(new LMM_EntityModeManager()).load();
+		(new LMM_EntityModeManager()).load(LMM_EntityModeBase.class);
 	}
 
 	/**
