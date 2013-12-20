@@ -1,40 +1,43 @@
 package net.minecraft.src;
 
-public class LMM_EntityAIRestrictRain extends EntityAIBase implements LMM_IEntityAI {
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.ai.EntityAIBase;
 
-    protected EntityLiving theEntity;
-    protected boolean isEnable;
-    
+public class LMM_EntityAIRestrictRain extends EntityAIBase implements
+		LMM_IEntityAI {
 
-    public LMM_EntityAIRestrictRain(EntityLiving par1EntityLiving) {
-        theEntity = par1EntityLiving;
-        isEnable = false;
-    }
+	public EntityLiving theEntity;
+	public boolean isEnable;
 
-	@Override
-    public boolean shouldExecute() {
-        return isEnable && theEntity.worldObj.isRaining();
-    }
+	public LMM_EntityAIRestrictRain(EntityLiving par1EntityLiving) {
+		theEntity = par1EntityLiving;
+		isEnable = false;
+	}
 
 	@Override
-    public void startExecuting() {
-        theEntity.getNavigator().setAvoidSun(true);
-    }
+	public boolean shouldExecute() {
+		return isEnable && theEntity.worldObj.isRaining();
+	}
 
 	@Override
-    public void resetTask() {
-        theEntity.getNavigator().setAvoidSun(false);
-    }
+	public void startExecuting() {
+		theEntity.getNavigator().setAvoidSun(true);
+	}
 
-	// 実行可能フラグ
+	@Override
+	public void resetTask() {
+		theEntity.getNavigator().setAvoidSun(false);
+	}
+
+	// 螳溯｡悟庄閭ｽ繝輔Λ繧ｰ
 	@Override
 	public void setEnable(boolean pFlag) {
 		isEnable = pFlag;
 	}
-	
+
 	@Override
 	public boolean getEnable() {
 		return isEnable;
 	}
-	
+
 }

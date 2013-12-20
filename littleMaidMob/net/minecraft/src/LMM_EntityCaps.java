@@ -3,10 +3,13 @@ package net.minecraft.src;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemStack;
+
 
 /**
- * Entityのデータ読み取り用のクラス
- * 別にEntityにインターフェース付けてもOK
+ * Entity縺ｮ繝�繝ｼ繧ｿ隱ｭ縺ｿ蜿悶ｊ逕ｨ縺ｮ繧ｯ繝ｩ繧ｹ
+ * 蛻･縺ｫEntity縺ｫ繧､繝ｳ繧ｿ繝ｼ繝輔ぉ繝ｼ繧ｹ莉倥￠縺ｦ繧０K
  */
 public class LMM_EntityCaps extends MMM_EntityCaps {
 

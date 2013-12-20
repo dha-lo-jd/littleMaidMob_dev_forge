@@ -1,22 +1,27 @@
 package net.minecraft.src;
 
-import java.lang.annotation.Target;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.util.MathHelper;
+
 public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackableTarget {
 
-	protected LMM_EntityLittleMaid theMaid;
-	protected Entity targetEntity;
-	protected Class targetClass;
-	protected int targetChance;
-	protected LMM_EntityAINearestAttackableTargetSorter theNearestAttackableTargetSorter;
+	public LMM_EntityLittleMaid theMaid;
+	public Entity targetEntity;
+	public Class targetClass;
+	public int targetChance;
+	public LMM_EntityAINearestAttackableTargetSorter theNearestAttackableTargetSorter;
 
-	private boolean field_75303_a;
-	private int field_75301_b;
-	private int field_75302_c;
-
+	private boolean fretarget;
+	private int fcanAttack;
+	private int fretryCounter;
 
 	public LMM_EntityAINearestAttackableTarget(LMM_EntityLittleMaid par1EntityLiving, Class par2Class, int par4, boolean par5) {
 		this(par1EntityLiving, par2Class, par4, par5, false);
@@ -27,14 +32,13 @@ public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackab
 		targetClass = par2;
 		targetChance = par4;
 		theNearestAttackableTargetSorter = new LMM_EntityAINearestAttackableTargetSorter(par1);
-		field_75301_b = 0;
-		field_75302_c = 0;
-		field_75303_a = par6;
+		fretarget = par6;
 		theMaid = par1;
 		
 		setMutexBits(1);
 	}
 
+	
 	@Override
 	public boolean shouldExecute() {
 		if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0) {
@@ -43,12 +47,12 @@ public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackab
 //			return true;
 		} else {
 			double lfollowRange = this.func_111175_f();
-			List llist = this.taskOwner.worldObj.getEntitiesWithinAABB(targetClass, taskOwner.boundingBox.expand(lfollowRange, 4.0D, lfollowRange));
+			List llist = this.taskOwner.worldObj.getEntitiesWithinAABB(targetClass, taskOwner.boundingBox.expand(lfollowRange, 8.0D, lfollowRange));
 			if (theMaid.mstatMasterEntity != null && !theMaid.isBloodsuck()) {
-				// ƒ\[ƒ^[‚ğå’†S‚Ö
+				// ã‚½ãƒ¼ã‚¿ãƒ¼ã‚’ä¸»ä¸­å¿ƒã¸
 				theNearestAttackableTargetSorter.setEntity(theMaid.mstatMasterEntity);
 			} else {
-				// ©•ª’†S‚Éƒ\[ƒg
+				// è‡ªåˆ†ä¸­å¿ƒã«ã‚½ãƒ¼ãƒˆ
 				theNearestAttackableTargetSorter.setEntity(theMaid);
 			}
 			Collections.sort(llist, theNearestAttackableTargetSorter);
@@ -73,60 +77,62 @@ public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackab
 		} else {
 			theMaid.setTarget(targetEntity);
 		}
+		fcanAttack = 0;
+		fretryCounter = 0;
 	}
 
 //	@Override
-	protected boolean isSuitableTargetLM(Entity par1EntityLiving, boolean par2) {
-		// LMM—p‚ÉƒJƒXƒ^ƒ€
-		// ”ñ¶•¨‚à‘ÎÛ‚Ì‚½‚ß•ÊƒNƒ‰ƒX
-		if (par1EntityLiving == null) {
+	public boolean isSuitableTargetLM(Entity pTarget, boolean par2) {
+		// LMMç”¨ã«ã‚«ã‚¹ã‚¿ãƒ 
+		// éç”Ÿç‰©ã‚‚å¯¾è±¡ã®ãŸã‚åˆ¥ã‚¯ãƒ©ã‚¹
+		if (pTarget == null) {
 			return false;
 		}
 		
-		if (par1EntityLiving == taskOwner) {
+		if (pTarget == taskOwner) {
 			return false;
 		}
-		if (par1EntityLiving == theMaid.mstatMasterEntity) {
+		if (pTarget == theMaid.mstatMasterEntity) {
 			return false;
 		}
 		
-		if (!par1EntityLiving.isEntityAlive()) {
+		if (!pTarget.isEntityAlive()) {
 			return false;
 		}
 		
 		LMM_EntityModeBase lailm = theMaid.getActiveModeClass(); 
 		if (lailm != null && lailm.isSearchEntity()) {
-			if (!lailm.checkEntity(theMaid.getMaidModeInt(), par1EntityLiving)) {
+			if (!lailm.checkEntity(theMaid.getMaidModeInt(), pTarget)) {
 				return false;
 			}
 		} else {
-			if (theMaid.getIFF(par1EntityLiving)) {
+			if (theMaid.getIFF(pTarget)) {
 				return false;
 			}
 		}
-		
-		// Šî“_‚©‚çˆê’è‹——£—£‚ê‚Ä‚¢‚éê‡‚àUŒ‚‚µ‚È‚¢
-		if (!taskOwner.func_110176_b(MathHelper.floor_double(par1EntityLiving.posX), MathHelper.floor_double(par1EntityLiving.posY), MathHelper.floor_double(par1EntityLiving.posZ))) {
+/*		
+		// åŸºç‚¹ã‹ã‚‰ä¸€å®šè·é›¢é›¢ã‚Œã¦ã„ã‚‹å ´åˆã‚‚æ”»æ’ƒã—ãªã„
+		if (!taskOwner.func_110176_b(MathHelper.floor_double(pTarget.posX), MathHelper.floor_double(pTarget.posY), MathHelper.floor_double(pTarget.posZ))) {
 //		if (!taskOwner.isWithinHomeDistance(MathHelper.floor_double(par1EntityLiving.posX), MathHelper.floor_double(par1EntityLiving.posY), MathHelper.floor_double(par1EntityLiving.posZ))) {
 			return false;
 		}
-		
-		// ƒ^[ƒQƒbƒg‚ªŒ©‚¦‚È‚¢
-		if (shouldCheckSight && !taskOwner.getEntitySenses().canSee(par1EntityLiving)) {
+*/		
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒè¦‹ãˆãªã„
+		if (shouldCheckSight && !taskOwner.getEntitySenses().canSee(pTarget)) {
 			return false;
 		}
 		
-		// UŒ‚’†~”»’èH
-		if (this.field_75303_a) {
-			if (--this.field_75302_c <= 0) {
-				this.field_75301_b = 0;
+		// æ”»æ’ƒä¸­æ­¢åˆ¤å®šï¼Ÿ
+		if (this.fretarget) {
+			if (--this.fretryCounter <= 0) {
+				this.fcanAttack = 0;
 			}
 			
-			if (this.field_75301_b == 0) {
-				this.field_75301_b = this.func_75295_a(par1EntityLiving) ? 1 : 2;
+			if (this.fcanAttack == 0) {
+				this.fcanAttack = this.func_75295_a(pTarget) ? 1 : 2;
 			}
 			
-			if (this.field_75301_b == 2) {
+			if (this.fcanAttack == 2) {
 				return false;
 			}
 		}
@@ -134,8 +140,9 @@ public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackab
 		return true;
 	}
 
-	private boolean func_75295_a(Entity par1EntityLiving) {
-		this.field_75302_c = 10 + this.taskOwner.getRNG().nextInt(5);
+	// æœ€çµ‚ä½ç½®ãŒæ”»æ’ƒã®é–“åˆã„ã§ãªã‘ã‚Œã°å¤±æ•—
+	public boolean func_75295_a(Entity par1EntityLiving) {
+		this.fretryCounter = 10 + this.taskOwner.getRNG().nextInt(5);
 		PathEntity var2 = taskOwner.getNavigator().getPathToXYZ(par1EntityLiving.posX, par1EntityLiving.posY, par1EntityLiving.posZ);
 //		PathEntity var2 = this.taskOwner.getNavigator().getPathToEntityLiving(par1EntityLiving);
 		

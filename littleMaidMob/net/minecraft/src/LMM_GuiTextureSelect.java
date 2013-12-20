@@ -1,7 +1,10 @@
 package net.minecraft.src;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+
 /**
- * ‘I‘ğ‚ÉƒT[ƒo[‚Öõ—¿‚Ìg—p‚ğ’Ê’m‚·‚é‚½‚ß‚Ìˆ—B
+ * é¸æŠæ™‚ã«ã‚µãƒ¼ãƒãƒ¼ã¸æŸ“æ–™ã®ä½¿ç”¨ã‚’é€šçŸ¥ã™ã‚‹ãŸã‚ã®å‡¦ç†ã€‚
  */
 public class LMM_GuiTextureSelect extends MMM_GuiTextureSelect {
 
@@ -11,15 +14,15 @@ public class LMM_GuiTextureSelect extends MMM_GuiTextureSelect {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton par1GuiButton) {
+	public void actionPerformed(GuiButton par1GuiButton) {
 		super.actionPerformed(par1GuiButton);
 		switch (par1GuiButton.id) {
 		case 200:
 			if (toServer) {
 				if (selectColor != selectPanel.color) {
-					// Fî•ñ‚Ìİ’è
+					// è‰²æƒ…å ±ã®è¨­å®š
 //					theMaid.maidColor = selectPanel.color | 0x010000 | (selectColor << 8);
-					// ƒT[ƒo[‚Öõ—¿‚Ìg—p‚ğ’Ê’m
+					// ã‚µãƒ¼ãƒãƒ¼ã¸æŸ“æ–™ã®ä½¿ç”¨ã‚’é€šçŸ¥
 					byte ldata[] = new byte[2];
 					ldata[0] = LMM_Statics.LMN_Server_DecDyePowder;
 					ldata[1] = (byte)selectColor;

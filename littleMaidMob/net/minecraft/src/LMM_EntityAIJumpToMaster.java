@@ -1,13 +1,19 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+
 public class LMM_EntityAIJumpToMaster extends EntityAIBase implements LMM_IEntityAI {
 
-	protected LMM_EntityLittleMaid theMaid;
-	protected EntityLivingBase theOwner;
-	protected World theWorld;
-	protected boolean isEnable;
+	public LMM_EntityLittleMaid theMaid;
+	public EntityLivingBase theOwner;
+	public World theWorld;
+	public boolean isEnable;
 	private boolean jumpTarget;
-	protected AxisAlignedBB boundingBox;
+	public AxisAlignedBB boundingBox;
 
 	public LMM_EntityAIJumpToMaster(LMM_EntityLittleMaid pEntityLittleMaid) {
 		super();
@@ -21,12 +27,15 @@ public class LMM_EntityAIJumpToMaster extends EntityAIBase implements LMM_IEntit
 	@Override
 	public boolean shouldExecute() {
 		if (!isEnable || !theMaid.isContractEX() || theMaid.isMaidWaitEx()) {
-			// Œ_–ñŒÂ‘Ì‚Ì‚İ‚ª’µ‚Ô
+			// å¥‘ç´„å€‹ä½“ã®ã¿ãŒè·³ã¶
 			return false;
 		}
-		
+		if (theMaid.func_110167_bD()) {
+			// æ‹¬ã‚‰ã‚Œã¦ã„ã‚‹ãªã‚‰è·³ã°ãªã„
+			return false;
+		}
 		if (theMaid.isFreedom()) {
-			// ©—Rs“®‚Ìq‚ÍŠî“_‚ÖƒWƒƒƒ“ƒv
+			// è‡ªç”±è¡Œå‹•ã®å­ã¯åŸºç‚¹ã¸ã‚¸ãƒ£ãƒ³ãƒ—
 			if (theMaid.homeWorld != theMaid.dimension) {
 				mod_LMM_littleMaidMob.Debug(String.format("ID:%d, %d -> %d, Change HomeWorld. reset HomePosition.",
 						theMaid.entityId,theMaid.homeWorld, theMaid.worldObj.provider.dimensionId));
@@ -57,7 +66,7 @@ public class LMM_EntityAIJumpToMaster extends EntityAIBase implements LMM_IEntit
 					return false;
 				}
 			} else {
-				// ƒ^[ƒQƒeƒBƒ“ƒO’†‚Í‹——£‚ªL‚Ñ‚é
+				// ã‚¿ãƒ¼ã‚²ãƒ†ã‚£ãƒ³ã‚°ä¸­ã¯è·é›¢ãŒä¼¸ã³ã‚‹
 				if (theMaid.mstatMasterDistanceSq < (theMaid.isBloodsuck() ? 1024D : 256D)) {
 					return false;
 				}
@@ -83,7 +92,7 @@ public class LMM_EntityAIJumpToMaster extends EntityAIBase implements LMM_IEntit
 							&& theWorld.isBlockNormalCube(i + l, k - 1, j + i1)
 							&& !theWorld.isBlockNormalCube(i + l, k, j + i1)
 							&& !theWorld.isBlockNormalCube(i + l, k + 1, j + i1)) {
-						// å‚Ì‘O‚É’µ‚Î‚È‚¢
+						// ä¸»ã®å‰ã«è·³ã°ãªã„
 						double dd = theOwner.getDistanceSq(
 								(double) (i + l) + 0.5D + MathHelper.sin(theOwner.rotationYaw * 0.01745329252F) * 2.0D,
 								(double) k,
@@ -102,7 +111,7 @@ public class LMM_EntityAIJumpToMaster extends EntityAIBase implements LMM_IEntit
 				}
 			}
 		} else {
-			// ƒz[ƒ€ƒ|ƒWƒVƒ‡ƒ“ƒGƒŠƒAŠO‚Å“]ˆÚ
+			// ãƒ›ãƒ¼ãƒ ãƒã‚¸ã‚·ãƒ§ãƒ³ã‚¨ãƒªã‚¢å¤–ã§è»¢ç§»
 			int lx = theMaid.func_110172_bL().posX;
 			int ly = theMaid.func_110172_bL().posY;
 			int lz = theMaid.func_110172_bL().posZ;
@@ -110,7 +119,7 @@ public class LMM_EntityAIJumpToMaster extends EntityAIBase implements LMM_IEntit
 //			int ly = theMaid.getHomePosition().posY;
 //			int lz = theMaid.getHomePosition().posZ;
 			if (!(isCanJump(lx, ly, lz))) {
-				// ƒz[ƒ€ƒ|ƒWƒVƒ‡ƒ“Á¸
+				// ãƒ›ãƒ¼ãƒ ãƒã‚¸ã‚·ãƒ§ãƒ³æ¶ˆå¤±
 				mod_LMM_littleMaidMob.Debug(String.format(
 						"ID:%d(%s) home lost.",
 						theMaid.entityId, theMaid.worldObj.isRemote ? "C" : "W"));
@@ -118,7 +127,7 @@ public class LMM_EntityAIJumpToMaster extends EntityAIBase implements LMM_IEntit
 				int b;
 				// int c;
 				boolean f = false;
-				// ‚™À•W‚Å’n–Ê‚ğŒŸo
+				// ï½™åº§æ¨™ã§åœ°é¢ã‚’æ¤œå‡º
 				for (a = 1; a < 6 && !f; a++) {
 					if (isCanJump(lx, ly + a, lz)) {
 						f = true;
@@ -134,7 +143,7 @@ public class LMM_EntityAIJumpToMaster extends EntityAIBase implements LMM_IEntit
 					}
 				}
 
-				// CW•ûŒü‚ÉŒŸõ—Ìˆæ‚ğL‚°‚é
+				// CWæ–¹å‘ã«æ¤œç´¢é ˜åŸŸã‚’åºƒã’ã‚‹
 				loop_search: for (a = 2; a < 18 && !f; a += 2) {
 					lx--;
 					lz--;
@@ -191,9 +200,9 @@ public class LMM_EntityAIJumpToMaster extends EntityAIBase implements LMM_IEntit
 	}
 
 	/**
-	 * “]ˆÚæ‚Ìƒ`ƒFƒbƒN
+	 * è»¢ç§»å…ˆã®ãƒã‚§ãƒƒã‚¯
 	 */
-	protected boolean isCanJump(int px, int py, int pz) {
+	public boolean isCanJump(int px, int py, int pz) {
 		double lw = (double) theMaid.width / 2D;
 		double ly = (double) py - (double) (theMaid.yOffset + theMaid.ySize);
 		boundingBox.setBounds((double) px - lw, ly, (double) pz - lw,

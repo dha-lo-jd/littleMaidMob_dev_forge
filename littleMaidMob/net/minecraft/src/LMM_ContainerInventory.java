@@ -1,15 +1,22 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ContainerPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotArmor;
+import net.minecraft.item.ItemStack;
+
 public class LMM_ContainerInventory extends ContainerPlayer {
 	
-	protected LMM_InventoryLittleMaid littlemaidInventory;
-	protected int numRows;
-	protected LMM_EntityLittleMaid owner;
+	public LMM_InventoryLittleMaid littlemaidInventory;
+	public int numRows;
+	public LMM_EntityLittleMaid owner;
 
 
 	public LMM_ContainerInventory(IInventory iinventory, LMM_EntityLittleMaid pEntity) {
 		// >
-		// Forge‘ÎôAContainerPlayerŒp³‚Å‚È‚¯‚ê‚Î—v‚ç‚È‚¢ASlotArmor—p
+		// Forgeå¯¾ç­–ã€ContainerPlayerç¶™æ‰¿ã§ãªã‘ã‚Œã°è¦ã‚‰ãªã„ã€SlotArmorç”¨
 		super(pEntity.maidInventory, !pEntity.worldObj.isRemote, pEntity.maidAvatar);
 		inventorySlots.clear();
 		inventoryItemStacks.clear();
@@ -46,7 +53,7 @@ public class LMM_ContainerInventory extends ContainerPlayer {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		// ŠJ‚¯‚é‚©‚Ç‚¤‚©‚Ì”»’è
+		// é–‹ã‘ã‚‹ã‹ã©ã†ã‹ã®åˆ¤å®š
 		LMM_EntityLittleMaid entitylittlemaid = littlemaidInventory.entityLittleMaid; 
 		if(entitylittlemaid.isDead) {
 //		if(entitylittlemaid.isDead || entitylittlemaid.isOpenInventory()) {

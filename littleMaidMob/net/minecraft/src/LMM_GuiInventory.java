@@ -1,12 +1,30 @@
 package net.minecraft.src;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.EXTRescaleNormal;
-import org.lwjgl.opengl.GL11;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiButtonNextPage;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeInstance;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+
+import org.lwjgl.opengl.EXTRescaleNormal;
+import org.lwjgl.opengl.GL11;
 
 public class LMM_GuiInventory extends GuiContainer {
 	// Field
@@ -23,7 +41,7 @@ public class LMM_GuiInventory extends GuiContainer {
 	public GuiButton selectbutton;
 	public boolean isChangeTexture;
 	
-	protected static ResourceLocation fguiTex = new ResourceLocation("textures/gui/container/littlemaidinventory.png");
+	public static ResourceLocation fguiTex = new ResourceLocation("textures/gui/container/littlemaidinventory.png");
 
 	// Method
 	public LMM_GuiInventory(EntityPlayer pPlayer, LMM_EntityLittleMaid elmaid) {
@@ -55,22 +73,24 @@ public class LMM_GuiInventory extends GuiContainer {
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
+	public void drawGuiContainerForegroundLayer(int par1, int par2) {
 		String ls;
 		fontRenderer.drawString(StatCollector.translateToLocal(
 				lowerChestInventory.getInvName()), 8, 64, 0x404040);
 		fontRenderer.drawString(StatCollector.translateToLocal(
 				upperChestInventory.getInvName()), 8, 114, 0x404040);
+//		fontRenderer.drawString(StatCollector.translateToLocal(
+//				"littleMaidMob.text.Health"), 86, 8, 0x404040);
+//		fontRenderer.drawString(StatCollector.translateToLocal(
+//				"littleMaidMob.text.AP"), 86, 32, 0x404040);
 		fontRenderer.drawString(StatCollector.translateToLocal(
-				"littleMaidMob.text.Health"), 86, 8, 0x404040);
-		fontRenderer.drawString(StatCollector.translateToLocal(
-				"littleMaidMob.text.AP"), 86, 32, 0x404040);
+				"littleMaidMob.text.STATUS"), 86, 8, 0x404040);
 		
 		fontRenderer.drawString(StatCollector.translateToLocal(
-				"littleMaidMob.mode.".concat(entitylittlemaid.getMaidModeString())), 86, 56, 0x404040);
+				"littleMaidMob.mode.".concat(entitylittlemaid.getMaidModeString())), 86, 61, 0x404040);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		// ƒLƒƒƒ‰
+		// ã‚­ãƒ£ãƒ©
 		int lj = 0;
 		int lk = 0;
 		GL11.glEnable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
@@ -110,8 +130,8 @@ public class LMM_GuiInventory extends GuiContainer {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		// ”wŒi
+	public void drawGuiContainerBackgroundLayer(float f, int i, int j) {
+		// èƒŒæ™¯
 		ResourceLocation lrl = ((MMM_TextureBox)entitylittlemaid.textureBox[0]).getTextureName(MMM_TextureManager.tx_gui);
 		if (lrl == null) {
 			lrl = fguiTex;
@@ -135,8 +155,8 @@ public class LMM_GuiInventory extends GuiContainer {
 		if (entitylittlemaid.hurtResistantTime < 10) {
 			flag1 = false;
 		}
-		int i1 = entitylittlemaid.health;
-		int j1 = entitylittlemaid.prevHealth;
+		int i1 = MathHelper.ceiling_float_int(entitylittlemaid.func_110138_aP());
+		int j1 = MathHelper.ceiling_float_int(entitylittlemaid.prevHealth);
 		rand.setSeed(updateCounter * 0x4c627);
 		
 		// AP
@@ -186,121 +206,124 @@ public class LMM_GuiInventory extends GuiContainer {
 */
 	}
 
-	protected void drawHeathArmor(int par1, int par2) {
+	public void drawHeathArmor(int par1, int par2) {
 		boolean var3 = entitylittlemaid.hurtResistantTime / 3 % 2 == 1;
 		
 		if (entitylittlemaid.hurtResistantTime < 10) {
 			var3 = false;
 		}
 		
-		int var4 = MathHelper.ceiling_float_int(entitylittlemaid.func_110143_aJ());
-		int var5 = MathHelper.ceiling_float_int(entitylittlemaid.prevHealth);
+		MMM_Client.setTexture(field_110324_m);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+		int lhealth = MathHelper.ceiling_float_int(entitylittlemaid.func_110143_aJ());
+		int llasthealth = MathHelper.ceiling_float_int(entitylittlemaid.prevHealth);
 		this.rand.setSeed((long) (updateCounter * 312871));
 		boolean var6 = false;
 //		FoodStats var7 = entitylittlemaid.getFoodStats();
 //		int var8 = var7.getFoodLevel();
 //		int var9 = var7.getPrevFoodLevel();
 		AttributeInstance var10 = entitylittlemaid.func_110148_a(SharedMonsterAttributes.field_111267_a);
-		int var11 = par1 / 2 - 91;
-		int var12 = par1 / 2 + 91;
 		int var13 = par2 - 39;
 		float var14 = (float) var10.func_111126_e();
 		float var15 = entitylittlemaid.func_110139_bj();
 		int var16 = MathHelper.ceiling_float_int((var14 + var15) / 2.0F / 10.0F);
 		int var17 = Math.max(10 - (var16 - 2), 3);
-		int var18 = var13 - (var16 - 1) * var17 - 10;
 		float var19 = var15;
-		int var20 = entitylittlemaid.getTotalArmorValue();
 		int var21 = -1;
 		
 		if (entitylittlemaid.isPotionActive(Potion.regeneration)) {
 			var21 = updateCounter % MathHelper.ceiling_float_int(var14 + 5.0F);
 		}
 		
-		// AP
-		int var23;
-		int var22;
+		int ldrawx;
+		int ldrawy;
 		
-		for (var22 = 0; var22 < 10; ++var22) {
-			if (var20 > 0) {
-				var23 = var11 + var22 * 8;
+		// AP
+		int larmor = entitylittlemaid.getTotalArmorValue();
+		ldrawy = guiTop + 36;
+		for (int li = 0; li < 10; ++li) {
+			if (larmor > 0) {
+				ldrawx = guiLeft + li * 8 + 86;
 				
-				if (var22 * 2 + 1 < var20) {
-					this.drawTexturedModalRect(var23, var18, 34, 9, 9, 9);
+				if (li * 2 + 1 < larmor) {
+					this.drawTexturedModalRect(ldrawx, ldrawy, 34, 9, 9, 9);
 				}
-				
-				if (var22 * 2 + 1 == var20) {
-					this.drawTexturedModalRect(var23, var18, 25, 9, 9, 9);
+				if (li * 2 + 1 == larmor) {
+					this.drawTexturedModalRect(ldrawx, ldrawy, 25, 9, 9, 9);
 				}
-				
-				if (var22 * 2 + 1 > var20) {
-					this.drawTexturedModalRect(var23, var18, 16, 9, 9, 9);
+				if (li * 2 + 1 > larmor) {
+					this.drawTexturedModalRect(ldrawx, ldrawy, 16, 9, 9, 9);
 				}
 			}
 		}
 		
 		// LP
-		int var25;
-		int var27;
-		int var26;
-		
-		for (var22 = MathHelper.ceiling_float_int((var14 + var15) / 2.0F) - 1; var22 >= 0; --var22) {
-			var23 = 16;
-			
+		for (int li = MathHelper.ceiling_float_int((var14 + var15) / 2.0F) - 1; li >= 0; --li) {
+			int var23 = 16;
 			if (entitylittlemaid.isPotionActive(Potion.poison)) {
 				var23 += 36;
 			} else if (entitylittlemaid.isPotionActive(Potion.wither)) {
 				var23 += 72;
 			}
 			
-			byte var24 = 0;
+			int var25 = MathHelper.ceiling_float_int((float) (li + 1) / 10.0F);
+			ldrawx = guiLeft + li % 10 * 8 + 86;
+			ldrawy = guiTop + 7 + var25 * var17;
+			
+			if (lhealth <= 4) {
+				ldrawy += this.rand.nextInt(2);
+			}
+			if (li == var21) {
+				ldrawy -= 2;
+			}
+			
+			this.drawTexturedModalRect(ldrawx, ldrawy, var3 ? 25 : 16, 0, 9, 9);
 			
 			if (var3) {
-				var24 = 1;
-			}
-			
-			var25 = MathHelper.ceiling_float_int((float) (var22 + 1) / 10.0F) - 1;
-			var26 = var11 + var22 % 10 * 8;
-			var27 = var13 - var25 * var17;
-			
-			if (var4 <= 4) {
-				var27 += this.rand.nextInt(2);
-			}
-			
-			if (var22 == var21) {
-				var27 -= 2;
-			}
-			
-			this.drawTexturedModalRect(var26, var27, 16 + var24 * 9, 9, 9, 9);
-			
-			if (var3) {
-				if (var22 * 2 + 1 < var5) {
-					this.drawTexturedModalRect(var26, var27, var23 + 54, 9, 9, 9);
+				if (li * 2 + 1 < llasthealth) {
+					this.drawTexturedModalRect(ldrawx, ldrawy, var23 + 54, 0, 9, 9);
 				}
-				
-				if (var22 * 2 + 1 == var5) {
-					this.drawTexturedModalRect(var26, var27, var23 + 63, 9, 9, 9);
+				if (li * 2 + 1 == llasthealth) {
+					this.drawTexturedModalRect(ldrawx, ldrawy, var23 + 63, 0, 9, 9);
 				}
 			}
 			
 			if (var19 > 0.0F) {
 				if (var19 == var15 && var15 % 2.0F == 1.0F) {
-					this.drawTexturedModalRect(var26, var27, var23 + 153, 9, 9, 9);
+					this.drawTexturedModalRect(ldrawx, ldrawy, var23 + 153, 0, 9, 9);
 				} else {
-					this.drawTexturedModalRect(var26, var27, var23 + 144, 9, 9, 9);
+					this.drawTexturedModalRect(ldrawx, ldrawy, var23 + 144, 0, 9, 9);
 				}
 				
 				var19 -= 2.0F;
 			} else {
-				if (var22 * 2 + 1 < var4) {
-					this.drawTexturedModalRect(var26, var27, var23 + 36, 9, 9, 9);
+				if (li * 2 + 1 < lhealth) {
+					this.drawTexturedModalRect(ldrawx, ldrawy, var23 + 36, 0, 9, 9);
 				}
-				
-				if (var22 * 2 + 1 == var4) {
-					this.drawTexturedModalRect(var26, var27, var23 + 45, 9, 9, 9);
+				if (li * 2 + 1 == lhealth) {
+					this.drawTexturedModalRect(ldrawx, ldrawy, var23 + 45, 0, 9, 9);
 				}
 			}
 		}
+		
+		// Air
+		ldrawy = guiTop + 46;
+		if (entitylittlemaid.isInsideOfMaterial(Material.water)) {
+			int var23 = entitylittlemaid.getAir();
+			int var35 = MathHelper.ceiling_double_int((double) (var23 - 2) * 10.0D / 300.0D);
+			int var25 = MathHelper.ceiling_double_int((double) var23 * 10.0D / 300.0D) - var35;
+			
+			for (int var26 = 0; var26 < var35 + var25; ++var26) {
+				ldrawx = guiLeft + var26 * 8 + 86;
+				if (var26 < var35) {
+					this.drawTexturedModalRect(ldrawx, ldrawy, 16, 18, 9, 9);
+				} else {
+					this.drawTexturedModalRect(ldrawx, ldrawy, 25, 18, 9, 9);
+				}
+			}
+		}
+		
 	}
 
 	@Override
@@ -312,14 +335,14 @@ public class LMM_GuiInventory extends GuiContainer {
 		int ii = i - guiLeft;
 		int jj = j - guiTop;
 		if (ii > 25 && ii < 78 && jj > 7 && jj < 60) {
-			// ƒ{ƒ^ƒ“‚Ì•\Ž¦
+			// ãƒœã‚¿ãƒ³ã®è¡¨ç¤º
 			txbutton[0].drawButton = true;
 			txbutton[1].drawButton = true;
 			txbutton[2].drawButton = true;
 			txbutton[3].drawButton = true;
 			selectbutton.drawButton = true;
 			
-			// ƒeƒNƒXƒ`ƒƒ–¼Ì‚Ì•\Ž¦
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£åç§°ã®è¡¨ç¤º
 			GL11.glPushMatrix();
 			GL11.glTranslatef(i - ii, j - jj, 0.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -364,18 +387,18 @@ public class LMM_GuiInventory extends GuiContainer {
 	}
 
 	@Override
-	protected void mouseClicked(int i, int j, int k) {
+	public void mouseClicked(int i, int j, int k) {
 		super.mouseClicked(i, j, k);
 /*
 		// 26,8-77,59
 		int ii = i - guiLeft;
 		int jj = j - guiTop;
 		
-		// TODO:ƒƒCƒhƒAƒZƒ“ƒuƒ‹‰æ–Ê‚ðì‚é
+		// TODO:ãƒ¡ã‚¤ãƒ‰ã‚¢ã‚»ãƒ³ãƒ–ãƒ«ç”»é¢ã‚’ä½œã‚‹
 		if (ii > 25 && ii < 78 && jj > 7 && jj < 60) {
-			// ‰¾—…•\Ž¦—Ìˆæ
+			// ä¼½ç¾…è¡¨ç¤ºé ˜åŸŸ
 			if (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54)) {
-				// Shift+‚Å‹tŽü‚è
+				// Shift+ã§é€†å‘¨ã‚Š
 				LMM_Client.setPrevTexturePackege(entitylittlemaid, k);
 			} else {
 				LMM_Client.setNextTexturePackege(entitylittlemaid, k);
@@ -386,7 +409,7 @@ public class LMM_GuiInventory extends GuiContainer {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton par1GuiButton) {
+	public void actionPerformed(GuiButton par1GuiButton) {
 		switch (par1GuiButton.id) {
 		case 100:
 			entitylittlemaid.setNextTexturePackege(0);
@@ -430,7 +453,7 @@ public class LMM_GuiInventory extends GuiContainer {
 	}
 
 	private void displayDebuffEffects() {
-		// ƒ|[ƒVƒ‡ƒ“ƒGƒtƒFƒNƒg‚Ì•\Ž¦
+		// ãƒãƒ¼ã‚·ãƒ§ãƒ³ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®è¡¨ç¤º
 		int lx = guiLeft - 124;
 		int ly = guiTop;
 		Collection collection = entitylittlemaid.getActivePotionEffects();

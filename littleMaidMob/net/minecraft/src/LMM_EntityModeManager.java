@@ -6,36 +6,57 @@ import java.util.List;
 public class LMM_EntityModeManager extends MMM_ManagerBase {
 
 	public static final String prefix = "EntityMode";
-    public static List<LMM_EntityModeBase> maidModeList = new ArrayList<LMM_EntityModeBase>();
+	public static List<LMM_EntityModeBase> maidModeList = new ArrayList<LMM_EntityModeBase>();
 
-    
+	/**
+	 * AIè¿½åŠ ç”¨ã®ãƒªã‚¹ãƒˆã‚’ç²å¾—ã€‚
+	 */
+	public static List<LMM_EntityModeBase> getModeList(LMM_EntityLittleMaid pentity) {
+		List<LMM_EntityModeBase> llist = new ArrayList<LMM_EntityModeBase>();
+		for (LMM_EntityModeBase lmode : maidModeList) {
+			try {
+				llist.add(lmode.getClass().getConstructor(LMM_EntityLittleMaid.class).newInstance(pentity));
+			} catch (Exception e) {
+			} catch (Error e) {
+			}
+		}
+
+		return llist;
+	}
+
 	public static void init() {
-		// “Á’è–¼Ì‚ğƒvƒŠƒtƒBƒbƒNƒX‚É‚Âmodƒtƒ@ƒC‚ğ‚ğŠl“¾
+		// ç‰¹å®šåç§°ã‚’ãƒ—ãƒªãƒ•ã‚£ãƒƒã‚¯ã‚¹ã«æŒã¤modãƒ•ã‚¡ã‚¤ã‚’ã‚’ç²å¾—
 		MMM_FileManager.getModFile("EntityMode", prefix);
 	}
-	
+
 	public static void loadEntityMode() {
-		(new LMM_EntityModeManager()).load();
+		(new LMM_EntityModeManager()).load(LMM_EntityModeBase.class);
+	}
+
+	/**
+	 * ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã¦ã„ã‚‹ãƒ¢ãƒ¼ãƒ‰ãƒªã‚¹ãƒˆã‚’è¡¨ç¤ºã™ã‚‹ã€‚
+	 */
+	public static void showLoadedModes() {
+		mod_LMM_littleMaidMob.Debug("Loaded Mode lists(%d)", maidModeList.size());
+		for (LMM_EntityModeBase lem : maidModeList) {
+			mod_LMM_littleMaidMob.Debug("%04d : %s", lem.priority(), lem.getClass().getSimpleName());
+		}
 	}
 
 	@Override
-	protected String getPreFix() {
-		return prefix;
-	}
-
-	@Override
-	protected boolean append(Class pclass) {
-		// ƒvƒ‰ƒCƒIƒŠƒeƒB[‡‚É’Ç‰Á
-		// ƒ\[ƒ^[g‚¤H
+	public boolean append(Class pclass) {
+		// ãƒ—ãƒ©ã‚¤ã‚ªãƒªãƒ†ã‚£ãƒ¼é †ã«è¿½åŠ 
+		// ã‚½ãƒ¼ã‚¿ãƒ¼ä½¿ã†ï¼Ÿ
 		if (!LMM_EntityModeBase.class.isAssignableFrom(pclass)) {
 			return false;
 		}
-		
+
 		try {
 			LMM_EntityModeBase lemb = null;
-			lemb = (LMM_EntityModeBase)pclass.getConstructor(LMM_EntityLittleMaid.class).newInstance((LMM_EntityLittleMaid)null);
+			lemb = (LMM_EntityModeBase) pclass.getConstructor(LMM_EntityLittleMaid.class).newInstance(
+					(LMM_EntityLittleMaid) null);
 			lemb.init();
-			
+
 			if (maidModeList.isEmpty() || lemb.priority() >= maidModeList.get(maidModeList.size() - 1).priority()) {
 				maidModeList.add(lemb);
 			} else {
@@ -54,21 +75,10 @@ public class LMM_EntityModeManager extends MMM_ManagerBase {
 
 		return false;
 	}
-	
-	/**
-	 * AI’Ç‰Á—p‚ÌƒŠƒXƒg‚ğŠl“¾B 
-	 */
-	public static List<LMM_EntityModeBase> getModeList(LMM_EntityLittleMaid pentity) {
-		List<LMM_EntityModeBase> llist = new ArrayList<LMM_EntityModeBase>();
-		for (LMM_EntityModeBase lmode : maidModeList) {
-			try {
-				llist.add(lmode.getClass().getConstructor(LMM_EntityLittleMaid.class).newInstance(pentity));
-			} catch (Exception e) {
-			} catch (Error e) {
-			}
-		}
-		
-		return llist;
+
+	@Override
+	public String getPreFix() {
+		return prefix;
 	}
 
 }

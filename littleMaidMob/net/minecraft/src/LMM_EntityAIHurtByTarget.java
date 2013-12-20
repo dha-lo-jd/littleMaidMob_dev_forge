@@ -1,8 +1,15 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.util.MathHelper;
+
 public class LMM_EntityAIHurtByTarget extends EntityAIHurtByTarget {
 
-	protected LMM_EntityLittleMaid theMaid;
+	public LMM_EntityLittleMaid theMaid;
 	private boolean field_75303_a;
 	private int field_75301_b;
 	private int field_75302_c;
@@ -20,7 +27,7 @@ public class LMM_EntityAIHurtByTarget extends EntityAIHurtByTarget {
 	@Override
 	public boolean shouldExecute() {
 		if (theMaid.isContract() && !theMaid.isBlocking() && theMaid.mstatMasterEntity != null) {
-			// ƒtƒFƒ“ƒT[Œn‚Íå‚É‘Î‚·‚éUŒ‚‚É”½‰
+			// ãƒ•ã‚§ãƒ³ã‚µãƒ¼ç³»ã¯ä¸»ã«å¯¾ã™ã‚‹æ”»æ’ƒã«åå¿œ
 			EntityLivingBase lentity = theMaid.mstatMasterEntity.getAITarget();
 			if (isSuitableTarget(lentity, false)) {
 				theMaid.setRevengeTarget(lentity);
@@ -42,7 +49,7 @@ public class LMM_EntityAIHurtByTarget extends EntityAIHurtByTarget {
 		String s2 = taskOwner.getAttackTarget() == null ? "Null" : taskOwner.getAttackTarget().getClass().toString();
 //		System.out.println(String.format("ID:%d, target:%s, attack:%s", taskOwner.entityId, s1, s2));
 		
-		// ‰£‚ç‚ê‚½d•Ô‚µ
+		// æ®´ã‚‰ã‚ŒãŸä»•è¿”ã—
 		EntityLivingBase leliving = taskOwner.getAITarget();
 		if (leliving != null && leliving != taskOwner.getAttackTarget()) {
 			taskOwner.setAttackTarget(null);
@@ -52,8 +59,8 @@ public class LMM_EntityAIHurtByTarget extends EntityAIHurtByTarget {
 	}
 	
 	@Override
-	protected boolean isSuitableTarget(EntityLivingBase par1EntityLiving, boolean par2) {
-		// LMM—p‚ÉƒJƒXƒ^ƒ€
+	public boolean isSuitableTarget(EntityLivingBase par1EntityLiving, boolean par2) {
+		// LMMç”¨ã«ã‚«ã‚¹ã‚¿ãƒ 
 		if (par1EntityLiving == null) {
 			return false;
 		}
@@ -78,18 +85,18 @@ public class LMM_EntityAIHurtByTarget extends EntityAIHurtByTarget {
 			}
 		}
 		
-		// Šî“_‚©‚çˆê’è‹——£—£‚ê‚Ä‚¢‚éê‡‚àUŒ‚‚µ‚È‚¢
+		// åŸºç‚¹ã‹ã‚‰ä¸€å®šè·é›¢é›¢ã‚Œã¦ã„ã‚‹å ´åˆã‚‚æ”»æ’ƒã—ãªã„
 		if (!taskOwner.func_110176_b(MathHelper.floor_double(par1EntityLiving.posX), MathHelper.floor_double(par1EntityLiving.posY), MathHelper.floor_double(par1EntityLiving.posZ))) {
 //		if (!taskOwner.isWithinHomeDistance(MathHelper.floor_double(par1EntityLiving.posX), MathHelper.floor_double(par1EntityLiving.posY), MathHelper.floor_double(par1EntityLiving.posZ))) {
 			return false;
 		}
 		
-		// ƒ^[ƒQƒbƒg‚ªŒ©‚¦‚È‚¢
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒè¦‹ãˆãªã„
 		if (shouldCheckSight && !taskOwner.getEntitySenses().canSee(par1EntityLiving)) {
 			return false;
 		}
 		
-		// UŒ‚’†~”»’èH
+		// æ”»æ’ƒä¸­æ­¢åˆ¤å®šï¼Ÿ
 		if (this.field_75303_a) {
 			if (--this.field_75302_c <= 0) {
 				this.field_75301_b = 0;
@@ -107,7 +114,7 @@ public class LMM_EntityAIHurtByTarget extends EntityAIHurtByTarget {
 		return true;
 	}
 
-	private boolean func_75295_a(Entity par1EntityLiving) {
+	public boolean func_75295_a(Entity par1EntityLiving) {
 		this.field_75302_c = 10 + this.taskOwner.getRNG().nextInt(5);
 		PathEntity var2 = taskOwner.getNavigator().getPathToXYZ(par1EntityLiving.posX, par1EntityLiving.posY, par1EntityLiving.posZ);
 //		PathEntity var2 = this.taskOwner.getNavigator().getPathToEntityLiving(par1EntityLiving);

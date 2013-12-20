@@ -1,9 +1,11 @@
 package net.minecraft.src;
 
+import net.minecraft.tileentity.TileEntity;
+
 public abstract class LMM_EntityModeBlockBase extends LMM_EntityModeBase {
 
-//	protected TileEntity fTile;
-	protected double fDistance;
+//	public TileEntity fTile;
+	public double fDistance;
 
 
 	public LMM_EntityModeBlockBase(LMM_EntityLittleMaid pEntity) {
@@ -12,12 +14,12 @@ public abstract class LMM_EntityModeBlockBase extends LMM_EntityModeBase {
 
 	@Override
 	public void updateBlock() {
-		// Šî€‚Æ‚È‚éTile‚ğƒZƒbƒg
+		// åŸºæº–ã¨ãªã‚‹Tileã‚’ã‚»ãƒƒãƒˆ
 		owner.setTilePos(0);
 	}
 
 	/**
-	 * ‚·‚Å‚Ég—p’†‚ÌTile‚ª‚ ‚éê‡‚ÍshouldBlock‚Ö”ò‚Ô‚æ‚¤‚É‚·‚éB
+	 * ã™ã§ã«ä½¿ç”¨ä¸­ã®TileãŒã‚ã‚‹å ´åˆã¯shouldBlockã¸é£›ã¶ã‚ˆã†ã«ã™ã‚‹ã€‚
 	 */
 	@Override
 	public boolean isSearchBlock() {
@@ -46,17 +48,17 @@ public abstract class LMM_EntityModeBlockBase extends LMM_EntityModeBase {
 
 
 	/**
-	 * ‘¼‚ÌƒƒCƒh‚ªg—p‚µ‚Ä‚¢‚é‚©‚ğƒ`ƒFƒbƒNB
+	 * ä»–ã®ãƒ¡ã‚¤ãƒ‰ãŒä½¿ç”¨ã—ã¦ã„ã‚‹ã‹ã‚’ãƒã‚§ãƒƒã‚¯ã€‚
 	 * @return
 	 */
-	protected boolean checkWorldMaid(TileEntity pTile) {
-		// ¢ŠE‚ÌƒƒCƒh‚©‚ç
+	public boolean checkWorldMaid(TileEntity pTile) {
+		// ä¸–ç•Œã®ãƒ¡ã‚¤ãƒ‰ã‹ã‚‰
 		for (Object lo : owner.worldObj.loadedEntityList) {
 			if (lo == owner) continue;
 			if (lo instanceof LMM_EntityLittleMaid) {
 				LMM_EntityLittleMaid lem = (LMM_EntityLittleMaid)lo;
 				if (lem.isUsingTile(pTile)) {
-					// ’N‚©‚ªg—p’†
+					// èª°ã‹ãŒä½¿ç”¨ä¸­
 					return true;
 				}
 			}

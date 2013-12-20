@@ -1,7 +1,13 @@
 package net.minecraft.src;
 
 import static net.minecraft.src.LMM_Statics.*;
-import java.util.Map.Entry;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.NetServerHandler;
+import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class LMM_Net {
 	
@@ -12,7 +18,7 @@ public class LMM_Net {
 	
 	
 	/**
-	 * “n‚³‚ê‚½ƒf[ƒ^‚Ìæ“ª‚É©•ª‚ÌEntityID‚ğ•t—^‚µ‚Ä‘S‚Ä‚ÌƒNƒ‰ƒCƒAƒ“ƒg‚Ö‘—M
+	 * æ¸¡ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã®å…ˆé ­ã«è‡ªåˆ†ã®EntityIDã‚’ä»˜ä¸ã—ã¦å…¨ã¦ã®ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¸é€ä¿¡
 	 */
 	public static void sendToAllEClient(LMM_EntityLittleMaid pEntity, byte[] pData) {
 		MMM_Helper.setInt(pData, 1, pEntity.entityId);
@@ -20,7 +26,7 @@ public class LMM_Net {
 	}
 
 	/**
-	 * “n‚³‚ê‚½ƒf[ƒ^‚Ìæ“ª‚É©•ª‚ÌEntityID‚ğ•t—^‚µ‚Ä“Á’è‚Ì‚ÌƒNƒ‰ƒCƒAƒ“ƒg‚Ö‘—M
+	 * æ¸¡ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã®å…ˆé ­ã«è‡ªåˆ†ã®EntityIDã‚’ä»˜ä¸ã—ã¦ç‰¹å®šã®ã®ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¸é€ä¿¡
 	 */
 	public static void sendToEClient(NetServerHandler pHandler, LMM_EntityLittleMaid pEntity, byte[] pData) {
 		MMM_Helper.setInt(pData, 1, pEntity.entityId);
@@ -32,7 +38,7 @@ public class LMM_Net {
 	}
 
 	/**
-	 * “n‚³‚ê‚½ƒf[ƒ^‚Ìæ“ª‚ÉEntityID‚ğ•t—^‚µ‚ÄƒT[ƒo[‚Ö‘—MB
+	 * æ¸¡ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã®å…ˆé ­ã«EntityIDã‚’ä»˜ä¸ã—ã¦ã‚µãƒ¼ãƒãƒ¼ã¸é€ä¿¡ã€‚
 	 * 0:Mode, 1-4:EntityID, 5-:Data
 	 */
 	public static void sendToEServer(LMM_EntityLittleMaid pEntity, byte[] pData) {
@@ -47,14 +53,14 @@ public class LMM_Net {
 	}
 
 	/**
-	 * ƒT[ƒo[‚ÖIFF‚ÌƒZ[ƒu‚ğƒŠƒNƒGƒXƒg
+	 * ã‚µãƒ¼ãƒãƒ¼ã¸IFFã®ã‚»ãƒ¼ãƒ–ã‚’ãƒªã‚¯ã‚¨ã‚¹ãƒˆ
 	 */
 	public static void saveIFF() {
 		sendToServer(new byte[] {LMN_Server_SaveIFF});
 	}
 
 	/**
-	 * littleMaid‚ÌEntity‚ğ•Ô‚·B
+	 * littleMaidã®Entityã‚’è¿”ã™ã€‚
 	 */
 	public static LMM_EntityLittleMaid getLittleMaid(byte[] pData, int pIndex, World pWorld) {
 		Entity lentity = MMM_Helper.getEntity(pData, pIndex, pWorld);
@@ -65,10 +71,10 @@ public class LMM_Net {
 		}
 	}
 
-	// óMƒpƒPƒbƒg‚Ìˆ—
+	// å—ä¿¡ãƒ‘ã‚±ãƒƒãƒˆã®å‡¦ç†
 	
 	public static void serverCustomPayload(NetServerHandler pNetHandler, Packet250CustomPayload pPayload) {
-		// ƒT[ƒo‘¤‚Ì“®ì
+		// ã‚µãƒ¼ãƒå´ã®å‹•ä½œ
 		byte lmode = pPayload.data[0];
 		int leid = 0;
 		LMM_EntityLittleMaid lemaid = null;
@@ -85,8 +91,8 @@ public class LMM_Net {
 		
 		switch (lmode) {
 		case LMN_Server_UpdateSlots : 
-			// ‰‰ñXV‚Æ‚©
-			// ƒCƒ“ƒxƒ“ƒgƒŠ‚ÌXV
+			// åˆå›æ›´æ–°ã¨ã‹
+			// ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªã®æ›´æ–°
 			lemaid.maidInventory.clearChanged();
 			for (LMM_SwingStatus lswing : lemaid.mstatSwingStatus) {
 				lswing.lastIndex = -1;
@@ -94,8 +100,8 @@ public class LMM_Net {
 			break;
 			
 		case LMN_Server_DecDyePowder:
-			// ƒJƒ‰[”Ô†‚ğƒNƒ‰ƒCƒAƒ“ƒg‚©‚çó‚¯æ‚é
-			// ƒCƒ“ƒxƒ“ƒgƒŠ‚©‚çõ—¿‚ğŒ¸‚ç‚·B
+			// ã‚«ãƒ©ãƒ¼ç•ªå·ã‚’ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‹ã‚‰å—ã‘å–ã‚‹
+			// ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªã‹ã‚‰æŸ“æ–™ã‚’æ¸›ã‚‰ã™ã€‚
 			int lcolor2 = pPayload.data[1];
 			if (!pNetHandler.playerEntity.capabilities.isCreativeMode) {
 				for (int li = 0; li < pNetHandler.playerEntity.inventory.mainInventory.length; li++) {
@@ -110,7 +116,7 @@ public class LMM_Net {
 			break;
 			
 		case LMN_Server_SetIFFValue:
-			// IFF‚Ìİ’è’l‚ğóM
+			// IFFã®è¨­å®šå€¤ã‚’å—ä¿¡
 			lval = pPayload.data[1];
 			lindex = MMM_Helper.getInt(pPayload.data, 2);
 			lname = MMM_Helper.getStr(pPayload.data, 6);
@@ -127,7 +133,7 @@ public class LMM_Net {
 			sendIFFValue(pNetHandler, lval, lindex);
 			break;
 		case LMN_Server_SaveIFF:
-			// IFFƒtƒ@ƒCƒ‹‚Ì•Û‘¶
+			// IFFãƒ•ã‚¡ã‚¤ãƒ«ã®ä¿å­˜
 			LMM_IFF.saveIFF(pNetHandler.playerEntity.username);
 			if (!MMM_Helper.isClient) {
 				LMM_IFF.saveIFF("");
@@ -138,12 +144,12 @@ public class LMM_Net {
 	}
 
 	/**
-	 * ƒNƒ‰ƒCƒAƒ“ƒg‚ÖIFF‚Ìİ’è’l‚ğ’Ê’m‚·‚éB
+	 * ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã¸IFFã®è¨­å®šå€¤ã‚’é€šçŸ¥ã™ã‚‹ã€‚
 	 * @param pNetHandler
 	 * @param pValue
 	 * @param pIndex
 	 */
-	protected static void sendIFFValue(NetServerHandler pNetHandler, int pValue, int pIndex) {
+	public static void sendIFFValue(NetServerHandler pNetHandler, int pValue, int pIndex) {
 		byte ldata[] = new byte[] {
 				LMN_Client_SetIFFValue,
 				0,
