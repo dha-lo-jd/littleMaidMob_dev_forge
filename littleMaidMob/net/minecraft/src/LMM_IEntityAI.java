@@ -2,7 +2,7 @@ package net.minecraft.src;
 
 public interface LMM_IEntityAI {
 	
-	//Às‰Â”\”»’è
+	//å®Ÿè¡Œå¯èƒ½åˆ¤å®š
 	public void setEnable(boolean pFlag);
 	public boolean getEnable();
 	

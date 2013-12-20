@@ -1,8 +1,17 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LMM_EntityLittleMaid;
+import net.minecraft.entity.LMM_EntityModeBase;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.util.MathHelper;
+
 public class LMM_EntityAIHurtByTarget extends EntityAIHurtByTarget {
 
-	protected LMM_EntityLittleMaid theMaid;
+	public LMM_EntityLittleMaid theMaid;
 	private boolean field_75303_a;
 	private int field_75301_b;
 	private int field_75302_c;
@@ -19,9 +28,15 @@ public class LMM_EntityAIHurtByTarget extends EntityAIHurtByTarget {
 
 	@Override
 	public boolean shouldExecute() {
+<<<<<<< HEAD
 		if (theMaid.isContract() && !theMaid.isBlocking() && theMaid.mstatMasterEntity != null) {
 			// ƒtƒFƒ“ƒT[Œn‚Íå‚É‘Î‚·‚éUŒ‚‚É”½‰
 			EntityLivingBase lentity = theMaid.mstatMasterEntity.getAITarget();
+=======
+		if (theMaid.isMaidContract() && !theMaid.isBlocking() && theMaid.mstatMasterEntity != null) {
+			// ãƒ•ã‚§ãƒ³ã‚µãƒ¼ç³»ã¯ä¸»ã«å¯¾ã™ã‚‹æ”»æ’ƒã«åå¿œ
+			EntityLiving lentity = theMaid.mstatMasterEntity.getAITarget();
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 			if (isSuitableTarget(lentity, false)) {
 				theMaid.setRevengeTarget(lentity);
 				return true;
@@ -42,8 +57,13 @@ public class LMM_EntityAIHurtByTarget extends EntityAIHurtByTarget {
 		String s2 = taskOwner.getAttackTarget() == null ? "Null" : taskOwner.getAttackTarget().getClass().toString();
 //		System.out.println(String.format("ID:%d, target:%s, attack:%s", taskOwner.entityId, s1, s2));
 		
+<<<<<<< HEAD
 		// ‰£‚ç‚ê‚½d•Ô‚µ
 		EntityLivingBase leliving = taskOwner.getAITarget();
+=======
+		// æ®´ã‚‰ã‚ŒãŸä»•è¿”ã—
+		EntityLiving leliving = taskOwner.getAITarget();
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 		if (leliving != null && leliving != taskOwner.getAttackTarget()) {
 			taskOwner.setAttackTarget(null);
 			System.out.println(String.format("ID:%d, ChangeTarget.", taskOwner.entityId));
@@ -52,8 +72,13 @@ public class LMM_EntityAIHurtByTarget extends EntityAIHurtByTarget {
 	}
 	
 	@Override
+<<<<<<< HEAD
 	protected boolean isSuitableTarget(EntityLivingBase par1EntityLiving, boolean par2) {
 		// LMM—p‚ÉƒJƒXƒ^ƒ€
+=======
+	public boolean isSuitableTarget(EntityLiving par1EntityLiving, boolean par2) {
+		// LMMç”¨ã«ã‚«ã‚¹ã‚¿ãƒ 
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 		if (par1EntityLiving == null) {
 			return false;
 		}
@@ -78,18 +103,23 @@ public class LMM_EntityAIHurtByTarget extends EntityAIHurtByTarget {
 			}
 		}
 		
+<<<<<<< HEAD
 		// Šî“_‚©‚çˆê’è‹——£—£‚ê‚Ä‚¢‚éê‡‚àUŒ‚‚µ‚È‚¢
 		if (!taskOwner.func_110176_b(MathHelper.floor_double(par1EntityLiving.posX), MathHelper.floor_double(par1EntityLiving.posY), MathHelper.floor_double(par1EntityLiving.posZ))) {
 //		if (!taskOwner.isWithinHomeDistance(MathHelper.floor_double(par1EntityLiving.posX), MathHelper.floor_double(par1EntityLiving.posY), MathHelper.floor_double(par1EntityLiving.posZ))) {
+=======
+		// åŸºç‚¹ã‹ã‚‰ä¸€å®šè·é›¢é›¢ã‚Œã¦ã„ã‚‹å ´åˆã‚‚æ”»æ’ƒã—ãªã„
+		if (!taskOwner.isWithinHomeDistance(MathHelper.floor_double(par1EntityLiving.posX), MathHelper.floor_double(par1EntityLiving.posY), MathHelper.floor_double(par1EntityLiving.posZ))) {
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 			return false;
 		}
 		
-		// ƒ^[ƒQƒbƒg‚ªŒ©‚¦‚È‚¢
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒè¦‹ãˆãªã„
 		if (shouldCheckSight && !taskOwner.getEntitySenses().canSee(par1EntityLiving)) {
 			return false;
 		}
 		
-		// UŒ‚’†~”»’èH
+		// æ”»æ’ƒä¸­æ­¢åˆ¤å®šï¼Ÿ
 		if (this.field_75303_a) {
 			if (--this.field_75302_c <= 0) {
 				this.field_75301_b = 0;

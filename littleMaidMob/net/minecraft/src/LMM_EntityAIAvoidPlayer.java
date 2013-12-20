@@ -1,17 +1,23 @@
 package net.minecraft.src;
 
-import java.util.List;
+import net.minecraft.entity.LMM_EntityLittleMaid;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.util.Vec3;
 
 public class LMM_EntityAIAvoidPlayer extends EntityAIBase implements LMM_IEntityAI {
 	
     /** The entity we are attached to */
-	protected LMM_EntityLittleMaid theMaid;
-    protected EntityPlayer theMaster;
-    protected float speedNormal;
-    protected PathEntity avoidPath;
+	public LMM_EntityLittleMaid theMaid;
+    public EntityPlayer theMaster;
+    public float speedNormal;
+    public PathEntity avoidPath;
     /** The PathNavigate of our entity */
-    protected PathNavigate entityPathNavigate;
-    protected boolean isEnable;
+    public PathNavigate entityPathNavigate;
+    public boolean isEnable;
 
     public boolean isActive;
     public int minDist; 
@@ -36,19 +42,19 @@ public class LMM_EntityAIAvoidPlayer extends EntityAIBase implements LMM_IEntity
     	
     	theMaster = theMaid.mstatMasterEntity;
     	
-    	// ‘ÎÛ‚ÍŒ©‚¦‚é‚©H‚Ä‚©‚±‚ê‚¢‚ç‚È‚­‚ËH
+    	// å¯¾è±¡ã¯è¦‹ãˆã‚‹ã‹ï¼Ÿã¦ã‹ã“ã‚Œã„ã‚‰ãªãã­ï¼Ÿ
         if (!theMaid.getEntitySenses().canSee(theMaster)) {
             return false;
         }
 
-        // ˆÚ“®æ‚ğô’è
+        // ç§»å‹•å…ˆã‚’ç­–å®š
         Vec3 vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom(theMaid, minDist, 7, Vec3.createVectorHelper(theMaster.posX, theMaster.posY, theMaster.posZ));
 
-        // ˆÚ“®æ‚ª–³‚¢
+        // ç§»å‹•å…ˆãŒç„¡ã„
         if (vec3d == null) {
             return false;
         }
-        // ˆÚ“®æ‚Ì‹——£‚ª‹ß‚¢
+        // ç§»å‹•å…ˆã®è·é›¢ãŒè¿‘ã„
         if (theMaster.getDistanceSq(vec3d.xCoord, vec3d.yCoord, vec3d.zCoord) < theMaid.mstatMasterDistanceSq) {
             return false;
         }
@@ -79,11 +85,11 @@ public class LMM_EntityAIAvoidPlayer extends EntityAIBase implements LMM_IEntity
 
     
     public void setActive() {
-    	// “®ìŠJn
+    	// å‹•ä½œé–‹å§‹
     	isActive = true;
     }
     
-	// Às‰Â”\ƒtƒ‰ƒO
+	// å®Ÿè¡Œå¯èƒ½ãƒ•ãƒ©ã‚°
     @Override
 	public void setEnable(boolean pFlag) {
 		isEnable = pFlag;

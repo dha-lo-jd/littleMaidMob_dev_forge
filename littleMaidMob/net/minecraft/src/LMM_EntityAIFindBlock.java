@@ -1,7 +1,16 @@
 package net.minecraft.src;
 
+import net.minecraft.entity.LMM_EntityLittleMaid;
+import net.minecraft.entity.LMM_EntityModeBase;
+import net.minecraft.entity.MMM_EntityDummy;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+
 public class LMM_EntityAIFindBlock extends EntityAIBase implements LMM_IEntityAI {
 
+<<<<<<< HEAD
 	protected boolean isEnable;
 	protected LMM_EntityLittleMaid theMaid;
 	protected LMM_EntityModeBase fmodeBase;
@@ -10,6 +19,16 @@ public class LMM_EntityAIFindBlock extends EntityAIBase implements LMM_IEntityAI
 //	protected int tileY;
 //	protected int tileZ;
 //	protected boolean isFind;
+=======
+	public boolean isEnable;
+	public LMM_EntityLittleMaid theMaid;
+	public LMM_EntityModeBase llmode;
+	public MovingObjectPosition theBlock;
+	public int tileX;
+	public int tileY;
+	public int tileZ;
+//	public boolean isFind;
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 	
 	
 	public LMM_EntityAIFindBlock(LMM_EntityLittleMaid pEntityLittleMaid) {
@@ -32,10 +51,17 @@ public class LMM_EntityAIFindBlock extends EntityAIBase implements LMM_IEntityAI
 			return fmodeBase.shouldBlock(theMaid.maidMode);
 		}
 		
+<<<<<<< HEAD
 		// ƒ^[ƒQƒbƒg‚ğƒT[ƒ`
 		int lx = MathHelper.floor_double(theMaid.posX);
 		int ly = MathHelper.floor_double(theMaid.posY);
 		int lz = MathHelper.floor_double(theMaid.posZ);
+=======
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’ã‚µãƒ¼ãƒ
+		tileX = MathHelper.floor_double(theMaid.posX);
+		tileY = MathHelper.floor_double(theMaid.posY);
+		tileZ = MathHelper.floor_double(theMaid.posZ);
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 		int vt = MathHelper.floor_float(((theMaid.rotationYawHead * 4F) / 360F) + 2.5F) & 3;
 		int xx = lx;
 		int yy = ly;
@@ -45,7 +71,7 @@ public class LMM_EntityAIFindBlock extends EntityAIBase implements LMM_IEntityAI
 		MMM_EntityDummy.clearDummyEntity(theMaid);
 		boolean flagdammy = false;
 		
-		// CW•ûŒü‚ÉŒŸõ—Ìˆæ‚ğL‚°‚é 
+		// CWæ–¹å‘ã«æ¤œç´¢é ˜åŸŸã‚’åºƒã’ã‚‹ 
 		for (int d = 0; d < 4; d++) {
 			for (int a = 0; a < 18; a += 2) {
 				int del = a / 2;
@@ -127,21 +153,33 @@ public class LMM_EntityAIFindBlock extends EntityAIBase implements LMM_IEntityAI
 
 	@Override
 	public boolean continueExecuting() {
+<<<<<<< HEAD
 		fmodeBase.updateBlock();
 		// ˆÚ“®’†‚ÍŒp‘±
+=======
+		// ç§»å‹•ä¸­ã¯ç¶™ç¶š
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 		if (!theMaid.getNavigator().noPath()) return true;
 		
 		double ld = theMaid.getDistanceTilePos();
 		if (ld > 100.0D) {
-			// õ“G”ÍˆÍŠO
+			// ç´¢æ•µç¯„å›²å¤–
 			theMaid.getActiveModeClass().farrangeBlock();
 			return false;
 		} else if (ld > 5.0D) {
+<<<<<<< HEAD
 			// Ë’ö‹——£ŠO
 			return theMaid.getActiveModeClass().outrangeBlock(theMaid.maidMode);
 		} else {
 			// Ë’ö‹——£
 			return theMaid.getActiveModeClass().executeBlock(theMaid.maidMode);
+=======
+			// å°„ç¨‹è·é›¢å¤–
+			return theMaid.getActiveModeClass().outrangeBlock(theMaid.getMaidModeInt(), tileX, tileY, tileZ);
+		} else {
+			// å°„ç¨‹è·é›¢
+			return theMaid.getActiveModeClass().executeBlock(theMaid.getMaidModeInt(), tileX, tileY, tileZ);
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 		}
 	}
 
@@ -157,8 +195,13 @@ public class LMM_EntityAIFindBlock extends EntityAIBase implements LMM_IEntityAI
 
 	@Override
 	public void updateTask() {
+<<<<<<< HEAD
 		// ƒ^[ƒQƒbƒg‚ğŒ©‚Â‚¯‚Ä‚¢‚é
 		theMaid.looksTilePos();
+=======
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’è¦‹ã¤ã‘ã¦ã„ã‚‹
+		theMaid.getLookHelper().setLookPosition(tileX + 0.5D, tileY + 0.5D, tileZ + 0.5D, 10F, theMaid.getVerticalFaceSpeed());
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 	}
 
 

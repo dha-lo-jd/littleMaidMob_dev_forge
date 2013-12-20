@@ -1,17 +1,36 @@
 package net.minecraft.src;
 
-import java.lang.annotation.Target;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.command.IEntitySelector;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.LMM_EntityLittleMaid;
+import net.minecraft.entity.LMM_EntityModeBase;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAINearestAttackableTargetSorter;
+import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.util.MathHelper;
+
 public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackableTarget {
 
+<<<<<<< HEAD
 	protected LMM_EntityLittleMaid theMaid;
 	protected Entity targetEntity;
 	protected Class targetClass;
 	protected int targetChance;
 	protected LMM_EntityAINearestAttackableTargetSorter theNearestAttackableTargetSorter;
+=======
+	public LMM_EntityLittleMaid theMaid;
+	Entity targetEntity;
+	Class targetClass;
+	int targetChance;
+	private final IEntitySelector field_82643_g;
+	private EntityAINearestAttackableTargetSorter theNearestAttackableTargetSorter;
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 
 	private boolean field_75303_a;
 	private int field_75301_b;
@@ -45,11 +64,19 @@ public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackab
 			double lfollowRange = this.func_111175_f();
 			List llist = this.taskOwner.worldObj.getEntitiesWithinAABB(targetClass, taskOwner.boundingBox.expand(lfollowRange, 4.0D, lfollowRange));
 			if (theMaid.mstatMasterEntity != null && !theMaid.isBloodsuck()) {
+<<<<<<< HEAD
 				// ƒ\[ƒ^[‚ğå’†S‚Ö
 				theNearestAttackableTargetSorter.setEntity(theMaid.mstatMasterEntity);
 			} else {
 				// ©•ª’†S‚Éƒ\[ƒg
 				theNearestAttackableTargetSorter.setEntity(theMaid);
+=======
+				// ã‚½ãƒ¼ã‚¿ãƒ¼ã‚’ä¸»ä¸­å¿ƒã¸
+				Collections.sort(var5, new EntityAINearestAttackableTargetSorter(this, theMaid.mstatMasterEntity));
+			} else {
+				// è‡ªåˆ†ä¸­å¿ƒã«ã‚½ãƒ¼ãƒˆ
+				Collections.sort(var5, this.theNearestAttackableTargetSorter);
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 			}
 			Collections.sort(llist, theNearestAttackableTargetSorter);
 			Iterator var2 = llist.iterator();
@@ -76,9 +103,14 @@ public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackab
 	}
 
 //	@Override
+<<<<<<< HEAD
 	protected boolean isSuitableTargetLM(Entity par1EntityLiving, boolean par2) {
 		// LMM—p‚ÉƒJƒXƒ^ƒ€
 		// ”ñ¶•¨‚à‘ÎÛ‚Ì‚½‚ß•ÊƒNƒ‰ƒX
+=======
+	public boolean isSuitableTargetLM(Entity par1EntityLiving, boolean par2) {
+		// LMMç”¨ã«ã‚«ã‚¹ã‚¿ãƒ 
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 		if (par1EntityLiving == null) {
 			return false;
 		}
@@ -105,18 +137,23 @@ public class LMM_EntityAINearestAttackableTarget extends EntityAINearestAttackab
 			}
 		}
 		
+<<<<<<< HEAD
 		// Šî“_‚©‚çˆê’è‹——£—£‚ê‚Ä‚¢‚éê‡‚àUŒ‚‚µ‚È‚¢
 		if (!taskOwner.func_110176_b(MathHelper.floor_double(par1EntityLiving.posX), MathHelper.floor_double(par1EntityLiving.posY), MathHelper.floor_double(par1EntityLiving.posZ))) {
 //		if (!taskOwner.isWithinHomeDistance(MathHelper.floor_double(par1EntityLiving.posX), MathHelper.floor_double(par1EntityLiving.posY), MathHelper.floor_double(par1EntityLiving.posZ))) {
+=======
+		// åŸºç‚¹ã‹ã‚‰ä¸€å®šè·é›¢é›¢ã‚Œã¦ã„ã‚‹å ´åˆã‚‚æ”»æ’ƒã—ãªã„
+		if (!taskOwner.isWithinHomeDistance(MathHelper.floor_double(par1EntityLiving.posX), MathHelper.floor_double(par1EntityLiving.posY), MathHelper.floor_double(par1EntityLiving.posZ))) {
+>>>>>>> 3c9267ee863704790532f2c9b8ddc171642033f0
 			return false;
 		}
 		
-		// ƒ^[ƒQƒbƒg‚ªŒ©‚¦‚È‚¢
+		// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒè¦‹ãˆãªã„
 		if (shouldCheckSight && !taskOwner.getEntitySenses().canSee(par1EntityLiving)) {
 			return false;
 		}
 		
-		// UŒ‚’†~”»’èH
+		// æ”»æ’ƒä¸­æ­¢åˆ¤å®šï¼Ÿ
 		if (this.field_75303_a) {
 			if (--this.field_75302_c <= 0) {
 				this.field_75301_b = 0;
